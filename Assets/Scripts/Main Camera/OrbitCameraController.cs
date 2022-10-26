@@ -2,20 +2,22 @@ using UnityEngine;
 
 public class OrbitCameraController : MonoBehaviour
 {
-    [SerializeField] private float rotationSensitivity;
-    [SerializeField] private float scrollSensitivity;
+    [Tooltip("Responsiveness of camera rotation")]
+    [SerializeField]
+    private float _rotationSensitivity;
 
-    private Transform mainCamera;
+    [Tooltip("Responsiveness of camera zoom")]
+    [SerializeField]
+    private float _scrollSensitivity;
 
-    private Transform cameraFocalPoint;
+    private Transform _mainCamera;
 
-    private float yRotation;
-    private float xRotation;
+    private float _yRotation;
+    private float _xRotation;
 
     private void Start()
     {
-        cameraFocalPoint = GetComponent<Transform>();
-        mainCamera = GetComponentInChildren<Camera>().transform;
+        _mainCamera = GetComponentInChildren<Camera>().transform;
     }
 
     private void Update()
@@ -25,30 +27,36 @@ public class OrbitCameraController : MonoBehaviour
         ZoomCamera();
     }
 
-    private void RotateCamera() // rotating around focal point
+    /// <summary>
+    /// Rotates camera around focal point
+    /// </summary>
+    private void RotateCamera()
     {
-        if (Input.GetMouseButton(1))
+        int rightMouseButton = 1;
+
+        if (Input.GetMouseButton(rightMouseButton))
         {
-            float mousePositionX = Input.GetAxis("Mouse X") * rotationSensitivity * Time.deltaTime;
-            float mousePositionY = Input.GetAxis("Mouse Y") * rotationSensitivity * Time.deltaTime;
+            float mousePositionX = Input.GetAxis("Mouse X") * _rotationSensitivity * Time.deltaTime;
+            float mousePositionY = Input.GetAxis("Mouse Y") * _rotationSensitivity * Time.deltaTime;
 
-            yRotation += mousePositionX;
-            xRotation -= mousePositionY;
+            _yRotation += mousePositionX;
+            _xRotation -= mousePositionY;
 
-            //xRotation = Mathf.Clamp(xRotation, -7.5f, 90); // if we will need a rotating restriction
-
-            transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+            transform.rotation = Quaternion.Euler(_xRotation, _yRotation, 0);
         }
     }
 
-    private void ZoomCamera() // scrolling to and out from focal point
+    /// <summary>
+    /// Zooms camera is side of focal point
+    /// </summary>
+    private void ZoomCamera()
     {
-        var mouseWheel = Input.GetAxis("Mouse ScrollWheel") * scrollSensitivity * Time.deltaTime;
+        float mouseWheel = Input.GetAxis("Mouse ScrollWheel") * _scrollSensitivity * Time.deltaTime;
 
-        mainCamera.Translate(Vector3.forward * mouseWheel);
+        _mainCamera.Translate(Vector3.forward * mouseWheel);
 
-        // visually looks better to go down while zooming to small models
+        // looks better to move a bit down while zooming to small models
         float scrollingDownDivisor = 5.25f;
-        mainCamera.Translate(Vector3.down * mouseWheel / scrollingDownDivisor);
+        _mainCamera.Translate(Vector3.down * mouseWheel / scrollingDownDivisor);
     }
 }

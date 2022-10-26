@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.4904685, g: 0.2626718, b: 0.20490476, a: 1}
+  m_IndirectSpecularColor: {r: 0.4917342, g: 0.2637648, b: 0.2058143, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -672,7 +672,7 @@ GameObject:
   - component: {fileID: 145891164}
   - component: {fileID: 145891163}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Tab Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3006,7 +3006,7 @@ GameObject:
   - component: {fileID: 782628377}
   - component: {fileID: 782628376}
   m_Layer: 0
-  m_Name: Camera focal point
+  m_Name: Camera Focal Point
   m_TagString: Untagged
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -3037,8 +3037,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13e59cae80d00844d8328a9b511d55a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSensitivity: 100
-  scrollSensitivity: 400
+  _rotationSensitivity: 100
+  _scrollSensitivity: 400
 --- !u!4 &782628378
 Transform:
   m_ObjectHideFlags: 0
@@ -3299,7 +3299,7 @@ GameObject:
   - component: {fileID: 846435613}
   - component: {fileID: 846435614}
   m_Layer: 0
-  m_Name: Transform handle
+  m_Name: Transform Handle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3565,7 +3565,7 @@ GameObject:
   - component: {fileID: 949542301}
   - component: {fileID: 949542300}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Tab Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5611,6 +5611,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -6323,7 +6324,7 @@ GameObject:
   - component: {fileID: 1579313640}
   - component: {fileID: 1579313639}
   m_Layer: 5
-  m_Name: Menu Button
+  m_Name: Quit Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6425,9 +6426,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 5f4bca862019f0e4581c3c838647ad13, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 52ea2efcf807dc742ad9a9a1c213518b, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -8035,7 +8036,7 @@ GameObject:
   - component: {fileID: 2046473976}
   - component: {fileID: 2046473975}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Tab Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

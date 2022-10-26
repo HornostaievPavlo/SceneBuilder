@@ -2,21 +2,31 @@ using UnityEngine;
 
 public class FocalPointMovement : MonoBehaviour
 {
-    [SerializeField] private float movingSensitivity;
+    [Tooltip("Responsiveness of focal point movement")]
+    [SerializeField]
+    private float _movingSensitivity;
 
-    void Update()
+    private void Update()
     {
         MoveFocalPoint();
     }
 
-    private void MoveFocalPoint() // on left button and ctrl pressed - moving of camera focal point in space
+    /// <summary>
+    /// Moves camera focal point according to direction of mouse movement
+    /// Works on both LCTRL and LMB are pressed
+    /// </summary>
+    private void MoveFocalPoint()
     {
-        if (Input.GetMouseButton(0) && Input.GetKey(KeyCode.LeftControl))
-        {
-            var mousePositionX = Input.GetAxis("Mouse X") * movingSensitivity * Time.deltaTime;
-            var mousePositionY = Input.GetAxis("Mouse Y") * movingSensitivity * Time.deltaTime;
+        int leftMouseButton = 0;
 
-            transform.Translate(new Vector3(-mousePositionX, -mousePositionY, 0) * (Time.deltaTime * movingSensitivity));
+        if (Input.GetMouseButton(leftMouseButton) && Input.GetKey(KeyCode.LeftControl))
+        {
+            float mousePositionX = Input.GetAxis("Mouse X") * _movingSensitivity * Time.deltaTime;
+            float mousePositionY = Input.GetAxis("Mouse Y") * _movingSensitivity * Time.deltaTime;
+
+            Vector3 movingVector = new Vector3(-mousePositionX, -mousePositionY, 0);
+
+            transform.Translate(movingVector * _movingSensitivity * Time.deltaTime);
         }
     }
 }
