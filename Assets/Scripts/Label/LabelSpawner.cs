@@ -2,19 +2,26 @@ using UnityEngine;
 
 public class LabelSpawner : MonoBehaviour
 {
-    [SerializeField] private GameObject labelPrefab;
+    [Tooltip("Prefab that should be spawned")]
+    [SerializeField]
+    private GameObject _labelPrefab;
 
-    private Transform labelParent;
+    private Transform _labelParent;
 
     private void Start()
     {
-        labelParent = this.transform;
+        _labelParent = this.transform;
     }
 
+    /// <summary>
+    /// Instantiates label from prefab,
+    /// adds SelectableObject component,
+    /// sets object type to Label
+    /// </summary>
     public void SpawnLabel()
     {
         Vector3 spawnPosition = new Vector3(0, 0.5f, -2.5f);
-        var labelPrefabCopy = Instantiate(labelPrefab, spawnPosition, labelPrefab.transform.rotation, labelParent);
+        var labelPrefabCopy = Instantiate(_labelPrefab, spawnPosition, _labelPrefab.transform.rotation, _labelParent);
 
         SelectableObject selectableObject = labelPrefabCopy.gameObject.AddComponent<SelectableObject>();
         selectableObject.type = ObjectType.Label;

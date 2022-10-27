@@ -1,37 +1,46 @@
-using UnityEngine;
-using System.Collections;
 using GLTFast;
+using System.Collections;
 using TMPro;
+using UnityEngine;
 
 public class ModelSpawner : MonoBehaviour
 {
-    [SerializeField] private TMP_InputField inputField;
+    [Tooltip("Field where path to model is provided")]
+    [SerializeField]
+    private TMP_InputField _inputField;
 
-    private Transform modelParent;
+    private Transform _modelParent;
 
-    private GameObject modelPlaceholder;
+    private GameObject _modelPlaceholder;
 
     private void Start()
     {
-        modelParent = this.transform;
+        _modelParent = this.transform;
     }
 
-    public void ImportModel() // load model, change enum type and add SelectableObject script
+    /// <summary>
+    /// Imports model from path,
+    /// adds SelectableObject component,
+    /// sets object type to Model
+    /// </summary>
+    public void ImportModel()
     {
-        if (inputField.text != "")
+        if (_inputField.text != "")
         {
-            modelPlaceholder = new GameObject();
-            modelPlaceholder.name = "Model";
-            modelPlaceholder.transform.position = new Vector3(0, 0, 0);
+            _modelPlaceholder = new GameObject();
+            _modelPlaceholder.name = "Model";
+            _modelPlaceholder.transform.position = new Vector3(0, 0, 0);
 
-            modelPlaceholder.transform.SetParent(modelParent);
+            _modelPlaceholder.transform.SetParent(_modelParent);
 
-            SelectableObject selectableObject = modelPlaceholder.AddComponent<SelectableObject>();
+            SelectableObject selectableObject = _modelPlaceholder.AddComponent<SelectableObject>();
             selectableObject.type = ObjectType.Model;
 
-            var gltfAsset = modelPlaceholder.AddComponent<GltfAsset>();
+            var gltfAsset = _modelPlaceholder.AddComponent<GltfAsset>();
 
-            string pathToModel = inputField.text.ToString();
+            string pathToModel = _inputField.text.ToString();
+
+            // TODO : add button to load duck directly from scene
 
             //string pathToModel = "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF/Duck.gltf";
 
@@ -41,11 +50,15 @@ public class ModelSpawner : MonoBehaviour
         }
     }
 
-    private IEnumerator AddColliders() // adding colliders to all mesh renderers to be able to click at any place of the model
+    /// <summary>
+    /// Adds colliders to all child gameObjects in model hierarchy
+    /// </summary>
+    /// <returns>Waits one second</returns>
+    private IEnumerator AddColliders()
     {
-        yield return new WaitForSeconds(1); // less than second is not working for some models
+        yield return new WaitForSeconds(1);
 
-        MeshRenderer[] meshRenderers = modelPlaceholder.GetComponentsInChildren<MeshRenderer>();
+        MeshRenderer[] meshRenderers = _modelPlaceholder.GetComponentsInChildren<MeshRenderer>();
 
         if (meshRenderers.Length >= 1)
         {
@@ -53,7 +66,7 @@ public class ModelSpawner : MonoBehaviour
             {
                 var itemCollider = item.gameObject.AddComponent<MeshCollider>();
 
-                itemCollider.convex = true; // all colliders created are convex
+                itemCollider.convex = true;
             }
         }
     }

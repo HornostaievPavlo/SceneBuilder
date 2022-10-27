@@ -1,29 +1,32 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class LabelStringsInitializer : MonoBehaviour
 {
-    private LabelTabController LabelTabController;
+    private LabelTabController _labelTabController;
 
-    void Start()
+    private void Start()
     {
-        LabelTabController = GetComponentInParent<LabelTabController>();
+        _labelTabController = GetComponentInParent<LabelTabController>();
 
         AddTitleAndDescription();
     }
 
+    /// <summary>
+    /// Adds entered text to UI row fields 
+    /// </summary>
     public void AddTitleAndDescription() // take title and description for each new row
     {
         TMP_Text[] textsFromSelectedRow = gameObject.GetComponentsInChildren<TMP_Text>();
 
-        textsFromSelectedRow[1].text = LabelTabController.title;
-        textsFromSelectedRow[2].text = LabelTabController.description;
+        textsFromSelectedRow[1].text = _labelTabController.title;
+        textsFromSelectedRow[2].text = _labelTabController.description;
 
-        Toggle toggle = gameObject.GetComponentInChildren<Toggle>(); // edit functionality works as toggle
+        Toggle toggle = gameObject.GetComponentInChildren<Toggle>();
 
-        toggle.onValueChanged.AddListener(delegate { LabelTabController.EditLabel(toggle.isOn); });
+        toggle.onValueChanged.AddListener(delegate { _labelTabController.EditLabel(toggle.isOn); });
 
-        LabelTabController.HideDataMenu();
+        _labelTabController.HideDataMenu();
     }
 }

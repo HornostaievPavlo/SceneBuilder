@@ -1,6 +1,6 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class LabelTabController : MonoBehaviour
 {
@@ -12,13 +12,11 @@ public class LabelTabController : MonoBehaviour
     [SerializeField] private Sprite editToggle;
     [SerializeField] private Sprite editTogglePressed;
 
-    private Menu Menu;
+    private TMP_InputField _titleInput;
+    private TMP_InputField _descriptionInput;
 
-    private TMP_InputField titleInput;
-    private TMP_InputField descriptionInput;
-
-    private TMP_Text onScreenLabelTitle;
-    private TMP_Text onScreenLabelDescription;
+    private TMP_Text _onScreenLabelTitle;
+    private TMP_Text _onScreenLabelDescription;
 
     [HideInInspector] public string title;
 
@@ -30,52 +28,64 @@ public class LabelTabController : MonoBehaviour
 
     private void Awake()
     {
-        Menu = GetComponentInParent<Menu>();
-
         TMP_InputField[] inputFields = GetComponentsInChildren<TMP_InputField>(true);
 
-        titleInput = inputFields[0];
-        descriptionInput = inputFields[1];
+        _titleInput = inputFields[0];
+        _descriptionInput = inputFields[1];
 
         TMP_Text[] onScreenTexts = onScreenLabel.GetComponentsInChildren<TMP_Text>(true);
 
-        onScreenLabelTitle = onScreenTexts[0];
-        onScreenLabelDescription = onScreenTexts[1];
+        _onScreenLabelTitle = onScreenTexts[0];
+        _onScreenLabelDescription = onScreenTexts[1];
     }
 
+    /// <summary>
+    /// Turns on adding label window
+    /// </summary>
     public void AddNewLabel()
     {
         labelDataMenu.SetActive(true);
         updateButton.gameObject.SetActive(false);
     }
 
+    /// <summary>
+    /// Reads title text from input field
+    /// </summary>
     public void GetTitleText()
     {
-        title = titleInput.text.ToString();
+        title = _titleInput.text.ToString();
     }
 
+    /// <summary>
+    /// Reads description text from input field
+    /// </summary>
     public void GetDescriptionText()
     {
-        description = descriptionInput.text.ToString();
+        description = _descriptionInput.text.ToString();
     }
 
+    /// <summary>
+    /// Turns on UI allowing to edit existing label 
+    /// </summary>
+    /// <param name="isEditMode">True if edit toggle is pressed</param>
     public void EditLabel(bool isEditMode)
     {
         editLabelToggle.image.sprite = isEditMode ? editTogglePressed : editToggle;
-
-
 
         labelDataMenu.SetActive(isEditMode);
 
         updateButton.gameObject.SetActive(isEditMode);
 
-        titleInput.text = currentTitle.text;
+        _titleInput.text = currentTitle.text;
 
-        descriptionInput.text = currentDescription.text;
+        _descriptionInput.text = currentDescription.text;
 
         ShowOnScreenLabel(false);
     }
 
+    /// <summary>
+    /// Takes input and changes text values to new ones
+    /// </summary>
     public void UpdateLabel()
     {
         GetTitleText();
@@ -93,21 +103,28 @@ public class LabelTabController : MonoBehaviour
         editLabelToggle.image.sprite = editToggle;
     }
 
+    /// <summary>
+    /// Turns on/off on screen label depending on selection
+    /// </summary>
+    /// <param name="isLabelSelected">True if label object is selected, false if not</param>
     public void ShowOnScreenLabel(bool isLabelSelected)
     {
         onScreenLabel.SetActive(isLabelSelected);
 
-        onScreenLabelTitle.text = currentTitle.text;
+        _onScreenLabelTitle.text = currentTitle.text;
 
-        onScreenLabelDescription.text = currentDescription.text;
+        _onScreenLabelDescription.text = currentDescription.text;
     }
 
+    /// <summary>
+    /// Turns off input menu
+    /// </summary>
     public void HideDataMenu()
     {
-        titleInput.text = string.Empty;
+        _titleInput.text = string.Empty;
         title = string.Empty;
 
-        descriptionInput.text = string.Empty;
+        _descriptionInput.text = string.Empty;
         description = string.Empty;
 
         labelDataMenu.SetActive(false);

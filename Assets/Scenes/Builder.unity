@@ -347,7 +347,7 @@ GameObject:
   - component: {fileID: 29598643}
   - component: {fileID: 29598645}
   m_Layer: 5
-  m_Name: Expand Toggle
+  m_Name: Expand/Collapse Toggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -447,7 +447,7 @@ GameObject:
   - component: {fileID: 49394071}
   - component: {fileID: 49394070}
   m_Layer: 5
-  m_Name: Viewport
+  m_Name: Cameras Viewport
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1501,7 +1501,7 @@ GameObject:
   - component: {fileID: 270632969}
   - component: {fileID: 270632970}
   m_Layer: 5
-  m_Name: Toggle Group
+  m_Name: Modes Toggle Group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1988,7 +1988,7 @@ GameObject:
   - component: {fileID: 426170008}
   - component: {fileID: 426170007}
   m_Layer: 5
-  m_Name: Viewport
+  m_Name: Labels Viewport
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2118,10 +2118,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9254f17c8fe09254fa3cf8fc326770fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RaycastItemSelection: {fileID: 719852891}
-  row: {fileID: 576895234020867155, guid: ee2d964ec14347547b5a590d220551f6, type: 3}
-  parent: {fileID: 2028771053}
-  rows: []
+  _raycastItemSelection: {fileID: 719852891}
+  _row: {fileID: 576895234020867155, guid: ee2d964ec14347547b5a590d220551f6, type: 3}
+  _parent: {fileID: 2028771053}
+  rowsList: []
 --- !u!1 &502310266
 GameObject:
   m_ObjectHideFlags: 0
@@ -2822,12 +2822,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 719852888}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0029ae636b218043a4c1422e4fa3959, type: 3}
+  m_Script: {fileID: 11500000, guid: cc95af325b84e514b84af8af42acfec1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  modelTable: {fileID: 485486786}
-  cameraTable: {fileID: 1657824028}
-  labelTable: {fileID: 869638091}
+  _modelTable: {fileID: 485486786}
+  _cameraTable: {fileID: 1657824028}
+  _labelTable: {fileID: 869638091}
   models: []
   cameras: []
   labels: []
@@ -2858,9 +2858,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3fb3fd9628bfd04d99467e8c02cebac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Menu: {fileID: 1321990557}
-  selectedObjectContolButtons: {fileID: 1099585251}
-  transformHandle: {fileID: 846435611}
+  _menu: {fileID: 1321990557}
+  _selectedObjectContolButtons: {fileID: 1099585251}
+  _transformHandle: {fileID: 846435611}
   raycastSelectableObj: {fileID: 0}
   selectedObject: {fileID: 0}
   indexOfSelected: 0
@@ -2876,7 +2876,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83c15b86d237a964fbc6445b02ace908, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  labelPrefab: {fileID: 642016064418931937, guid: 89cb155df0ca7ca46aeaa0ca3a0ff62c, type: 3}
+  _labelPrefab: {fileID: 642016064418931937, guid: 89cb155df0ca7ca46aeaa0ca3a0ff62c, type: 3}
 --- !u!114 &719852893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2889,7 +2889,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3c46e76e18b33d4e8b38d04ecb70ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraPrefab: {fileID: 1426085950667615465, guid: 47f2b749991db434bbd58ce52de1b2d1, type: 3}
+  _cameraPrefab: {fileID: 1426085950667615465, guid: 47f2b749991db434bbd58ce52de1b2d1, type: 3}
 --- !u!114 &719852894
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2902,7 +2902,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e12fa3d6f645c4e4ea1e707749e05066, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputField: {fileID: 370322109}
+  _inputField: {fileID: 370322109}
 --- !u!1 &753680644
 GameObject:
   m_ObjectHideFlags: 0
@@ -2916,7 +2916,7 @@ GameObject:
   - component: {fileID: 753680647}
   - component: {fileID: 753680646}
   m_Layer: 5
-  m_Name: Viewport
+  m_Name: Models Viewport
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3024,7 +3024,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51e6ecc9e485cf848ad0dade42e91431, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movingSensitivity: 25
+  _movingSensitivity: 25
 --- !u!114 &782628377
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3420,10 +3420,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9254f17c8fe09254fa3cf8fc326770fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RaycastItemSelection: {fileID: 719852891}
-  row: {fileID: 2388981990835224202, guid: 1d57b30d4e8526142ba55798fac90cfc, type: 3}
-  parent: {fileID: 1902654316}
-  rows: []
+  _raycastItemSelection: {fileID: 719852891}
+  _row: {fileID: 2388981990835224202, guid: 1d57b30d4e8526142ba55798fac90cfc, type: 3}
+  _parent: {fileID: 1902654316}
+  rowsList: []
 --- !u!1 &913312142
 GameObject:
   m_ObjectHideFlags: 0
@@ -3752,7 +3752,7 @@ GameObject:
   - component: {fileID: 1045916355}
   - component: {fileID: 1045916356}
   m_Layer: 5
-  m_Name: Open
+  m_Name: Open Toggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4689,10 +4689,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f265db0f4cb790143b645031a95c185e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RaycastItemSelection: {fileID: 719852891}
-  RuntimeTransformHandle: {fileID: 846435614}
-  toggle: {fileID: 809214184}
-  mainCameraFocalPoint: {fileID: 782628375}
+  _raycastItemSelection: {fileID: 719852891}
+  _runtimeTransformHandle: {fileID: 846435614}
+  _uiToggle: {fileID: 809214184}
+  _cameraFocalPoint: {fileID: 782628375}
 --- !u!1 &1190783065
 GameObject:
   m_ObjectHideFlags: 0
@@ -5696,9 +5696,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94f75cefcec6bd34f8e73fb379cd2cf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  modelsTab: {fileID: 485486784}
-  camerasTab: {fileID: 1657824025}
-  labelsTab: {fileID: 869638088}
+  _modelsTab: {fileID: 485486784}
+  _camerasTab: {fileID: 1657824025}
+  _labelsTab: {fileID: 869638088}
 --- !u!114 &1321990557
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5711,10 +5711,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c5ee80b855f3bf4e8c9da117bf1a0c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  raycast: {fileID: 719852891}
-  modelTable: {fileID: 485486786}
-  cameraTable: {fileID: 1657824028}
-  labelTable: {fileID: 869638091}
+  _raycast: {fileID: 719852891}
+  _modelsTable: {fileID: 485486786}
+  _camerasTable: {fileID: 1657824028}
+  _labelsTable: {fileID: 869638091}
 --- !u!114 &1321990558
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5727,11 +5727,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d27e7376f268b494eaa5f23248a90345, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  modelsViewport: {fileID: 753680645}
-  camerasViewport: {fileID: 49394069}
-  labelsViewport: {fileID: 426170006}
-  openToggle: {fileID: 1045916355}
-  sizeToggle: {fileID: 29598643}
+  _modelsViewport: {fileID: 753680645}
+  _camerasViewport: {fileID: 49394069}
+  _labelsViewport: {fileID: 426170006}
+  _openToggle: {fileID: 1045916355}
+  _sizeToggle: {fileID: 29598643}
 --- !u!1 &1333067985
 GameObject:
   m_ObjectHideFlags: 0
@@ -6848,7 +6848,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d418cfbbd89a53f47a32f79866f421cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RaycastItemSelection: {fileID: 719852891}
+  _raycastItemSelection: {fileID: 719852891}
   mainViewImage: {fileID: 13835825}
   mainViewImageSelected: {fileID: 21300000, guid: 72c8d3c07ff8c0e4e883aa2fba56fffd, type: 3}
   mainViewImageDeselected: {fileID: 21300000, guid: a817f269a9f4b194bb02ff300d7b67f5, type: 3}
@@ -6871,10 +6871,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9254f17c8fe09254fa3cf8fc326770fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RaycastItemSelection: {fileID: 719852891}
-  row: {fileID: -4830769845822010318, guid: 86eda2ea53f746346b95e7118d4f3be9, type: 3}
-  parent: {fileID: 1333067986}
-  rows: []
+  _raycastItemSelection: {fileID: 719852891}
+  _row: {fileID: -4830769845822010318, guid: 86eda2ea53f746346b95e7118d4f3be9, type: 3}
+  _parent: {fileID: 1333067986}
+  rowsList: []
 --- !u!1 &1683679715
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,23 +2,34 @@ using UnityEngine;
 
 public class MainTabs : MonoBehaviour
 {
-    [SerializeField] private GameObject modelsTab;
-    [SerializeField] private GameObject camerasTab;
-    [SerializeField] private GameObject labelsTab;
+    [SerializeField] private GameObject _modelsTab;
+    [SerializeField] private GameObject _camerasTab;
+    [SerializeField] private GameObject _labelsTab;
 
-
+    /// <summary>
+    /// Toggles models tab on/off
+    /// </summary>
+    /// <param name="isModelsTab">Is tab selected or unselected</param>
     public void SelectModelsTab(bool isModelsTab) // cannot make one method because toggle event is not taking two parameters
     {
-        modelsTab.SetActive(isModelsTab);
+        _modelsTab.SetActive(isModelsTab);
     }
 
+    /// <summary>
+    /// Toggles cameras tab on/off
+    /// </summary>
+    /// <param name="isCamerasTab">Is tab selected or unselected</param>
     public void SelectCamerasTab(bool isCamerasTab)
     {
-        camerasTab.SetActive(isCamerasTab);
+        _camerasTab.SetActive(isCamerasTab);
     }
 
+    /// <summary>
+    /// Toggles labels tab on/off
+    /// </summary>
+    /// <param name="isLabelsTab">Is tab selected or unselected</param>
     public void SelectLabelsTab(bool isLabelsTab)
     {
-        labelsTab.SetActive(isLabelsTab);
+        _labelsTab.SetActive(isLabelsTab);
     }
 }

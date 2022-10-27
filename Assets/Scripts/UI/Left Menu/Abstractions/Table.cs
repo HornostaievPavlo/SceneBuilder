@@ -1,30 +1,38 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class Table : MonoBehaviour
 {
-    [SerializeField] private RaycastItemSelection RaycastItemSelection;
+    [SerializeField] private RaycastItemSelection _raycastItemSelection;
 
-    [SerializeField] private Row row;
+    [Space]
 
-    [SerializeField] private Transform parent;
+    [SerializeField] private Row _row;
 
-    public List<Row> rows;
+    [SerializeField] private Transform _parent;
 
-    public void CreateRowAndAddToList() // add row on Awake() of object
+    [HideInInspector] public List<Row> rowsList;
+
+    /// <summary>
+    /// Creates new row when object is created
+    /// </summary>
+    public void CreateRowAndAddToList()
     {
-        Row copy = Instantiate(row, parent);
+        Row newRow = Instantiate(_row, _parent);
 
-        rows.Add(copy);
+        rowsList.Add(newRow);
     }
 
-    public void DestroyRowAndRemoveFromList() // remove row on OnDestroy() of object
+    /// <summary>
+    /// Destroys row when object is deleted from scene
+    /// </summary>
+    public void DestroyRowAndRemoveFromList()
     {
-        if (rows[RaycastItemSelection.indexOfSelected] != null)
+        if (rowsList[_raycastItemSelection.indexOfSelected] != null)
         {
-            Destroy(rows[RaycastItemSelection.indexOfSelected].gameObject);
+            Destroy(rowsList[_raycastItemSelection.indexOfSelected].gameObject);
         }
 
-        rows.RemoveAt(RaycastItemSelection.indexOfSelected);
+        rowsList.RemoveAt(_raycastItemSelection.indexOfSelected);
     }
 }

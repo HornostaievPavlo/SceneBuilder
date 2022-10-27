@@ -1,19 +1,19 @@
 using UnityEngine;
 public class SelectableObject : MonoBehaviour
 {
-    public ObjectType type;
+    [HideInInspector] public ObjectType type;
 
-    private CreatedObjectController CreatedObjectController;
+    private CreatedObjectManager _createdObjectManager;
 
     private void Start()
     {
-        CreatedObjectController = GetComponentInParent<CreatedObjectController>();
+        _createdObjectManager = GetComponentInParent<CreatedObjectManager>();
 
-        CreatedObjectController.AddCreatedObjectToList(this);
+        _createdObjectManager.AddCreatedObjectToList(this);
     }
 
     private void OnDestroy()
     {
-        CreatedObjectController.RemoveCreatedObjectFromList(this);
+        _createdObjectManager.RemoveCreatedObjectFromList(this);
     }
 }

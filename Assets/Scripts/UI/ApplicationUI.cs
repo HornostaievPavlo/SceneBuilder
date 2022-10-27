@@ -3,65 +3,92 @@ using UnityEngine;
 
 public class ApplicationUI : MonoBehaviour
 {
-    [SerializeField] private RaycastItemSelection RaycastItemSelection;
+    [SerializeField] private RaycastItemSelection _raycastItemSelection;
 
-    [SerializeField] private RuntimeTransformHandle RuntimeTransformHandle;
+    [SerializeField] private RuntimeTransformHandle _runtimeTransformHandle;
 
-    [SerializeField] private GameObject toggle;
+    [SerializeField] private GameObject _uiToggle;
 
-    [SerializeField] private GameObject mainCameraFocalPoint;
+    [SerializeField] private GameObject _cameraFocalPoint;
 
+    /// <summary>
+    /// Turns all UI elements on/off 
+    /// </summary>
+    /// <param name="isActive">Toggle value</param>
     public void SetUIActive(bool isActive)
     {
         gameObject.SetActive(isActive);
 
-        toggle.gameObject.transform.eulerAngles = new Vector3(0, 0, isActive ? 0 : 180);
+        _uiToggle.gameObject.transform.eulerAngles = new Vector3(0, 0, isActive ? 0 : 180);
     }
 
+    /// <summary>
+    /// Alligns camera focal point to currently selected object
+    /// </summary>
     public void CenterCameraFocalPoint()
     {
-        if (RaycastItemSelection.selectedObject != null)
+        if (_raycastItemSelection.selectedObject != null)
         {
-            mainCameraFocalPoint.transform.position = RaycastItemSelection.selectedObject.transform.position;
+            _cameraFocalPoint.transform.position = _raycastItemSelection.selectedObject.transform.position;
         }
     }
 
+    /// <summary>
+    /// Makes a copy of selected object
+    /// </summary>
     public void CopySelectedObject()
     {
-        if (RaycastItemSelection.selectedObject != null)
+        if (_raycastItemSelection.selectedObject != null)
         {
-            Vector3 copyPosition = new Vector3(0, RaycastItemSelection.selectedObject.transform.position.y, 0);
+            Vector3 copyPosition = new Vector3(0, _raycastItemSelection.selectedObject.transform.position.y, 0);
 
-            Instantiate(RaycastItemSelection.selectedObject.transform,
+            Instantiate(_raycastItemSelection.selectedObject.transform,
                         copyPosition,
-                        RaycastItemSelection.selectedObject.transform.rotation,
-                        RaycastItemSelection.selectedObject.transform.parent);
+                        _raycastItemSelection.selectedObject.transform.rotation,
+                        _raycastItemSelection.selectedObject.transform.parent);
         }
     }
 
+    /// <summary>
+    /// Deletes selected object and its ui row from the scene
+    /// </summary>
     public void RemoveObject()
     {
-        if (RaycastItemSelection.selectedObject != null)
+        if (_raycastItemSelection.selectedObject != null)
         {
-            Destroy(RaycastItemSelection.selectedObject);
+            Destroy(_raycastItemSelection.selectedObject);
 
-            RaycastItemSelection.ItemSelection(false, RaycastItemSelection.selectedObject.transform);
+            _raycastItemSelection.ItemSelection(false, _raycastItemSelection.selectedObject.transform);
         }
     }
 
+    /// <summary>
+    /// Changes mode of the TransformHandle to translation 
+    /// </summary>
     public void SetPositionType()
     {
-        RuntimeTransformHandle.type = HandleType.POSITION;
-    }
-    public void SetRotationType()
-    {
-        RuntimeTransformHandle.type = HandleType.ROTATION;
-    }
-    public void SetScaleType()
-    {
-        RuntimeTransformHandle.type = HandleType.SCALE;
+        _runtimeTransformHandle.type = HandleType.POSITION;
     }
 
+    /// <summary>
+    /// Changes mode of the TransformHandle to rotation 
+    /// </summary>
+    public void SetRotationType()
+    {
+        _runtimeTransformHandle.type = HandleType.ROTATION;
+    }
+
+    /// <summary>
+    /// Changes mode of the TransformHandle to scaling 
+    /// </summary>
+    public void SetScaleType()
+    {
+        _runtimeTransformHandle.type = HandleType.SCALE;
+    }
+
+    /// <summary>
+    /// Exits application
+    /// </summary>
     public void QuitApplication()
     {
         Application.Quit();

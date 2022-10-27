@@ -2,19 +2,26 @@ using UnityEngine;
 
 public class CameraSpawner : MonoBehaviour
 {
-    [SerializeField] private GameObject cameraPrefab;
+    [Tooltip("Prefab that should be spawned")]
+    [SerializeField]
+    private GameObject _cameraPrefab;
 
-    private Transform cameraParent;
+    private Transform _cameraParent;
 
     private void Start()
     {
-        cameraParent = this.transform;
+        _cameraParent = this.transform;
     }
 
+    /// <summary>
+    /// Instantiates camera from prefab,
+    /// adds SelectableObject component,
+    /// sets object type to Camera
+    /// </summary>
     public void SpawnCamera()
     {
         Vector3 spawnPosition = new Vector3(0, 0.5f, -5);
-        var cameraPrefabCopy = Instantiate(cameraPrefab, spawnPosition, cameraPrefab.transform.rotation, cameraParent);
+        var cameraPrefabCopy = Instantiate(_cameraPrefab, spawnPosition, _cameraPrefab.transform.rotation, _cameraParent);
 
         SelectableObject selectableObject = cameraPrefabCopy.gameObject.AddComponent<SelectableObject>();
         selectableObject.type = ObjectType.Camera;

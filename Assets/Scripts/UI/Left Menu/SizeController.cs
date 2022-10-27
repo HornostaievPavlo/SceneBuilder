@@ -3,40 +3,44 @@ using UnityEngine.UI;
 
 public class SizeController : MonoBehaviour
 {
-    [SerializeField] private RectTransform modelsViewport;
+    [SerializeField] private RectTransform _modelsViewport;
 
-    [SerializeField] private RectTransform camerasViewport;
+    [SerializeField] private RectTransform _camerasViewport;
 
-    [SerializeField] private RectTransform labelsViewport;
+    [SerializeField] private RectTransform _labelsViewport;
 
-    [SerializeField] private RectTransform openToggle;
+    [SerializeField] private RectTransform _openToggle;
 
-    [SerializeField] private RectTransform sizeToggle;
+    [SerializeField] private RectTransform _sizeToggle;
 
-    private RectTransform mainBackground;
+    private RectTransform _mainBackground;
 
-    private GameObject toggleGroup;
+    private GameObject _toggleGroup;
 
-    private GameObject leftMenu;
+    private GameObject _leftMenu;
 
     private void Awake()
     {
-        mainBackground = GetComponentInChildren<Image>(true).rectTransform;
+        _mainBackground = GetComponentInChildren<Image>(true).rectTransform;
 
-        toggleGroup = GetComponentInChildren<ToggleGroup>().gameObject;
+        _toggleGroup = GetComponentInChildren<ToggleGroup>().gameObject;
 
-        leftMenu = mainBackground.gameObject;
+        _leftMenu = _mainBackground.gameObject;
     }
 
+    /// <summary>
+    /// Opens left menu according to bool value of toggle
+    /// </summary>
+    /// <param name="isOpened">Is menu opened or not</param>
     public void OpenLeftMenu(bool isOpened)
     {
         Vector3 toggleRotation = new Vector3(0, 0, isOpened ? 0 : 180);
-        openToggle.eulerAngles = toggleRotation;
+        _openToggle.eulerAngles = toggleRotation;
 
-        leftMenu.SetActive(!isOpened);
-        sizeToggle.gameObject.SetActive(!isOpened);
+        _leftMenu.SetActive(!isOpened);
+        _sizeToggle.gameObject.SetActive(!isOpened);
 
-        Toggle[] toggles = toggleGroup.GetComponentsInChildren<Toggle>();
+        Toggle[] toggles = _toggleGroup.GetComponentsInChildren<Toggle>();
 
         foreach (Toggle item in toggles) // while menu is not opened tabs toggles are not interactable
         {
@@ -52,10 +56,14 @@ public class SizeController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Expands/collapses menu accrding to its current state
+    /// </summary>
+    /// <param name="isHalfSize">Is menu half or full view</param>
     public void ChangeLeftMenuSize(bool isHalfSize) // changing of menu size for small collapse toggle 
     {
-        const int toggleHalfSizePosition = 426;
-        const int toggleFullSizePosition = 29;
+        int toggleHalfSizePosition = 426;
+        int toggleFullSizePosition = 29;
 
         Vector2 halfSizeViewport = new Vector2(0, 0);
         Vector2 fullSizeViewport = new Vector2(0, -401);
@@ -66,14 +74,14 @@ public class SizeController : MonoBehaviour
         Vector2 backgroundPosition = new Vector2(215, isHalfSize ? 198.5f : 0);
         Vector2 backgroundSize = new Vector2(430, isHalfSize ? 491 : 888);
 
-        mainBackground.anchoredPosition = backgroundPosition;
-        mainBackground.sizeDelta = backgroundSize;
+        _mainBackground.anchoredPosition = backgroundPosition;
+        _mainBackground.sizeDelta = backgroundSize;
 
-        sizeToggle.eulerAngles = toggleRotation;
-        sizeToggle.anchoredPosition = togglePosition;
+        _sizeToggle.eulerAngles = toggleRotation;
+        _sizeToggle.anchoredPosition = togglePosition;
 
-        modelsViewport.offsetMin = isHalfSize ? halfSizeViewport : fullSizeViewport;
-        camerasViewport.offsetMin = isHalfSize ? halfSizeViewport : fullSizeViewport;
-        labelsViewport.offsetMin = isHalfSize ? halfSizeViewport : fullSizeViewport;
+        _modelsViewport.offsetMin = isHalfSize ? halfSizeViewport : fullSizeViewport;
+        _camerasViewport.offsetMin = isHalfSize ? halfSizeViewport : fullSizeViewport;
+        _labelsViewport.offsetMin = isHalfSize ? halfSizeViewport : fullSizeViewport;
     }
 }

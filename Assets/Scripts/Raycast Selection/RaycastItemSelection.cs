@@ -4,17 +4,11 @@ using UnityEngine.EventSystems;
 
 public class RaycastItemSelection : MonoBehaviour
 {
-    [SerializeField] private Menu Menu;
+    [SerializeField] private Menu _menu;
 
-    [SerializeField] private GameObject selectedObjectContolButtons;
+    [SerializeField] private GameObject _selectedObjectContolButtons;
 
-    [SerializeField] private GameObject transformHandle;
-
-    private CreatedObjectController CreatedObjectController;
-
-    private RuntimeTransformHandle RuntimeTransformHandle;
-
-    private Camera mainCamera;
+    [SerializeField] private GameObject _transformHandle;
 
     [HideInInspector] public SelectableObject raycastSelectableObj;
 
@@ -22,13 +16,19 @@ public class RaycastItemSelection : MonoBehaviour
 
     [HideInInspector] public int indexOfSelected;
 
+    private CreatedObjectManager _createdObjectManager;
+
+    private RuntimeTransformHandle _runtimeTransformHandle;
+
+    private Camera _mainCamera;
+
     private void Start()
     {
-        RuntimeTransformHandle = transformHandle.GetComponent<RuntimeTransformHandle>();
+        _runtimeTransformHandle = _transformHandle.GetComponent<RuntimeTransformHandle>();
 
-        CreatedObjectController = GetComponent<CreatedObjectController>();
+        _createdObjectManager = GetComponent<CreatedObjectManager>();
 
-        mainCamera = Camera.main;
+        _mainCamera = Camera.main;
     }
 
     private void Update()
@@ -36,18 +36,23 @@ public class RaycastItemSelection : MonoBehaviour
         RaycastSelection();
     }
 
-    private void RaycastSelection() // selection by raycasting and finding any collider on a way of ray
+    /// <summary>
+    /// Selects object if it has SelectableObject component attached,
+    /// deselects if it has not
+    /// </summary>
+    private void RaycastSelection()
     {
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
             RaycastHit raycastHit;
-            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition); // throwing a raycast
+            Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition); // throwing a raycast
 
             if (Physics.Raycast(ray, out raycastHit, 100.0f)) // condition when raycast hits collider
             {
-                Transform selectedTransform = raycastHit.transform; // take the transform which was hit
+                Transform selectedTransform = raycastHit.transform;
 
-                var selectionParameter = selectedTransform.GetComponentInParent<SelectableObject>(); // perform selection if it contains SelectableObject component
+                // perform selection if it contains SelectableObject component
+                var selectionParameter = selectedTransform.GetComponentInParent<SelectableObject>();
 
                 if (selectionParameter != null)
                 {
@@ -55,16 +60,16 @@ public class RaycastItemSelection : MonoBehaviour
 
                     raycastSelectableObj = selectionParameter;
 
-                    indexOfSelected = CreatedObjectController.dictOfLists[selectionParameter.type].IndexOf(selectionParameter.gameObject);
+                    indexOfSelected = _createdObjectManager.dictOfLists[selectionParameter.type].IndexOf(selectionParameter.gameObject);
 
                     ItemSelection(true, selectionParameter.transform);
 
-                    Menu.SelectRow(true);
+                    _menu.SelectRow(true);
                 }
             }
-            else // no collider - deselect
+            else
             {
-                Menu.SelectRow(false);
+                _menu.SelectRow(false);
 
                 ItemSelection(false, transform);
 
@@ -73,13 +78,18 @@ public class RaycastItemSelection : MonoBehaviour
         }
     }
 
-    public void ItemSelection(bool isSelected, Transform target) // unified selection/deselection according to bool value 
+    /// <summary>
+    /// Performs selection and deselection of the object 
+    /// </summary>
+    /// <param name="isSelected">True to select, false to deselect</param>
+    /// <param name="target">Which object to operate</param>
+    public void ItemSelection(bool isSelected, Transform target)
     {
-        transformHandle.SetActive(isSelected);
+        _transformHandle.SetActive(isSelected);
 
-        selectedObjectContolButtons.SetActive(isSelected);
+        _selectedObjectContolButtons.SetActive(isSelected);
 
-        RuntimeTransformHandle.target = isSelected ? target.transform : RuntimeTransformHandle.transform;
+        _runtimeTransformHandle.target = isSelected ? target.transform : _runtimeTransformHandle.transform;
 
         selectedObject = isSelected ? target.gameObject : null;
     }
