@@ -40,14 +40,33 @@ public class ModelSpawner : MonoBehaviour
 
             string pathToModel = _inputField.text.ToString();
 
-            // TODO : add button to load duck directly from scene
-
-            //string pathToModel = "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF/Duck.gltf";
-
-            gltfAsset.Load(pathToModel); // gltf model loading
+            gltfAsset.Load(pathToModel);
 
             StartCoroutine(AddColliders());
         }
+    }
+
+    /// <summary>
+    /// Loads duck model into scene
+    /// </summary>
+    public void ImportDuckModel()
+    {
+        string pathToDuck = "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF/Duck.gltf";
+
+        _modelPlaceholder = new GameObject();
+        _modelPlaceholder.name = "Model";
+        _modelPlaceholder.transform.position = new Vector3(0, 0, 0);
+
+        _modelPlaceholder.transform.SetParent(_modelParent);
+
+        SelectableObject selectableObject = _modelPlaceholder.AddComponent<SelectableObject>();
+        selectableObject.type = ObjectType.Model;
+
+        var gltfAsset = _modelPlaceholder.AddComponent<GltfAsset>();
+
+        gltfAsset.Load(pathToDuck);
+
+        StartCoroutine(AddColliders());
     }
 
     /// <summary>

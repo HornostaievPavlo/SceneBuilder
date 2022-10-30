@@ -8377,7 +8377,7 @@ GameObject:
   - component: {fileID: 2106448688}
   - component: {fileID: 2106448687}
   m_Layer: 5
-  m_Name: 'Browse Button '
+  m_Name: 'Load Duck Button '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8446,7 +8446,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2106448688}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 719852894}
+        m_TargetAssemblyTypeName: ModelSpawner, Assembly-CSharp
+        m_MethodName: ImportDuckModel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2106448688
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8467,7 +8479,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: fca22630eb3cf3d43919bd47887484bd, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 56ca2181a71d3bc42b76a4f0edeb5c7b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
