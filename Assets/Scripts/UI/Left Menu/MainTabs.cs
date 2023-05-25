@@ -10,7 +10,7 @@ public class MainTabs : MonoBehaviour
     /// Toggles models tab on/off
     /// </summary>
     /// <param name="isModelsTab">Is tab selected or unselected</param>
-    public void SelectModelsTab(bool isModelsTab) // cannot make one method because toggle event is not taking two parameters
+    public void SelectModelsTab(bool isModelsTab)
     {
         _modelsTab.SetActive(isModelsTab);
     }
