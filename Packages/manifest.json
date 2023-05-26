@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.atteneder.gltfast": "4.7.0",
+    "com.atteneder.gltfast": "5.0.4",
     "com.shtif.runtimetransformhandle": "https://github.com/pshtif/RuntimeTransformHandle.git?path=Assets/Plugins/RuntimeTransformHandle",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.collab-proxy": "1.17.2",
