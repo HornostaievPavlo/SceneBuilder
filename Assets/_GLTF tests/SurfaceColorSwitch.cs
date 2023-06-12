@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SurfaceColorSwitch : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class SurfaceColorSwitch : MonoBehaviour
 
     private const string BASE_COLOR = "baseColorFactor";
     private const string TEXTURE = "baseColorTexture";
+
+    public Slider tintSlider;
 
     private void Awake()
     {
@@ -42,13 +45,22 @@ public class SurfaceColorSwitch : MonoBehaviour
         {
             targetMaterial.SetColor(BASE_COLOR, defaultColor);
         }
-        else if (Input.GetKeyDown(KeyCode.A)) // adding tint to texture
+        else if (Input.GetKeyDown(KeyCode.T)) // adding tint to texture
         {
-            Color multiplier = new Color(defaultColor.r * 0.5f,
-                                         defaultColor.g * 0.5f,
-                                         defaultColor.b * 0.5f);
+            //Color tintedColor = new Color(defaultColor.r * tintTest,
+            //                              defaultColor.g * tintTest,
+            //                              defaultColor.b * tintTest);
 
-            targetMaterial.SetColor(BASE_COLOR, multiplier);
+
+            float tintTest2 = tintSlider.value;
+
+            Debug.Log("na base " + tintTest2);
+
+            Color tintedColor = new Color(defaultColor.r * tintTest2,
+                                          defaultColor.g * tintTest2,
+                                          defaultColor.b * tintTest2);
+
+            targetMaterial.SetColor(BASE_COLOR, tintedColor);
         }
         else if (Input.GetKeyDown(KeyCode.F))
         {
