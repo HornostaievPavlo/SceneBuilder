@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ApplicationUI : MonoBehaviour
 {
-    [SerializeField] private RaycastItemSelection _raycastItemSelection;
+    [SerializeField] private SelectionSystem _raycastItemSelection;
 
     [SerializeField] private RuntimeTransformHandle _runtimeTransformHandle;
 

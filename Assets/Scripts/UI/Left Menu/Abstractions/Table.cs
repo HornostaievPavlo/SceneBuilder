@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Table : MonoBehaviour
 {
-    [SerializeField] private RaycastItemSelection _raycastItemSelection;
+    [SerializeField] private SelectionSystem _raycastItemSelection;
 
     [Space]
 

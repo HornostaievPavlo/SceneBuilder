@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class CameraModesSelection : MonoBehaviour
 {
-    [SerializeField] private RaycastItemSelection _raycastItemSelection;
+    [SerializeField] private SelectionSystem _raycastItemSelection;
 
     [SerializeField] private Image mainViewImage;
     [SerializeField] private Sprite mainViewImageSelected;

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 [DisallowMultipleComponent]
 public class Menu : MonoBehaviour
 {
-    [SerializeField] private RaycastItemSelection _raycast;
+    [SerializeField] private SelectionSystem _raycast;
 
     [Space]
 

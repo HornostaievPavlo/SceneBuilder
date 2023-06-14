@@ -2,7 +2,7 @@ using RuntimeHandle;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class RaycastItemSelection : MonoBehaviour
+public class SelectionSystem : MonoBehaviour
 {
     [SerializeField] private Menu menu;
 

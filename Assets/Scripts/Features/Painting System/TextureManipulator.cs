@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class TextureManipulator : MonoBehaviour
 {
-    [SerializeField] private RaycastItemSelection _raycastItemSelection;
+    [SerializeField] private SelectionSystem _raycastItemSelection;
 
     [SerializeField] private MeshRenderer targetRenderer;
 
