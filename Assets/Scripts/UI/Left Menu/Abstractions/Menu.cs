@@ -6,10 +6,6 @@ using UnityEngine.UI;
 [DisallowMultipleComponent]
 public class Menu : MonoBehaviour
 {
-    [SerializeField] private SelectionSystem _raycast;
-
-    [Space]
-
     [Tooltip("Models tab gameObject")]
     [SerializeField]
     private Table _modelsTable;
@@ -21,6 +17,8 @@ public class Menu : MonoBehaviour
     [Tooltip("Labels tab gameObject")]
     [SerializeField]
     private Table _labelsTable;
+
+    private SelectionSystem _selectionSystem;
 
     private LabelTabController _labelTabController;
 
@@ -34,6 +32,10 @@ public class Menu : MonoBehaviour
 
     private void Start()
     {
+        var applicationUI = GetComponentInParent<ApplicationUI>();
+
+        _selectionSystem = applicationUI.selectionSystem;
+
         _labelTabController = GetComponentInChildren<LabelTabController>(true);
 
         _cameraModesSelection = GetComponentInChildren<CameraModesSelection>(true);
@@ -50,32 +52,32 @@ public class Menu : MonoBehaviour
     /// <param name="isSelected">Is object selected or not</param>
     public void SelectRow(bool isSelected)
     {
-        if (_raycast.selectedObject != null)
+        if (_selectionSystem.selectedObject != null)
         {
-            foreach (Row item in tablesDict[_raycast.raycastSelectableObj.type].rowsList)
+            foreach (Row item in tablesDict[_selectionSystem.selectableObject.type].rowsList)
             {
                 Image[] allDots = item.GetComponentsInChildren<Image>();
 
                 allDots[1].color = _unselectedDots;
             }
 
-            Image[] selectedDots = tablesDict[_raycast.raycastSelectableObj.type].rowsList[_raycast.indexOfSelected].gameObject.GetComponentsInChildren<Image>();
+            Image[] selectedDots = tablesDict[_selectionSystem.selectableObject.type].rowsList[_selectionSystem.indexOfSelected].gameObject.GetComponentsInChildren<Image>();
 
             // changing selection dots color according to selection bool
             selectedDots[1].color = isSelected ? this._selectedDots : _unselectedDots;
 
             // additional logic for camera selection
-            if (_raycast.raycastSelectableObj.type == ObjectType.Camera)
+            if (_selectionSystem.selectableObject.type == ObjectType.Camera)
             {
-                _cameraModesSelection.ballCamera = isSelected ? _raycast.selectedObject.GetComponentInChildren<Camera>() : null;
+                _cameraModesSelection.ballCamera = isSelected ? _selectionSystem.selectedObject.GetComponentInChildren<Camera>() : null;
             }
 
             // additional logic for label selection
-            if (_raycast.raycastSelectableObj.type == ObjectType.Label)
+            if (_selectionSystem.selectableObject.type == ObjectType.Label)
             {
-                _labelTabController.editLabelToggle = tablesDict[ObjectType.Label].rowsList[_raycast.indexOfSelected].GetComponentInChildren<Toggle>();
+                _labelTabController.editLabelToggle = tablesDict[ObjectType.Label].rowsList[_selectionSystem.indexOfSelected].GetComponentInChildren<Toggle>();
 
-                TMP_Text[] labelTexts = tablesDict[ObjectType.Label].rowsList[_raycast.indexOfSelected].GetComponentsInChildren<TMP_Text>();
+                TMP_Text[] labelTexts = tablesDict[ObjectType.Label].rowsList[_selectionSystem.indexOfSelected].GetComponentsInChildren<TMP_Text>();
 
                 _labelTabController.currentTitle = labelTexts[1];
                 _labelTabController.currentDescription = labelTexts[2];
@@ -92,11 +94,11 @@ public class Menu : MonoBehaviour
     /// </summary>
     public void UpdateRowNumber() // assign text number to (index in list + 1)
     {
-        foreach (Row item in tablesDict[_raycast.raycastSelectableObj.type].rowsList)
+        foreach (Row item in tablesDict[_selectionSystem.selectableObject.type].rowsList)
         {
             var circleText = item.GetComponentInChildren<TMP_Text>();
 
-            int numberOfObject = tablesDict[_raycast.raycastSelectableObj.type].rowsList.IndexOf(item) + 1;
+            int numberOfObject = tablesDict[_selectionSystem.selectableObject.type].rowsList.IndexOf(item) + 1;
 
             circleText.text = numberOfObject.ToString();
         }

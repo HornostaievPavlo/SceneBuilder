@@ -8,28 +8,22 @@ public class SelectionSystem : MonoBehaviour
 
     [SerializeField] private ColorManipulator colorManipulator;
 
-    [SerializeField] private GameObject contolsButtons;
+    [SerializeField] private RuntimeTransformHandle runtimeTransformHandle;
 
-    [SerializeField] private GameObject transformHandle;
+    [SerializeField] private CreatedObjectManager _createdObjectManager;
 
-    [HideInInspector] public SelectableObject raycastSelectableObj;
+    [SerializeField] private GameObject controlsButtons;
+
+    [HideInInspector] public SelectableObject selectableObject;
 
     [HideInInspector] public GameObject selectedObject;
 
     [HideInInspector] public int indexOfSelected;
 
-    private CreatedObjectManager _createdObjectManager;
-
-    private RuntimeTransformHandle _runtimeTransformHandle;
-
     private Camera _mainCamera;
 
-    private void Start()
+    private void Awake()
     {
-        _runtimeTransformHandle = transformHandle.GetComponent<RuntimeTransformHandle>();
-
-        _createdObjectManager = GetComponent<CreatedObjectManager>();
-
         _mainCamera = Camera.main;
     }
 
@@ -60,7 +54,7 @@ public class SelectionSystem : MonoBehaviour
                 {
                     selectedObject = selectionParameter.gameObject;
 
-                    raycastSelectableObj = selectionParameter;
+                    selectableObject = selectionParameter;
 
                     indexOfSelected = _createdObjectManager.dictOfLists[selectionParameter.type].IndexOf(selectionParameter.gameObject);
 
@@ -75,7 +69,7 @@ public class SelectionSystem : MonoBehaviour
 
                 ItemSelection(false, transform);
 
-                raycastSelectableObj = null;
+                selectableObject = null;
             }
         }
     }
@@ -87,11 +81,11 @@ public class SelectionSystem : MonoBehaviour
     /// <param name="target">Which object to operate</param>
     public void ItemSelection(bool isSelected, Transform target)
     {
-        transformHandle.SetActive(isSelected);
+        runtimeTransformHandle.gameObject.SetActive(isSelected);
 
-        contolsButtons.SetActive(isSelected);
+        controlsButtons.SetActive(isSelected);
 
-        _runtimeTransformHandle.target = isSelected ? target.transform : _runtimeTransformHandle.transform;
+        runtimeTransformHandle.target = isSelected ? target.transform : runtimeTransformHandle.transform;
 
         selectedObject = isSelected ? target.gameObject : null;
 

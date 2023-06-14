@@ -8,7 +8,7 @@ public class SelectableObject : MonoBehaviour
 
     private void Start()
     {
-        _createdObjectManager = GetComponentInParent<CreatedObjectManager>();
+        _createdObjectManager = FindObjectOfType<CreatedObjectManager>();
 
         _createdObjectManager.AddCreatedObjectToList(this);
     }

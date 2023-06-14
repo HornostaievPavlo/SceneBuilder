@@ -3,13 +3,13 @@ using UnityEngine;
 
 public class ApplicationUI : MonoBehaviour
 {
-    [SerializeField] private SelectionSystem _raycastItemSelection;
-
     [SerializeField] private RuntimeTransformHandle _runtimeTransformHandle;
 
-    [SerializeField] private GameObject _uiToggle;
+    [SerializeField] private GameObject hideUIToggle;
 
     [SerializeField] private GameObject _cameraFocalPoint;
+
+    public SelectionSystem selectionSystem;
 
     /// <summary>
     /// Turns all UI elements on/off 
@@ -19,7 +19,7 @@ public class ApplicationUI : MonoBehaviour
     {
         gameObject.SetActive(isActive);
 
-        _uiToggle.gameObject.transform.eulerAngles = new Vector3(0, 0, isActive ? 0 : 180);
+        hideUIToggle.gameObject.transform.eulerAngles = new Vector3(0, 0, isActive ? 0 : 180);
     }
 
     /// <summary>
@@ -27,9 +27,9 @@ public class ApplicationUI : MonoBehaviour
     /// </summary>
     public void CenterCameraFocalPoint()
     {
-        if (_raycastItemSelection.selectedObject != null)
+        if (selectionSystem.selectedObject != null)
         {
-            _cameraFocalPoint.transform.position = _raycastItemSelection.selectedObject.transform.position;
+            _cameraFocalPoint.transform.position = selectionSystem.selectedObject.transform.position;
         }
     }
 
@@ -38,14 +38,14 @@ public class ApplicationUI : MonoBehaviour
     /// </summary>
     public void CopySelectedObject()
     {
-        if (_raycastItemSelection.selectedObject != null)
+        if (selectionSystem.selectedObject != null)
         {
-            Vector3 copyPosition = new Vector3(0, _raycastItemSelection.selectedObject.transform.position.y, 0);
+            Vector3 copyPosition = new Vector3(0, selectionSystem.selectedObject.transform.position.y, 0);
 
-            Instantiate(_raycastItemSelection.selectedObject.transform,
+            Instantiate(selectionSystem.selectedObject.transform,
                         copyPosition,
-                        _raycastItemSelection.selectedObject.transform.rotation,
-                        _raycastItemSelection.selectedObject.transform.parent);
+                        selectionSystem.selectedObject.transform.rotation,
+                        selectionSystem.selectedObject.transform.parent);
         }
     }
 
@@ -54,11 +54,11 @@ public class ApplicationUI : MonoBehaviour
     /// </summary>
     public void RemoveObject()
     {
-        if (_raycastItemSelection.selectedObject != null)
+        if (selectionSystem.selectedObject != null)
         {
-            Destroy(_raycastItemSelection.selectedObject);
+            Destroy(selectionSystem.selectedObject);
 
-            _raycastItemSelection.ItemSelection(false, _raycastItemSelection.selectedObject.transform);
+            selectionSystem.ItemSelection(false, selectionSystem.selectedObject.transform);
         }
     }
 

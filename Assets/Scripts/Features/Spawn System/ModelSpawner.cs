@@ -9,14 +9,9 @@ public class ModelSpawner : MonoBehaviour
     [SerializeField]
     private TMP_InputField _inputField;
 
+    private GameObject placeholder; 
+    
     private Transform _modelParent;
-
-    private GameObject _modelPlaceholder;
-
-    private void Start()
-    {
-        _modelParent = this.transform;
-    }
 
     /// <summary>
     /// Imports model from path,
@@ -27,16 +22,16 @@ public class ModelSpawner : MonoBehaviour
     {
         if (_inputField.text != "")
         {
-            _modelPlaceholder = new GameObject();
-            _modelPlaceholder.name = "Model";
-            _modelPlaceholder.transform.position = new Vector3(0, 0, 0);
+            placeholder = new GameObject();
+            placeholder.name = "Model";
+            placeholder.transform.position = new Vector3(0, 0, 0);
 
-            _modelPlaceholder.transform.SetParent(_modelParent);
+            placeholder.transform.SetParent(_modelParent);
 
-            SelectableObject selectableObject = _modelPlaceholder.AddComponent<SelectableObject>();
+            SelectableObject selectableObject = placeholder.AddComponent<SelectableObject>();
             selectableObject.type = ObjectType.Model;
 
-            var gltfAsset = _modelPlaceholder.AddComponent<GltfAsset>();
+            var gltfAsset = placeholder.AddComponent<GltfAsset>();
 
             string pathToModel = _inputField.text.ToString();
 
@@ -53,16 +48,16 @@ public class ModelSpawner : MonoBehaviour
     {
         string pathToDuck = "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF/Duck.gltf";
 
-        _modelPlaceholder = new GameObject();
-        _modelPlaceholder.name = "Model";
-        _modelPlaceholder.transform.position = new Vector3(0, 0, 0);
+        placeholder = new GameObject();
+        placeholder.name = "Model";
+        placeholder.transform.position = new Vector3(0, 0, 0);
 
-        _modelPlaceholder.transform.SetParent(_modelParent);
+        placeholder.transform.SetParent(_modelParent);
 
-        SelectableObject selectableObject = _modelPlaceholder.AddComponent<SelectableObject>();
+        SelectableObject selectableObject = placeholder.AddComponent<SelectableObject>();
         selectableObject.type = ObjectType.Model;
 
-        var gltfAsset = _modelPlaceholder.AddComponent<GltfAsset>();
+        var gltfAsset = placeholder.AddComponent<GltfAsset>();
 
         gltfAsset.Load(pathToDuck);
 
@@ -77,7 +72,7 @@ public class ModelSpawner : MonoBehaviour
     {
         yield return new WaitForSeconds(1);
 
-        MeshRenderer[] meshRenderers = _modelPlaceholder.GetComponentsInChildren<MeshRenderer>();
+        MeshRenderer[] meshRenderers = placeholder.GetComponentsInChildren<MeshRenderer>();
 
         if (meshRenderers.Length >= 1)
         {

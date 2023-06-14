@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class MainTabs : MonoBehaviour
+public class TabsSwitcher : MonoBehaviour
 {
     [SerializeField] private GameObject _modelsTab;
     [SerializeField] private GameObject _camerasTab;

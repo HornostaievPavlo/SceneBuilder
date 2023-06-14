@@ -1987,7 +1987,6 @@ GameObject:
   - component: {fileID: 417165522}
   - component: {fileID: 417165521}
   - component: {fileID: 417165520}
-  - component: {fileID: 417165519}
   m_Layer: 0
   m_Name: Spawn System
   m_TagString: Untagged
@@ -2010,24 +2009,6 @@ Transform:
   m_Father: {fileID: 1627617347}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &417165519
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 417165517}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc95af325b84e514b84af8af42acfec1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _modelTable: {fileID: 485486786}
-  _cameraTable: {fileID: 1657824028}
-  _labelTable: {fileID: 869638091}
-  models: []
-  cameras: []
-  labels: []
 --- !u!114 &417165520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4734,7 +4715,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f265db0f4cb790143b645031a95c185e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _raycastItemSelection: {fileID: 0}
+  _raycastItemSelection: {fileID: 1335881327}
   _runtimeTransformHandle: {fileID: 846435614}
   _uiToggle: {fileID: 809214184}
   _cameraFocalPoint: {fileID: 782628375}
@@ -4931,7 +4912,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
@@ -4956,7 +4937,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 417165522}
         m_TargetAssemblyTypeName: ModelSpawner, Assembly-CSharp
         m_MethodName: ImportModel
         m_Mode: 1
@@ -5695,6 +5676,7 @@ GameObject:
   - component: {fileID: 1321990557}
   - component: {fileID: 1321990556}
   - component: {fileID: 1321990558}
+  - component: {fileID: 1321990559}
   m_Layer: 5
   m_Name: Menu
   m_TagString: Untagged
@@ -5757,7 +5739,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c5ee80b855f3bf4e8c9da117bf1a0c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _raycast: {fileID: 0}
+  _raycast: {fileID: 1335881327}
   _modelsTable: {fileID: 485486786}
   _camerasTable: {fileID: 1657824028}
   _labelsTable: {fileID: 869638091}
@@ -5778,6 +5760,24 @@ MonoBehaviour:
   _labelsViewport: {fileID: 426170006}
   _openToggle: {fileID: 1045916355}
   _sizeToggle: {fileID: 29598643}
+--- !u!114 &1321990559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1321990554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc95af325b84e514b84af8af42acfec1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _modelTable: {fileID: 485486786}
+  _cameraTable: {fileID: 1657824028}
+  _labelTable: {fileID: 869638091}
+  models: []
+  cameras: []
+  labels: []
 --- !u!1 &1333067985
 GameObject:
   m_ObjectHideFlags: 0
@@ -5902,7 +5902,7 @@ MonoBehaviour:
   colorManipulator: {fileID: 1787243083}
   contolsButtons: {fileID: 1099585251}
   transformHandle: {fileID: 846435611}
-  raycastSelectableObj: {fileID: 0}
+  selectableObject: {fileID: 0}
   selectedObject: {fileID: 0}
   indexOfSelected: 0
 --- !u!1 &1383365530
@@ -6233,7 +6233,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
@@ -6533,7 +6533,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
@@ -8676,7 +8676,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
@@ -8701,7 +8701,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 417165522}
         m_TargetAssemblyTypeName: ModelSpawner, Assembly-CSharp
         m_MethodName: ImportDuckModel
         m_Mode: 1
