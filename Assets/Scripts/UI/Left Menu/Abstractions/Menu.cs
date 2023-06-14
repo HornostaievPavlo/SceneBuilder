@@ -6,11 +6,9 @@ using UnityEngine.UI;
 [DisallowMultipleComponent]
 public class Menu : MonoBehaviour
 {
-    [SerializeField] private Table modelsTable;
-
-    [SerializeField] private Table camerasTable;
-
-    [SerializeField] private Table labelsTable;
+    [HideInInspector] public Table modelsTable;
+    [HideInInspector] public Table camerasTable;
+    [HideInInspector] public Table labelsTable;
 
     private SelectionSystem _selectionSystem;
 
@@ -24,7 +22,7 @@ public class Menu : MonoBehaviour
     // dictionary to relate object with table to write
     public Dictionary<ObjectType, Table> tablesDict = new Dictionary<ObjectType, Table>();
 
-    private void Start()
+    private void Awake()
     {
         var applicationUI = GetComponentInParent<ApplicationUI>();
 
@@ -33,6 +31,11 @@ public class Menu : MonoBehaviour
         _labelTabController = GetComponentInChildren<LabelTabController>(true);
 
         _cameraModesSelection = GetComponentInChildren<CameraModesSelection>(true);
+
+        Table[] tables = GetComponentsInChildren<Table>(true);
+        modelsTable = tables[0];
+        camerasTable = tables[1];
+        labelsTable = tables[2];
 
         tablesDict[ObjectType.Model] = modelsTable;
         tablesDict[ObjectType.Camera] = camerasTable;

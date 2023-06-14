@@ -1,19 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CreatedObjectManager : MonoBehaviour
+public class RowsInitializer : MonoBehaviour
 {
-    [Tooltip("Tab where objects will be added")]
-    [SerializeField]
-    private Table _modelTable;
-
-    [Tooltip("Tab where objects will be added")]
-    [SerializeField]
-    private Table _cameraTable;
-
-    [Tooltip("Tab where objects will be added")]
-    [SerializeField]
-    private Table _labelTable;
+    private Table _modelsTable;
+    private Table _camerasTable;
+    private Table _labelsTable;
 
     [HideInInspector] public List<GameObject> models;
     [HideInInspector] public List<GameObject> cameras;
@@ -27,13 +19,19 @@ public class CreatedObjectManager : MonoBehaviour
 
     private void Start()
     {
+        var menu = GetComponent<Menu>();
+
+        _modelsTable = menu.modelsTable;
+        _camerasTable = menu.camerasTable;
+        _labelsTable = menu.labelsTable;
+
         dictOfLists[ObjectType.Model] = models;
         dictOfLists[ObjectType.Camera] = cameras;
         dictOfLists[ObjectType.Label] = labels;
 
-        dictOfTables[ObjectType.Model] = _modelTable;
-        dictOfTables[ObjectType.Camera] = _cameraTable;
-        dictOfTables[ObjectType.Label] = _labelTable;
+        dictOfTables[ObjectType.Model] = _modelsTable;
+        dictOfTables[ObjectType.Camera] = _camerasTable;
+        dictOfTables[ObjectType.Label] = _labelsTable;
     }
 
     /// <summary>

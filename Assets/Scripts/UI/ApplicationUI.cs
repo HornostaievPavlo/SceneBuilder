@@ -5,7 +5,7 @@ public class ApplicationUI : MonoBehaviour
 {
     [SerializeField] private RuntimeTransformHandle _runtimeTransformHandle;
 
-    [SerializeField] private GameObject hideUIToggle;
+    [SerializeField] private Transform hideUIToggle;
 
     [SerializeField] private GameObject _cameraFocalPoint;
 
@@ -15,11 +15,11 @@ public class ApplicationUI : MonoBehaviour
     /// Turns all UI elements on/off 
     /// </summary>
     /// <param name="isActive">Toggle value</param>
-    public void SetUIActive(bool isActive)
+    public void SetUIState(bool isActive)
     {
         gameObject.SetActive(isActive);
 
-        hideUIToggle.gameObject.transform.eulerAngles = new Vector3(0, 0, isActive ? 0 : 180);
+        hideUIToggle.eulerAngles = new Vector3(0, 0, isActive ? 0 : 180);
     }
 
     /// <summary>

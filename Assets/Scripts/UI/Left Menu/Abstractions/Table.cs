@@ -3,22 +3,27 @@ using UnityEngine;
 
 public class Table : MonoBehaviour
 {
-    [SerializeField] private SelectionSystem _raycastItemSelection;
+    [SerializeField] private Row rowPrefab;
 
-    [Space]
+    [SerializeField] private Transform rowParent;
 
-    [SerializeField] private Row _row;
-
-    [SerializeField] private Transform _parent;
+    private SelectionSystem _selectionSystem;
 
     [HideInInspector] public List<Row> rowsList;
+
+    private void Start()
+    {
+        var applicationUI = GetComponentInParent<ApplicationUI>();
+
+        _selectionSystem = applicationUI.selectionSystem;
+    }
 
     /// <summary>
     /// Creates new row when object is created
     /// </summary>
     public void CreateRowAndAddToList()
     {
-        Row newRow = Instantiate(_row, _parent);
+        Row newRow = Instantiate(rowPrefab, rowParent);
 
         rowsList.Add(newRow);
     }
@@ -28,11 +33,11 @@ public class Table : MonoBehaviour
     /// </summary>
     public void DestroyRowAndRemoveFromList()
     {
-        if (rowsList[_raycastItemSelection.indexOfSelected] != null)
+        if (rowsList[_selectionSystem.indexOfSelected] != null)
         {
-            Destroy(rowsList[_raycastItemSelection.indexOfSelected].gameObject);
+            Destroy(rowsList[_selectionSystem.indexOfSelected].gameObject);
         }
 
-        rowsList.RemoveAt(_raycastItemSelection.indexOfSelected);
+        rowsList.RemoveAt(_selectionSystem.indexOfSelected);
     }
 }

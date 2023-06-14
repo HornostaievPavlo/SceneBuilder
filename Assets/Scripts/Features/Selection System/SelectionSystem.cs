@@ -10,7 +10,7 @@ public class SelectionSystem : MonoBehaviour
 
     [SerializeField] private RuntimeTransformHandle runtimeTransformHandle;
 
-    [SerializeField] private CreatedObjectManager _createdObjectManager;
+    [SerializeField] private RowsInitializer _createdObjectManager;
 
     [SerializeField] private GameObject controlsButtons;
 
