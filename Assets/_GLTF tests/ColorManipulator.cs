@@ -8,12 +8,12 @@ public class ColorManipulator : MonoBehaviour
     private List<Renderer> targetRenderers = new List<Renderer>();
 
     [SerializeField]
-    private List<Material> targetMaterials;
-
-    [SerializeField]
     private List<Material> originalMaterials = new List<Material>();
 
-    private const string BASE_COLOR = "baseColorFactor";
+    [SerializeField]
+    private List<Material> targetMaterials;
+
+    private const string COLOR_PROPERTY_NAME = "baseColorFactor";
 
     public void GetAllModelMaterials(GameObject target, bool isSelected)
     {
@@ -60,7 +60,7 @@ public class ColorManipulator : MonoBehaviour
                 renderer.material = material;
             }
 
-            material.SetColor(BASE_COLOR, color);
+            material.SetColor(COLOR_PROPERTY_NAME, color);
         }
     }
 
@@ -68,8 +68,6 @@ public class ColorManipulator : MonoBehaviour
     {
         for (int i = 0; i < targetMaterials.Count; i++)
         {
-            //targetMaterials[i].color = originalMaterials[i].color;
-
             targetRenderers[i].material = originalMaterials[i];
         }
     }

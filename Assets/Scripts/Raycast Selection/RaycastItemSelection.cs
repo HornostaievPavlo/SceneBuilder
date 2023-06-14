@@ -4,13 +4,13 @@ using UnityEngine.EventSystems;
 
 public class RaycastItemSelection : MonoBehaviour
 {
+    [SerializeField] private Menu menu;
+
     [SerializeField] private ColorManipulator colorManipulator;
 
-    [SerializeField] private Menu _menu;
+    [SerializeField] private GameObject contolsButtons;
 
-    [SerializeField] private GameObject _selectedObjectContolButtons;
-
-    [SerializeField] private GameObject _transformHandle;
+    [SerializeField] private GameObject transformHandle;
 
     [HideInInspector] public SelectableObject raycastSelectableObj;
 
@@ -26,7 +26,7 @@ public class RaycastItemSelection : MonoBehaviour
 
     private void Start()
     {
-        _runtimeTransformHandle = _transformHandle.GetComponent<RuntimeTransformHandle>();
+        _runtimeTransformHandle = transformHandle.GetComponent<RuntimeTransformHandle>();
 
         _createdObjectManager = GetComponent<CreatedObjectManager>();
 
@@ -66,12 +66,12 @@ public class RaycastItemSelection : MonoBehaviour
 
                     ItemSelection(true, selectionParameter.transform);
 
-                    _menu.SelectRow(true);
+                    menu.SelectRow(true);
                 }
             }
             else
             {
-                _menu.SelectRow(false);
+                menu.SelectRow(false);
 
                 ItemSelection(false, transform);
 
@@ -87,9 +87,9 @@ public class RaycastItemSelection : MonoBehaviour
     /// <param name="target">Which object to operate</param>
     public void ItemSelection(bool isSelected, Transform target)
     {
-        _transformHandle.SetActive(isSelected);
+        transformHandle.SetActive(isSelected);
 
-        _selectedObjectContolButtons.SetActive(isSelected);
+        contolsButtons.SetActive(isSelected);
 
         _runtimeTransformHandle.target = isSelected ? target.transform : _runtimeTransformHandle.transform;
 
