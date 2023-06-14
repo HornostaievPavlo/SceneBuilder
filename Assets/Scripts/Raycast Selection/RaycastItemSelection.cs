@@ -4,6 +4,8 @@ using UnityEngine.EventSystems;
 
 public class RaycastItemSelection : MonoBehaviour
 {
+    [SerializeField] private ColorManipulator colorManipulator;
+
     [SerializeField] private Menu _menu;
 
     [SerializeField] private GameObject _selectedObjectContolButtons;
@@ -92,5 +94,7 @@ public class RaycastItemSelection : MonoBehaviour
         _runtimeTransformHandle.target = isSelected ? target.transform : _runtimeTransformHandle.transform;
 
         selectedObject = isSelected ? target.gameObject : null;
+
+        colorManipulator.GetAllModelMaterials(selectedObject, isSelected);
     }
 }
