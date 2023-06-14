@@ -6,17 +6,11 @@ using UnityEngine.UI;
 [DisallowMultipleComponent]
 public class Menu : MonoBehaviour
 {
-    [Tooltip("Models tab gameObject")]
-    [SerializeField]
-    private Table _modelsTable;
+    [SerializeField] private Table modelsTable;
 
-    [Tooltip("Cameras tab gameObject")]
-    [SerializeField]
-    private Table _camerasTable;
+    [SerializeField] private Table camerasTable;
 
-    [Tooltip("Labels tab gameObject")]
-    [SerializeField]
-    private Table _labelsTable;
+    [SerializeField] private Table labelsTable;
 
     private SelectionSystem _selectionSystem;
 
@@ -40,9 +34,24 @@ public class Menu : MonoBehaviour
 
         _cameraModesSelection = GetComponentInChildren<CameraModesSelection>(true);
 
-        tablesDict[ObjectType.Model] = _modelsTable;
-        tablesDict[ObjectType.Camera] = _camerasTable;
-        tablesDict[ObjectType.Label] = _labelsTable;
+        tablesDict[ObjectType.Model] = modelsTable;
+        tablesDict[ObjectType.Camera] = camerasTable;
+        tablesDict[ObjectType.Label] = labelsTable;
+    }
+
+    public void SelectModelsTab(bool isModelsTab)
+    {
+        modelsTable.gameObject.SetActive(isModelsTab);
+    }
+
+    public void SelectCamerasTab(bool isCamerasTab)
+    {
+        camerasTable.gameObject.SetActive(isCamerasTab);
+    }
+
+    public void SelectLabelsTab(bool isLabelsTab)
+    {
+        labelsTable.gameObject.SetActive(isLabelsTab);
     }
 
     /// <summary>

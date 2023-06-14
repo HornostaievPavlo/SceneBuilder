@@ -4715,10 +4715,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f265db0f4cb790143b645031a95c185e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _raycastItemSelection: {fileID: 1335881327}
   _runtimeTransformHandle: {fileID: 846435614}
-  _uiToggle: {fileID: 809214184}
+  hideUIToggle: {fileID: 809214184}
   _cameraFocalPoint: {fileID: 782628375}
+  selectionSystem: {fileID: 1335881327}
 --- !u!1 &1190783065
 GameObject:
   m_ObjectHideFlags: 0
@@ -5224,8 +5224,8 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1321990556}
-        m_TargetAssemblyTypeName: LeftMenuInteraction, Assembly-CSharp
+      - m_Target: {fileID: 1321990557}
+        m_TargetAssemblyTypeName: Menu, Assembly-CSharp
         m_MethodName: SelectModelsTab
         m_Mode: 0
         m_Arguments:
@@ -5234,7 +5234,7 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
+          m_BoolArgument: 1
         m_CallState: 2
   m_IsOn: 0
 --- !u!1 &1251436806
@@ -5674,9 +5674,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1321990555}
   - component: {fileID: 1321990557}
-  - component: {fileID: 1321990556}
-  - component: {fileID: 1321990558}
   - component: {fileID: 1321990559}
+  - component: {fileID: 1321990558}
   m_Layer: 5
   m_Name: Menu
   m_TagString: Untagged
@@ -5712,21 +5711,6 @@ RectTransform:
   m_AnchoredPosition: {x: 255, y: 484.5}
   m_SizeDelta: {x: 430, y: 888}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1321990556
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1321990554}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 94f75cefcec6bd34f8e73fb379cd2cf3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _modelsTab: {fileID: 485486784}
-  _camerasTab: {fileID: 1657824025}
-  _labelsTab: {fileID: 869638088}
 --- !u!114 &1321990557
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5739,10 +5723,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c5ee80b855f3bf4e8c9da117bf1a0c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _raycast: {fileID: 1335881327}
-  _modelsTable: {fileID: 485486786}
-  _camerasTable: {fileID: 1657824028}
-  _labelsTable: {fileID: 869638091}
+  modelsTable: {fileID: 485486786}
+  camerasTable: {fileID: 1657824028}
+  labelsTable: {fileID: 869638091}
 --- !u!114 &1321990558
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5900,8 +5883,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menu: {fileID: 1321990557}
   colorManipulator: {fileID: 1787243083}
-  contolsButtons: {fileID: 1099585251}
-  transformHandle: {fileID: 846435611}
+  runtimeTransformHandle: {fileID: 846435614}
+  _createdObjectManager: {fileID: 1321990559}
+  controlsButtons: {fileID: 1099585251}
   selectableObject: {fileID: 0}
   selectedObject: {fileID: 0}
   indexOfSelected: 0
@@ -8091,8 +8075,8 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1321990556}
-        m_TargetAssemblyTypeName: LeftMenuInteraction, Assembly-CSharp
+      - m_Target: {fileID: 1321990557}
+        m_TargetAssemblyTypeName: Menu, Assembly-CSharp
         m_MethodName: SelectCamerasTab
         m_Mode: 0
         m_Arguments:
@@ -8101,7 +8085,7 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
+          m_BoolArgument: 1
         m_CallState: 2
   m_IsOn: 0
 --- !u!1 &1962854318
@@ -8189,8 +8173,8 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1321990556}
-        m_TargetAssemblyTypeName: LeftMenuInteraction, Assembly-CSharp
+      - m_Target: {fileID: 1321990557}
+        m_TargetAssemblyTypeName: Menu, Assembly-CSharp
         m_MethodName: SelectLabelsTab
         m_Mode: 0
         m_Arguments:
@@ -8199,7 +8183,7 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
+          m_BoolArgument: 1
         m_CallState: 2
   m_IsOn: 0
 --- !u!1 &2028771052
