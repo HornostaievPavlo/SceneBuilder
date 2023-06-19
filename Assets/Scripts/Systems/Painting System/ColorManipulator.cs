@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ColorManipulator : MonoBehaviour
 {
@@ -60,7 +61,30 @@ public class ColorManipulator : MonoBehaviour
                 renderer.material = material;
             }
 
+            ///
+            material.SetTexture("baseColorTexture", null);
+            ///
+
             material.SetColor(COLOR_PROPERTY_NAME, color);
+        }
+    }
+
+    public void SetColorTint(Slider slider)
+    {
+        float tintValue = slider.value;
+
+        foreach (var newMaterial in targetMaterials)
+        {
+            Color tintedColor = new Color(newMaterial.color.r * tintValue,
+                                          newMaterial.color.g * tintValue,
+                                          newMaterial.color.b * tintValue);
+
+            newMaterial.SetColor(COLOR_PROPERTY_NAME, tintedColor);
+
+            foreach (Renderer renderer in targetRenderers)
+            {
+                renderer.material = newMaterial;
+            }
         }
     }
 
@@ -70,10 +94,5 @@ public class ColorManipulator : MonoBehaviour
         {
             targetRenderers[i].material = originalMaterials[i];
         }
-    }
-
-    public void SetRedColor()
-    {
-        SetColor(Color.red);
     }
 }

@@ -1,16 +1,35 @@
 using RuntimeHandle;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ApplicationUI : MonoBehaviour
 {
-    [SerializeField] private RuntimeTransformHandle _runtimeTransformHandle;
-
-    [SerializeField] private Transform hideUIToggle;
-
-    [SerializeField] private GameObject _cameraFocalPoint;
+    [Header("Classes")]
+    [Space]
 
     public SelectionSystem selectionSystem;
 
+    [SerializeField] private RuntimeTransformHandle runtimeTransformHandle;
+
+    [SerializeField] private ColorManipulator colorManipulator;
+
+    [SerializeField] private OrbitCameraController orbitCameraController;
+
+    [Header("Objects")]
+    [Space]
+
+    [SerializeField] private Slider colorTintSlider;
+
+    [SerializeField] private GameObject colorsButtons;
+
+    [SerializeField] private Transform hideUIToggle;
+
+    private void Start()
+    {
+        AssignColorsButtons();
+    }
+
+    #region MainUI
     /// <summary>
     /// Turns all UI elements on/off 
     /// </summary>
@@ -22,15 +41,9 @@ public class ApplicationUI : MonoBehaviour
         hideUIToggle.eulerAngles = new Vector3(0, 0, isActive ? 0 : 180);
     }
 
-    /// <summary>
-    /// Alligns camera focal point to currently selected object
-    /// </summary>
     public void CenterCameraFocalPoint()
     {
-        if (selectionSystem.selectedObject != null)
-        {
-            _cameraFocalPoint.transform.position = selectionSystem.selectedObject.transform.position;
-        }
+        orbitCameraController.CenterCameraFocalPoint();
     }
 
     /// <summary>
@@ -61,13 +74,15 @@ public class ApplicationUI : MonoBehaviour
             selectionSystem.ItemSelection(false, selectionSystem.selectedObject.transform);
         }
     }
+    #endregion
 
+    #region TransformHandle
     /// <summary>
     /// Changes mode of the TransformHandle to translation 
     /// </summary>
     public void SetPositionType()
     {
-        _runtimeTransformHandle.type = HandleType.POSITION;
+        runtimeTransformHandle.type = HandleType.POSITION;
     }
 
     /// <summary>
@@ -75,7 +90,7 @@ public class ApplicationUI : MonoBehaviour
     /// </summary>
     public void SetRotationType()
     {
-        _runtimeTransformHandle.type = HandleType.ROTATION;
+        runtimeTransformHandle.type = HandleType.ROTATION;
     }
 
     /// <summary>
@@ -83,12 +98,41 @@ public class ApplicationUI : MonoBehaviour
     /// </summary>
     public void SetScaleType()
     {
-        _runtimeTransformHandle.type = HandleType.SCALE;
+        runtimeTransformHandle.type = HandleType.SCALE;
+    }
+    #endregion
+
+    #region PaintingSystem
+
+    private void AssignColorsButtons()
+    {
+        Button[] buttons = colorsButtons.GetComponentsInChildren<Button>(true);
+
+        buttons[0].onClick.AddListener(() => colorManipulator.SetColor(Color.red));
+        buttons[1].onClick.AddListener(() => colorManipulator.SetColor(new Color(1, 0, 0.5f, 1))); //pink
+        buttons[2].onClick.AddListener(() => colorManipulator.SetColor(new Color(1, 0.5f, 0, 1))); //orange
+        buttons[3].onClick.AddListener(() => colorManipulator.SetColor(new Color(1, 1, 0, 1))); //yellow
+        buttons[4].onClick.AddListener(() => colorManipulator.SetColor(Color.green));
+        buttons[5].onClick.AddListener(() => colorManipulator.SetColor(new Color(0.75f, 1, 0.75f, 1))); //lgreen
+        buttons[6].onClick.AddListener(() => colorManipulator.SetColor(Color.blue)); //blue
+        buttons[7].onClick.AddListener(() => colorManipulator.SetColor(new Color(0.5f, 0.7f, 1, 1))); //lblue
+        buttons[8].onClick.AddListener(() => colorManipulator.SetColor(new Color(0, 0, 0.5f, 1))); //violet 
+        buttons[9].onClick.AddListener(() => colorManipulator.SetColor(new Color(0.5f, 0.5f, 0.75f, 1))); //purple
+        buttons[10].onClick.AddListener(() => colorManipulator.SetColor(Color.black));
+        buttons[11].onClick.AddListener(() => colorManipulator.SetColor(Color.white));
     }
 
-    /// <summary>
-    /// Exits application
-    /// </summary>
+    public void SetColorTint()
+    {
+        colorManipulator.SetColorTint(colorTintSlider);
+    }
+
+    public void ResetColor()
+    {
+        colorManipulator.ResetColor();
+    }
+    #endregion
+
     public void QuitApplication()
     {
         Application.Quit();

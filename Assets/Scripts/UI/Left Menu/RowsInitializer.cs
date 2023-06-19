@@ -19,7 +19,7 @@ public class RowsInitializer : MonoBehaviour
 
     private void Start()
     {
-        var menu = GetComponent<Menu>();
+        var menu = GetComponent<LeftMenu>();
 
         _modelsTable = menu.modelsTable;
         _camerasTable = menu.camerasTable;

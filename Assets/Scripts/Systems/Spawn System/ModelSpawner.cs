@@ -9,9 +9,14 @@ public class ModelSpawner : MonoBehaviour
     [SerializeField]
     private TMP_InputField _inputField;
 
-    private GameObject placeholder; 
-    
+    private GameObject placeholder;
+
     private Transform _modelParent;
+
+    private void Start()
+    {
+        ImportDuckModel();
+    }
 
     /// <summary>
     /// Imports model from path,

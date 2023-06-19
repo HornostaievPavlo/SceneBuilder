@@ -4,15 +4,17 @@ using UnityEngine.EventSystems;
 
 public class SelectionSystem : MonoBehaviour
 {
-    [SerializeField] private Menu menu;
+    [SerializeField] private LeftMenu leftMenu;
 
     [SerializeField] private ColorManipulator colorManipulator;
 
     [SerializeField] private RuntimeTransformHandle runtimeTransformHandle;
 
-    [SerializeField] private RowsInitializer _createdObjectManager;
+    [SerializeField] private RowsInitializer rowsInitializer;
 
     [SerializeField] private GameObject controlsButtons;
+
+    [SerializeField] private GameObject rightMenu;
 
     [HideInInspector] public SelectableObject selectableObject;
 
@@ -56,16 +58,16 @@ public class SelectionSystem : MonoBehaviour
 
                     selectableObject = selectionParameter;
 
-                    indexOfSelected = _createdObjectManager.dictOfLists[selectionParameter.type].IndexOf(selectionParameter.gameObject);
+                    indexOfSelected = rowsInitializer.dictOfLists[selectionParameter.type].IndexOf(selectionParameter.gameObject);
 
                     ItemSelection(true, selectionParameter.transform);
 
-                    menu.SelectRow(true);
+                    leftMenu.SelectRow(true);
                 }
             }
             else
             {
-                menu.SelectRow(false);
+                leftMenu.SelectRow(false);
 
                 ItemSelection(false, transform);
 
@@ -84,6 +86,8 @@ public class SelectionSystem : MonoBehaviour
         runtimeTransformHandle.gameObject.SetActive(isSelected);
 
         controlsButtons.SetActive(isSelected);
+
+        if (!isSelected) rightMenu.SetActive(false);
 
         runtimeTransformHandle.target = isSelected ? target.transform : runtimeTransformHandle.transform;
 

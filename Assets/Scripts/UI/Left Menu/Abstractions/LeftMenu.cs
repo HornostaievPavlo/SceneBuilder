@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [DisallowMultipleComponent]
-public class Menu : MonoBehaviour
+public class LeftMenu : MonoBehaviour
 {
     [HideInInspector] public Table modelsTable;
     [HideInInspector] public Table camerasTable;
@@ -40,21 +40,6 @@ public class Menu : MonoBehaviour
         tablesDict[ObjectType.Model] = modelsTable;
         tablesDict[ObjectType.Camera] = camerasTable;
         tablesDict[ObjectType.Label] = labelsTable;
-    }
-
-    public void SelectModelsTab(bool isModelsTab)
-    {
-        modelsTable.gameObject.SetActive(isModelsTab);
-    }
-
-    public void SelectCamerasTab(bool isCamerasTab)
-    {
-        camerasTable.gameObject.SetActive(isCamerasTab);
-    }
-
-    public void SelectLabelsTab(bool isLabelsTab)
-    {
-        labelsTable.gameObject.SetActive(isLabelsTab);
     }
 
     /// <summary>

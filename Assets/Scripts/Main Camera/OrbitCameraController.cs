@@ -4,11 +4,11 @@ public class OrbitCameraController : MonoBehaviour
 {
     [Tooltip("Responsiveness of camera rotation")]
     [SerializeField]
-    private float _rotationSensitivity;
+    private float rotationSensitivity;
 
     [Tooltip("Responsiveness of camera zoom")]
     [SerializeField]
-    private float _scrollSensitivity;
+    private float scrollSensitivity;
 
     private Transform _mainCamera;
 
@@ -36,8 +36,8 @@ public class OrbitCameraController : MonoBehaviour
 
         if (Input.GetMouseButton(rightMouseButton))
         {
-            float mousePositionX = Input.GetAxis("Mouse X") * _rotationSensitivity * Time.deltaTime;
-            float mousePositionY = Input.GetAxis("Mouse Y") * _rotationSensitivity * Time.deltaTime;
+            float mousePositionX = Input.GetAxis("Mouse X") * rotationSensitivity * Time.deltaTime;
+            float mousePositionY = Input.GetAxis("Mouse Y") * rotationSensitivity * Time.deltaTime;
 
             _yRotation += mousePositionX;
             _xRotation -= mousePositionY;
@@ -51,12 +51,25 @@ public class OrbitCameraController : MonoBehaviour
     /// </summary>
     private void ZoomCamera()
     {
-        float mouseWheel = Input.GetAxis("Mouse ScrollWheel") * _scrollSensitivity * Time.deltaTime;
+        float mouseWheel = Input.GetAxis("Mouse ScrollWheel") * scrollSensitivity * Time.deltaTime;
 
         _mainCamera.Translate(Vector3.forward * mouseWheel);
 
         // looks better to move a bit down while zooming to small models
         float scrollingDownDivisor = 5.25f;
         _mainCamera.Translate(Vector3.down * mouseWheel / scrollingDownDivisor);
+    }
+
+    /// <summary>
+    /// Alligns camera focal point to currently selected object
+    /// </summary>
+    public void CenterCameraFocalPoint()
+    {
+        Transform selectedObject = FindObjectOfType<SelectionSystem>().selectedObject.transform;
+
+        if (selectedObject != null)
+        {
+            this.transform.position = selectedObject.transform.position;
+        }
     }
 }
