@@ -9,9 +9,9 @@ public class ModelSpawner : MonoBehaviour
     [SerializeField]
     private TMP_InputField _inputField;
 
-    private GameObject placeholder;
+    [SerializeField] private Transform _modelParent;
 
-    private Transform _modelParent;
+    private GameObject placeholder;
 
     private void Start()
     {

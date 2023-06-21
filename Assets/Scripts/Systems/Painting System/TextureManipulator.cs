@@ -14,6 +14,8 @@ public class TextureManipulator : MonoBehaviour
 
     public GameObject selectedObject;
 
+    //material.SetTexture("baseColorTexture", null);   
+
     private void Awake()
     {
         targetRenderer = selectedObject.GetComponent<MeshRenderer>();

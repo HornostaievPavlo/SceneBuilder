@@ -61,10 +61,6 @@ public class ColorManipulator : MonoBehaviour
                 renderer.material = material;
             }
 
-            ///
-            material.SetTexture("baseColorTexture", null);
-            ///
-
             material.SetColor(COLOR_PROPERTY_NAME, color);
         }
     }
@@ -73,18 +69,20 @@ public class ColorManipulator : MonoBehaviour
     {
         float tintValue = slider.value;
 
-        foreach (var newMaterial in targetMaterials)
+        Color originalColorCopy = originalMaterials[0].color;
+
+        foreach (var material in targetMaterials)
         {
-            Color tintedColor = new Color(newMaterial.color.r * tintValue,
-                                          newMaterial.color.g * tintValue,
-                                          newMaterial.color.b * tintValue);
-
-            newMaterial.SetColor(COLOR_PROPERTY_NAME, tintedColor);
-
             foreach (Renderer renderer in targetRenderers)
             {
-                renderer.material = newMaterial;
+                renderer.material = material;
             }
+
+            Color tintedColor = new Color(originalColorCopy.r * tintValue,
+                                          originalColorCopy.g * tintValue,
+                                          originalColorCopy.b * tintValue);
+
+            material.SetColor(COLOR_PROPERTY_NAME, tintedColor);
         }
     }
 
@@ -93,6 +91,8 @@ public class ColorManipulator : MonoBehaviour
         for (int i = 0; i < targetMaterials.Count; i++)
         {
             targetRenderers[i].material = originalMaterials[i];
+
+            targetRenderers[i].material.color = Color.white;
         }
     }
 }
