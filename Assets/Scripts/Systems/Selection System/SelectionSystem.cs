@@ -6,7 +6,7 @@ public class SelectionSystem : MonoBehaviour
 {
     [SerializeField] private LeftMenu leftMenu;
 
-    [SerializeField] private ColorManipulator colorManipulator;
+    [SerializeField] private SurfacePainter surfacePainter;
 
     [SerializeField] private RuntimeTransformHandle runtimeTransformHandle;
 
@@ -93,6 +93,6 @@ public class SelectionSystem : MonoBehaviour
 
         selectedObject = isSelected ? target.gameObject : null;
 
-        colorManipulator.GetAllModelMaterials(selectedObject, isSelected);
+        surfacePainter.GetAllModelMaterials(selectedObject, isSelected);
     }
 }

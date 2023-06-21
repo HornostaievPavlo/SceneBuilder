@@ -11,7 +11,7 @@ public class ApplicationUI : MonoBehaviour
 
     [SerializeField] private RuntimeTransformHandle runtimeTransformHandle;
 
-    [SerializeField] private ColorManipulator colorManipulator;
+    [SerializeField] private SurfacePainter colorManipulator;
 
     [SerializeField] private OrbitCameraController orbitCameraController;
 
