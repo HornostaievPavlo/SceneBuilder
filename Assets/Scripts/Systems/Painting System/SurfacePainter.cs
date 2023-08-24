@@ -6,13 +6,11 @@ using UnityEngine.UI;
 public class SurfacePainter : MonoBehaviour
 {
     [SerializeField]
+    private List<Material> targetMaterials;
+
     private List<Renderer> targetRenderers = new List<Renderer>();
 
-    [SerializeField]
     private List<Material> originalMaterials = new List<Material>();
-
-    [SerializeField]
-    private List<Material> targetMaterials;
 
     private const string COLOR_PROPERTY_NAME = "baseColorFactor";
 
