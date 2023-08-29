@@ -4,11 +4,11 @@ public class SelectableObject : MonoBehaviour
 {
     [HideInInspector] public ObjectType type;
 
-    private CreatedObjectManager _createdObjectManager;
+    private RowsInitializer _createdObjectManager;
 
     private void Start()
     {
-        _createdObjectManager = GetComponentInParent<CreatedObjectManager>();
+        _createdObjectManager = FindObjectOfType<RowsInitializer>();
 
         _createdObjectManager.AddCreatedObjectToList(this);
     }
