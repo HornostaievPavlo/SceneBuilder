@@ -13,7 +13,7 @@ public class SaveLoadUtility : MonoBehaviour
 
     private void Awake()
     {
-        placeholder = GameObject.Find("Placeholder").transform;
+        placeholder = GameObject.Find("Assets Placeholder").transform;
     }
 
     public static void ClearTargetsList()

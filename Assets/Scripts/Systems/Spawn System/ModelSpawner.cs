@@ -27,8 +27,11 @@ public class ModelSpawner : MonoBehaviour
     {
         if (_inputField.text != "")
         {
-            placeholder = new GameObject();
-            placeholder.name = "Model";
+            placeholder = new GameObject
+            {
+                name = "Asset"
+            };
+
             placeholder.transform.position = new Vector3(0, 0, 0);
 
             placeholder.transform.SetParent(_modelParent);
