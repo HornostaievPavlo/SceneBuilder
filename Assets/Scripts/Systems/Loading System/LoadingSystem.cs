@@ -2,63 +2,77 @@ using GLTFast;
 using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
+using TMPro;
 
 public class LoadingSystem : MonoBehaviour//, ILoadable
 {
-    private GltfAsset CreateAsset()
+    [SerializeField] private TMP_InputField inputField;
+
+    private GltfAsset CreateAsset(AssetType type)
     {
         GameObject asset = new GameObject
         {
             name = "Asset"
         };
 
-        asset.transform.SetParent(SaveLoadUtility.placeholder);
+        asset.transform.SetParent(SaveLoadUtility.assetsParent);
+
+        SelectableObject selectable = asset.AddComponent<SelectableObject>();
+        selectable.type = type;
 
         var gltfAsset = asset.AddComponent<GltfAsset>();
 
         return gltfAsset;
     }
 
-    public async void LoadAsset()
+    //how to do input field reading without direct reference?
+    public async void LoadAssetFromDirectory()
     {
-        bool success = await LoadModel();
+        if(inputField.text != string.Empty)
+        {
+            bool success = await LoadModel(inputField.text);
+
+            if (success) Debug.Log("Model loaded from INPUT FIELD successfully");
+        }       
+    }
+
+    public async void LoadAssetFromSaveFile()
+    {
+        bool success = await LoadModel(SaveLoadUtility.modelPath);
 
         if (success)
         {
-            Debug.Log("Model loaded successfully");
+            Debug.Log("Model loaded from SAVE FILE successfully");
 
             LoadTexture();
         }
     }
-    #region utka
-    public async void Duck()
+
+    /// <summary>
+    /// Base Task for loading model from any source path
+    /// </summary>
+    /// <param name="modelPath">Directory or save file</param>
+    /// <returns>Result of loading process</returns>
+    private async Task<bool> LoadModel(string modelPath)
     {
-        await LoadDuck();
-    }
-    public async Task<bool> LoadDuck()
-    {
-        var asset = CreateAsset();
+        var asset = CreateAsset(AssetType.Model);
 
-        var success = await asset.Load(SaveLoadUtility.duckModelPath);
-        if (success) asset.gameObject.AddComponent<SelectableObject>();
+        var success = await asset.Load(modelPath);
 
-        return success;
-    }
-    #endregion
+        if (success)
+        {
+            //var selectable = asset.gameObject.AddComponent<SelectableObject>();
+            //selectable.type = ObjectType.Model;
 
-    private async Task<bool> LoadModel()
-    {
-        var asset = CreateAsset();
-
-        var success = await asset.Load(SaveLoadUtility.modelPath);
-        if (success) asset.gameObject.AddComponent<SelectableObject>();
+            AddCollidersToAsset(asset);
+        }
 
         return success;
     }
 
     private void LoadTexture()
     {
-        var model = SaveLoadUtility.placeholder.gameObject.GetComponentInChildren<SelectableObject>();
+        var model = SaveLoadUtility.assetsParent.gameObject.GetComponentInChildren<SelectableObject>();
 
         Renderer renderer = model.gameObject.GetComponentInChildren<MeshRenderer>();
 
@@ -77,6 +91,18 @@ public class LoadingSystem : MonoBehaviour//, ILoadable
 
                 Debug.Log("Texture added successfully");
             }
+        }
+    }
+
+    private void AddCollidersToAsset(GltfAsset asset)
+    {
+        MeshRenderer[] meshRenderers = asset.gameObject.GetComponentsInChildren<MeshRenderer>();
+
+        foreach (MeshRenderer item in meshRenderers)
+        {
+            var itemCollider = item.gameObject.AddComponent<MeshCollider>();
+
+            itemCollider.convex = true;
         }
     }
 }

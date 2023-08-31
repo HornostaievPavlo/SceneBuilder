@@ -24,6 +24,6 @@ public class CameraSpawner : MonoBehaviour
         var cameraPrefabCopy = Instantiate(_cameraPrefab, spawnPosition, _cameraPrefab.transform.rotation, _cameraParent);
 
         SelectableObject selectableObject = cameraPrefabCopy.gameObject.AddComponent<SelectableObject>();
-        selectableObject.type = ObjectType.Camera;
+        selectableObject.type = AssetType.Camera;
     }
 }

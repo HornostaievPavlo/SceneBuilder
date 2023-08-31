@@ -1,7 +1,7 @@
 /// <summary>
-/// Represents all object types 
+/// Represents all possible assets types 
 /// </summary>
-public enum ObjectType
+public enum AssetType
 {
     Model,
     Camera,

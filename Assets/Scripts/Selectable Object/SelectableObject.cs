@@ -2,19 +2,20 @@ using UnityEngine;
 
 public class SelectableObject : MonoBehaviour
 {
-    [HideInInspector] public ObjectType type;
+    [HideInInspector]
+    public AssetType type;
 
-    private RowsInitializer _createdObjectManager;
+    private RowsInitializer rowsInitializer;
 
     private void Start()
     {
-        _createdObjectManager = FindObjectOfType<RowsInitializer>();
+        rowsInitializer = FindObjectOfType<RowsInitializer>();
 
-        _createdObjectManager.AddCreatedObjectToList(this);
+        rowsInitializer.AddCreatedObjectToList(this);
     }
 
     private void OnDestroy()
     {
-        _createdObjectManager.RemoveCreatedObjectFromList(this);
+        rowsInitializer.RemoveCreatedObjectFromList(this);
     }
 }

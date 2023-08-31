@@ -15,7 +15,7 @@ public class ModelSpawner : MonoBehaviour
 
     private void Start()
     {
-        ImportDuckModel();
+        //ImportDuckModel();
     }
 
     /// <summary>
@@ -37,7 +37,7 @@ public class ModelSpawner : MonoBehaviour
             placeholder.transform.SetParent(_modelParent);
 
             SelectableObject selectableObject = placeholder.AddComponent<SelectableObject>();
-            selectableObject.type = ObjectType.Model;
+            selectableObject.type = AssetType.Model;
 
             var gltfAsset = placeholder.AddComponent<GltfAsset>();
 
@@ -63,7 +63,7 @@ public class ModelSpawner : MonoBehaviour
         placeholder.transform.SetParent(_modelParent);
 
         SelectableObject selectableObject = placeholder.AddComponent<SelectableObject>();
-        selectableObject.type = ObjectType.Model;
+        selectableObject.type = AssetType.Model;
 
         var gltfAsset = placeholder.AddComponent<GltfAsset>();
 

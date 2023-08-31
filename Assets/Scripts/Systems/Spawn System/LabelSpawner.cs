@@ -24,6 +24,6 @@ public class LabelSpawner : MonoBehaviour
         var labelPrefabCopy = Instantiate(_labelPrefab, spawnPosition, _labelPrefab.transform.rotation, _labelParent);
 
         SelectableObject selectableObject = labelPrefabCopy.gameObject.AddComponent<SelectableObject>();
-        selectableObject.type = ObjectType.Label;
+        selectableObject.type = AssetType.Label;
     }
 }

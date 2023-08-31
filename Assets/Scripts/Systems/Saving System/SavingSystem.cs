@@ -7,7 +7,7 @@ public class SavingSystem : MonoBehaviour//, ISavable
     private void CollectSelectableObjects()
     {
         SelectableObject[] selectableObjects =
-            SaveLoadUtility.placeholder.GetComponentsInChildren<SelectableObject>();
+            SaveLoadUtility.assetsParent.GetComponentsInChildren<SelectableObject>();
 
         foreach (var item in selectableObjects)
         {
