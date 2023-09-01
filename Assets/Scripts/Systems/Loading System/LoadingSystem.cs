@@ -61,9 +61,6 @@ public class LoadingSystem : MonoBehaviour//, ILoadable
 
         if (success)
         {
-            //var selectable = asset.gameObject.AddComponent<SelectableObject>();
-            //selectable.type = ObjectType.Model;
-
             AddCollidersToAsset(asset);
         }
 
