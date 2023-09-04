@@ -1,10 +1,10 @@
 using GLTFast;
 using System.IO;
 using System.Threading.Tasks;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
-public class LoadingSystem : MonoBehaviour//, ILoadable
+public class LoadingSystem : MonoBehaviour
 {
     [SerializeField] private TMP_InputField inputField;
 
@@ -26,14 +26,20 @@ public class LoadingSystem : MonoBehaviour//, ILoadable
     }
 
     //how to do input field reading without direct reference?
+
+    private void Start() // CUSTOM!!!!!!!!!!!!!!
+    {
+        LoadAssetFromDirectory();
+    }
     public async void LoadAssetFromDirectory()
     {
-        if(inputField.text != string.Empty)
+        inputField.text = "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF/Duck.gltf";
+        if (inputField.text != string.Empty)
         {
             bool success = await LoadModel(inputField.text);
 
-            if (success) Debug.Log("Model loaded from INPUT FIELD successfully");
-        }       
+            //if (success) Debug.Log("Model loaded from INPUT FIELD successfully");
+        }
     }
 
     public async void LoadAssetFromSaveFile()
@@ -42,7 +48,7 @@ public class LoadingSystem : MonoBehaviour//, ILoadable
 
         if (success)
         {
-            Debug.Log("Model loaded from SAVE FILE successfully");
+            //Debug.Log("Model loaded from SAVE FILE successfully");
 
             LoadTexture();
         }

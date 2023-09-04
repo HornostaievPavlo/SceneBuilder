@@ -2,9 +2,9 @@ using GLTFast.Export;
 using System.IO;
 using UnityEngine;
 
-public class SavingSystem : MonoBehaviour//, ISavable
+public class SavingSystem : MonoBehaviour
 {
-    private void CollectSelectableObjects()
+    private SelectableObject[] CollectSelectableObjects()
     {
         SelectableObject[] selectableObjects =
             SaveLoadUtility.assetsParent.GetComponentsInChildren<SelectableObject>();
@@ -13,18 +13,20 @@ public class SavingSystem : MonoBehaviour//, ISavable
         {
             SaveLoadUtility.savingTargets.Add(item.gameObject);
         }
+
+        return selectableObjects;
     }
 
     public void SaveAsset()
     {
-        CollectSelectableObjects();
+        var saveTargets = CollectSelectableObjects();
 
-        SaveTexture();
+        SaveTextures(saveTargets);
 
-        SaveModel();
+        SaveModels();
     }
 
-    private async void SaveModel()
+    private async void SaveModels()
     {
         var export = new GameObjectExport();
         export.AddScene(SaveLoadUtility.savingTargets.ToArray());
@@ -34,36 +36,45 @@ public class SavingSystem : MonoBehaviour//, ISavable
         if (success) Debug.Log("Model saved successfully");
     }
 
-    private void SaveTexture()
+    private void SaveTextures(SelectableObject[] targets)
     {
-        Renderer renderer = SaveLoadUtility.savingTargets[0].GetComponentInChildren<Renderer>();
-
-        if (renderer != null)
+        for (int i = 0; i < targets.Length; i++)
         {
-            Material material = renderer.sharedMaterial;
+            Renderer renderer = targets[i].GetComponentInChildren<Renderer>();
 
-            if (material != null && material.mainTexture != null)
+            if (renderer != null)
             {
-                Texture2D texture = (Texture2D)material.mainTexture;
+                Material material = renderer.sharedMaterial;
 
-                Texture2D readableCopy = DuplicateTexture(texture);
+                if (material != null && material.mainTexture != null)
+                {
+                    Texture2D texture = DuplicateTexture((Texture2D)material.mainTexture);
 
-                SaveTextureToFile(readableCopy);
+                    string directoryPath = SaveLoadUtility.assetSavePath + @$"\Asset {i}";
 
-                Debug.Log("Texture saved successfully");
+                    string filePath = directoryPath + @"\Texture.png";
+
+                    SaveTextureToFile(texture, directoryPath, filePath);
+
+                    Debug.Log($"Texture number ({i}) saved successfully");
+                }
             }
         }
-
-        //foreach (var target in savingTargets)
-        //{
-        //    Destroy(target);
-        //}
     }
 
-    private void SaveTextureToFile(Texture2D texture)
+    private void SaveTextureToFile(Texture2D texture, string directory, string file)
     {
         byte[] textureBytes = texture.EncodeToPNG();
-        File.WriteAllBytes(SaveLoadUtility.texturePath, textureBytes);
+
+        var folder = Directory.CreateDirectory(directory);
+
+        //Debug.Log("Creating folder with name - " + folderName);
+
+        var fullPath = Path.Combine(folder.FullName, file);
+
+        //Debug.Log("Final path - " + fullPath);
+
+        File.WriteAllBytes(fullPath, textureBytes);
     }
 
     private Texture2D DuplicateTexture(Texture2D source)
