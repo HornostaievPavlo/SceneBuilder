@@ -17,7 +17,7 @@ public class SavingSystem : MonoBehaviour
         return selectableObjects;
     }
 
-    public void SaveAsset()
+    public void SaveAssets()
     {
         var saveTargets = CollectSelectableObjects();
 
@@ -31,9 +31,9 @@ public class SavingSystem : MonoBehaviour
         var export = new GameObjectExport();
         export.AddScene(SaveLoadUtility.savingTargets.ToArray());
 
-        bool success = await export.SaveToFileAndDispose(SaveLoadUtility.modelPath);
+        bool success = await export.SaveToFileAndDispose(SaveLoadUtility.scenePath);
 
-        if (success) Debug.Log("Model saved successfully");
+        if (success) Debug.Log("Models saved successfully");
     }
 
     private void SaveTextures(SelectableObject[] targets)
@@ -42,27 +42,24 @@ public class SavingSystem : MonoBehaviour
         {
             Renderer renderer = targets[i].GetComponentInChildren<Renderer>();
 
-            if (renderer != null)
+            Material material = renderer.sharedMaterial;
+
+            if (material.mainTexture != null)
             {
-                Material material = renderer.sharedMaterial;
+                Texture2D texture = DuplicateTexture((Texture2D)material.mainTexture);
 
-                if (material != null && material.mainTexture != null)
-                {
-                    Texture2D texture = DuplicateTexture((Texture2D)material.mainTexture);
+                string directoryPath = SaveLoadUtility.assetSavePath + @$"\Asset {i + 1}";
 
-                    string directoryPath = SaveLoadUtility.assetSavePath + @$"\Asset {i}";
+                string filePath = directoryPath + @"\Texture.png";
 
-                    string filePath = directoryPath + @"\Texture.png";
+                CreateDirectoryAndSaveTexture(texture, directoryPath, filePath);
 
-                    SaveTextureToFile(texture, directoryPath, filePath);
-
-                    Debug.Log($"Texture number ({i}) saved successfully");
-                }
+                Debug.Log($"Texture number ({i + 1}) saved successfully");
             }
         }
     }
 
-    private void SaveTextureToFile(Texture2D texture, string directory, string file)
+    private void CreateDirectoryAndSaveTexture(Texture2D texture, string directory, string file)
     {
         byte[] textureBytes = texture.EncodeToPNG();
 

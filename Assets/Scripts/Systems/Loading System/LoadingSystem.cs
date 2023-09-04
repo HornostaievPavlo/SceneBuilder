@@ -1,4 +1,5 @@
 using GLTFast;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using TMPro;
@@ -7,6 +8,37 @@ using UnityEngine;
 public class LoadingSystem : MonoBehaviour
 {
     [SerializeField] private TMP_InputField inputField;
+
+    List<Transform> currentAssetsInScene = new List<Transform>();
+
+    //how to do input field reading without direct reference?
+
+    public async void LoadAssetFromDirectory() => await LoadModels(inputField.text);
+
+    public async void LoadAssetsFromSaveFile()
+    {
+        bool success = await LoadModels(SaveLoadUtility.scenePath);
+
+        if (success) LoadTexture();
+    }
+
+    private async Task<bool> LoadModels(string modelPath)
+    {
+        var asset = CreateAsset(AssetType.Model);
+
+        var success = await asset.Load(modelPath);
+
+        if (success)
+        {
+            var assets = new List<Transform>();
+
+            if (modelPath == SaveLoadUtility.scenePath) assets = InitializeImportedAssets();
+
+            AddCollidersToAssets(assets);
+        }
+
+        return success;
+    }
 
     private GltfAsset CreateAsset(AssetType type)
     {
@@ -25,87 +57,74 @@ public class LoadingSystem : MonoBehaviour
         return gltfAsset;
     }
 
-    //how to do input field reading without direct reference?
+    private List<Transform> InitializeImportedAssets() // gabella
+    {
+        // setting scene obj as child of placeholder
+        Transform sceneObj = GameObject.Find("Scene").transform;
+        sceneObj.SetParent(SaveLoadUtility.assetsParent);
 
-    private void Start() // CUSTOM!!!!!!!!!!!!!!
-    {
-        LoadAssetFromDirectory();
-    }
-    public async void LoadAssetFromDirectory()
-    {
-        inputField.text = "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF/Duck.gltf";
-        if (inputField.text != string.Empty)
+        // removing spawner
+        var spawner = SaveLoadUtility.assetsParent.gameObject.GetComponentInChildren<GltfAsset>();
+        Destroy(spawner.gameObject.GetComponent<SelectableObject>());
+        spawner.gameObject.name = "SPAWNER";
+
+        // setting assets up from a scene
+        Transform[] children = sceneObj.gameObject.GetComponentsInChildren<Transform>();
+
+        for (int i = 0; i < children.Length; i++)
         {
-            bool success = await LoadModel(inputField.text);
-
-            //if (success) Debug.Log("Model loaded from INPUT FIELD successfully");
-        }
-    }
-
-    public async void LoadAssetFromSaveFile()
-    {
-        bool success = await LoadModel(SaveLoadUtility.modelPath);
-
-        if (success)
-        {
-            //Debug.Log("Model loaded from SAVE FILE successfully");
-
-            LoadTexture();
-        }
-    }
-
-    /// <summary>
-    /// Base Task for loading model from any source path
-    /// </summary>
-    /// <param name="modelPath">Directory or save file</param>
-    /// <returns>Result of loading process</returns>
-    private async Task<bool> LoadModel(string modelPath)
-    {
-        var asset = CreateAsset(AssetType.Model);
-
-        var success = await asset.Load(modelPath);
-
-        if (success)
-        {
-            AddCollidersToAsset(asset);
+            if (children[i].gameObject.name == "Asset") currentAssetsInScene.Add(children[i]);
         }
 
-        return success;
+        foreach (var asset in currentAssetsInScene)
+        {
+            asset.SetParent(SaveLoadUtility.assetsParent);
+            var selectable = asset.gameObject.AddComponent<SelectableObject>();
+            selectable.type = AssetType.Model;
+        }
+
+        Destroy(sceneObj.gameObject);
+
+        return currentAssetsInScene;
     }
 
     private void LoadTexture()
     {
-        var model = SaveLoadUtility.assetsParent.gameObject.GetComponentInChildren<SelectableObject>();
-
-        Renderer renderer = model.gameObject.GetComponentInChildren<MeshRenderer>();
-
-        if (renderer != null)
+        for (int i = 0; i < currentAssetsInScene.Count; i++)
         {
-            Material material = renderer.material;
+            Renderer renderer = currentAssetsInScene[i].gameObject.GetComponentInChildren<MeshRenderer>();
 
-            if (material != null)
+            if (renderer != null)
             {
-                byte[] loadedBytes = File.ReadAllBytes(SaveLoadUtility.texturePath);
+                Material material = renderer.material;
 
-                Texture2D textureFromBytes = new Texture2D(2, 2);
-                textureFromBytes.LoadImage(loadedBytes);
+                if (material != null)
+                {
+                    string pathToTexture =
+                        SaveLoadUtility.assetSavePath + @$"\Asset {i + 1}" + @"\Texture.png";
 
-                material.mainTexture = textureFromBytes;
+                    byte[] loadedBytes = File.ReadAllBytes(pathToTexture);
 
-                Debug.Log("Texture added successfully");
+                    Texture2D textureFromBytes = new Texture2D(2, 2);
+                    textureFromBytes.LoadImage(loadedBytes);
+
+                    material.mainTexture = textureFromBytes;
+                }
             }
         }
     }
 
-    private void AddCollidersToAsset(GltfAsset asset)
+    private void AddCollidersToAssets(List<Transform> assets)
     {
-        MeshRenderer[] meshRenderers = asset.gameObject.GetComponentsInChildren<MeshRenderer>();
-
-        foreach (MeshRenderer item in meshRenderers)
+        foreach (var asset in assets)
         {
-            var itemCollider = item.gameObject.AddComponent<MeshCollider>();
+            MeshRenderer[] meshRenderers = asset.gameObject.GetComponentsInChildren<MeshRenderer>();
 
-            itemCollider.convex = true;
+            foreach (MeshRenderer renderer in meshRenderers)
+            {
+                var itemCollider = renderer.gameObject.AddComponent<MeshCollider>();
+                itemCollider.convex = true;
+            }
         }
     }
 }

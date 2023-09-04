@@ -3,8 +3,7 @@ using UnityEngine;
 
 public class SaveLoadUtility : MonoBehaviour
 {
-    public static readonly string modelPath = @"D:\_GLTF\Saves\Asset\Model.gltf";
-    public static readonly string texturePath = @"D:\_GLTF\Saves\Asset\Texture.png";
+    public static readonly string scenePath = @"D:\_GLTF\Saves\Scene.gltf";
 
     public static readonly string assetSavePath = @"D:\_GLTF\Saves";
 

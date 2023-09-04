@@ -1549,7 +1549,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2093245011}
         m_TargetAssemblyTypeName: LoadingSystem, Main
-        m_MethodName: LoadAssetFromSaveFile
+        m_MethodName: LoadAssetsFromSaveFile
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4843,7 +4843,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1697327449}
         m_TargetAssemblyTypeName: SavingSystem, Main
-        m_MethodName: SaveAsset
+        m_MethodName: SaveAssets
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11263,7 +11263,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1568791745}
   m_Layer: 0
-  m_Name: Scene
+  m_Name: Scene Setup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
