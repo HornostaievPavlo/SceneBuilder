@@ -7,21 +7,26 @@ using UnityEngine;
 
 public class LoadingSystem : MonoBehaviour
 {
-    [SerializeField] private TMP_InputField inputField;
+    [SerializeField]
+    private TMP_InputField inputField;
 
-    List<Transform> currentAssetsInScene = new List<Transform>();
+    private List<Transform> modelsInScene = new List<Transform>();
 
-    //how to do input field reading without direct reference?
-
-    public async void LoadAssetFromDirectory() => await LoadModels(inputField.text);
+    public async void LoadAssetsFromDirectory() => await LoadModels(inputField.text);
 
     public async void LoadAssetsFromSaveFile()
     {
         bool success = await LoadModels(SaveLoadUtility.scenePath);
 
-        if (success) LoadTexture();
+        if (success) AssignTextures();
     }
 
+    /// <summary>
+    /// General model loading procedure 
+    /// Handles adding of colliders to models
+    /// </summary>
+    /// <param name="modelPath">Local storage or save file</param>
+    /// <returns>Success of loading</returns>
     private async Task<bool> LoadModels(string modelPath)
     {
         var asset = CreateAsset(AssetType.Model);
@@ -30,16 +35,32 @@ public class LoadingSystem : MonoBehaviour
 
         if (success)
         {
-            var assets = new List<Transform>();
+            if (modelPath == SaveLoadUtility.scenePath)
+            {
+                var assets = InitializeImportedAssets();
+                AddCollidersToAssets(assets);
+            }
+            else
+            {
+                Transform[] children = SaveLoadUtility.assetsParent.gameObject.GetComponentsInChildren<Transform>();
 
-            if (modelPath == SaveLoadUtility.scenePath) assets = InitializeImportedAssets();
+                for (int i = 0; i < children.Length; i++)
+                {
+                    if (children[i].gameObject.name == "Asset") modelsInScene.Add(children[i]);
+                }
 
-            AddCollidersToAssets(assets);
+                AddCollidersToAssets(modelsInScene);
+
+            }
         }
-
         return success;
     }
 
+    /// <summary>
+    /// Creates new Selecetable asset of specified type
+    /// </summary>
+    /// <param name="type">Specifies AssetType of created object</param>
+    /// <returns>Asset instance</returns>
     private GltfAsset CreateAsset(AssetType type)
     {
         GameObject asset = new GameObject
@@ -73,10 +94,10 @@ public class LoadingSystem : MonoBehaviour
 
         for (int i = 0; i < children.Length; i++)
         {
-            if (children[i].gameObject.name == "Asset") currentAssetsInScene.Add(children[i]);
+            if (children[i].gameObject.name == "Asset") modelsInScene.Add(children[i]);
         }
 
-        foreach (var asset in currentAssetsInScene)
+        foreach (var asset in modelsInScene)
         {
             asset.SetParent(SaveLoadUtility.assetsParent);
             var selectable = asset.gameObject.AddComponent<SelectableObject>();
@@ -85,14 +106,17 @@ public class LoadingSystem : MonoBehaviour
 
         Destroy(sceneObj.gameObject);
 
-        return currentAssetsInScene;
+        return modelsInScene;
     }
 
-    private void LoadTexture()
+    /// <summary>
+    /// Assigns textures to corresponding materials
+    /// </summary>
+    private void AssignTextures()
     {
-        for (int i = 0; i < currentAssetsInScene.Count; i++)
+        for (int i = 0; i < modelsInScene.Count; i++)
         {
-            Renderer renderer = currentAssetsInScene[i].gameObject.GetComponentInChildren<MeshRenderer>();
+            Renderer renderer = modelsInScene[i].gameObject.GetComponentInChildren<MeshRenderer>();
 
             if (renderer != null)
             {
@@ -100,20 +124,35 @@ public class LoadingSystem : MonoBehaviour
 
                 if (material != null)
                 {
-                    string pathToTexture =
-                        SaveLoadUtility.assetSavePath + @$"\Asset {i + 1}" + @"\Texture.png";
+                    string currentAssetPath = @$"\Asset {i + 1}" + @"\Texture.png";
+                    string fullPath = SaveLoadUtility.assetsSavePath + currentAssetPath;
 
-                    byte[] loadedBytes = File.ReadAllBytes(pathToTexture);
-
-                    Texture2D textureFromBytes = new Texture2D(2, 2);
-                    textureFromBytes.LoadImage(loadedBytes);
-
-                    material.mainTexture = textureFromBytes;
+                    material.mainTexture = OpenDirectoryAndLoadTexture(fullPath);
                 }
             }
         }
     }
 
+    /// <summary>
+    /// Loads texture from given path
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    private Texture2D OpenDirectoryAndLoadTexture(string path)
+    {
+        byte[] loadedBytes = File.ReadAllBytes(path);
+
+        Texture2D textureFromBytes = new Texture2D(2, 2);
+        textureFromBytes.LoadImage(loadedBytes);
+
+        return textureFromBytes;
+    }
+
+    /// <summary>
+    /// Adds convex mesh collider to
+    /// all renderers in List of targets
+    /// </summary>
+    /// <param name="assets">Collection of targets</param>
     private void AddCollidersToAssets(List<Transform> assets)
     {
         foreach (var asset in assets)

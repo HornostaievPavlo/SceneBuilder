@@ -4,38 +4,46 @@ using UnityEngine;
 
 public class SavingSystem : MonoBehaviour
 {
-    private SelectableObject[] CollectSelectableObjects()
-    {
-        SelectableObject[] selectableObjects =
-            SaveLoadUtility.assetsParent.GetComponentsInChildren<SelectableObject>();
-
-        foreach (var item in selectableObjects)
-        {
-            SaveLoadUtility.savingTargets.Add(item.gameObject);
-        }
-
-        return selectableObjects;
-    }
-
     public void SaveAssets()
     {
         var saveTargets = CollectSelectableObjects();
 
         SaveTextures(saveTargets);
 
-        SaveModels();
+        SaveModels(saveTargets);
     }
 
-    private async void SaveModels()
+    /// <summary>
+    /// Finds all Selectables in scene
+    /// </summary>
+    /// <returns>Array of Selectables</returns>
+    private SelectableObject[] CollectSelectableObjects()
     {
-        var export = new GameObjectExport();
-        export.AddScene(SaveLoadUtility.savingTargets.ToArray());
-
-        bool success = await export.SaveToFileAndDispose(SaveLoadUtility.scenePath);
-
-        if (success) Debug.Log("Models saved successfully");
+        return SaveLoadUtility.assetsParent.GetComponentsInChildren<SelectableObject>();
     }
 
+    /// <summary>
+    /// Saves all Selectables to file
+    /// </summary>
+    /// <param name="targets">Array of objects to save</param>
+    private async void SaveModels(SelectableObject[] targets)
+    {
+        GameObject[] models = new GameObject[targets.Length];
+
+        for (int i = 0; i < targets.Length; i++)
+        {
+            models[i] = targets[i].gameObject;
+        }
+
+        var export = new GameObjectExport();
+        export.AddScene(models);
+        await export.SaveToFileAndDispose(SaveLoadUtility.scenePath);
+    }
+
+    /// <summary>
+    /// Saves textures from all Selectables
+    /// </summary>
+    /// <param name="targets">Array of objects with textures</param>
     private void SaveTextures(SelectableObject[] targets)
     {
         for (int i = 0; i < targets.Length; i++)
@@ -48,32 +56,36 @@ public class SavingSystem : MonoBehaviour
             {
                 Texture2D texture = DuplicateTexture((Texture2D)material.mainTexture);
 
-                string directoryPath = SaveLoadUtility.assetSavePath + @$"\Asset {i + 1}";
+                string directoryPath = SaveLoadUtility.assetsSavePath + @$"\Asset {i + 1}";
 
                 string filePath = directoryPath + @"\Texture.png";
 
                 CreateDirectoryAndSaveTexture(texture, directoryPath, filePath);
-
-                Debug.Log($"Texture number ({i + 1}) saved successfully");
             }
         }
     }
 
+    /// <summary>
+    /// Creates directory and saves given texture
+    /// </summary>
+    /// <param name="texture">File to save</param>
+    /// <param name="directory">Path to directory</param>
+    /// <param name="file">Path to file</param>
     private void CreateDirectoryAndSaveTexture(Texture2D texture, string directory, string file)
     {
         byte[] textureBytes = texture.EncodeToPNG();
 
         var folder = Directory.CreateDirectory(directory);
-
-        //Debug.Log("Creating folder with name - " + folderName);
-
         var fullPath = Path.Combine(folder.FullName, file);
-
-        //Debug.Log("Final path - " + fullPath);
 
         File.WriteAllBytes(fullPath, textureBytes);
     }
 
+    /// <summary>
+    /// Makes readable copy of texture
+    /// </summary>
+    /// <param name="source">Original texture</param>
+    /// <returns>Readable copy</returns>
     private Texture2D DuplicateTexture(Texture2D source)
     {
         RenderTexture renderTex = RenderTexture.GetTemporary(
