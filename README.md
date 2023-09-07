@@ -1,4 +1,4 @@
-# SceneBuilder - 3D Model Viewer
+# SceneBuilder
 
 This application empowers you to create scenes using a collection of loaded 3D models of .glTF type. Whether you're a 3D artist, game developer, or simply someone who loves exploring 3D worlds, SceneBuilder is designed to spark your creativity.
 
