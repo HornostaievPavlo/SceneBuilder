@@ -12,10 +12,10 @@ public class RowsInitializer : MonoBehaviour
     [HideInInspector] public List<GameObject> labels;
 
     // dictionary to relate object by type with list to write in
-    public Dictionary<ObjectType, List<GameObject>> dictOfLists = new Dictionary<ObjectType, List<GameObject>>();
+    public Dictionary<AssetType, List<GameObject>> dictOfLists = new Dictionary<AssetType, List<GameObject>>();
 
     // dictionary to relate object by type with table to write in
-    public Dictionary<ObjectType, Table> dictOfTables = new Dictionary<ObjectType, Table>();
+    public Dictionary<AssetType, Table> dictOfTables = new Dictionary<AssetType, Table>();
 
     private void Start()
     {
@@ -25,13 +25,13 @@ public class RowsInitializer : MonoBehaviour
         _camerasTable = menu.camerasTable;
         _labelsTable = menu.labelsTable;
 
-        dictOfLists[ObjectType.Model] = models;
-        dictOfLists[ObjectType.Camera] = cameras;
-        dictOfLists[ObjectType.Label] = labels;
+        dictOfLists[AssetType.Model] = models;
+        dictOfLists[AssetType.Camera] = cameras;
+        dictOfLists[AssetType.Label] = labels;
 
-        dictOfTables[ObjectType.Model] = _modelsTable;
-        dictOfTables[ObjectType.Camera] = _camerasTable;
-        dictOfTables[ObjectType.Label] = _labelsTable;
+        dictOfTables[AssetType.Model] = _modelsTable;
+        dictOfTables[AssetType.Camera] = _camerasTable;
+        dictOfTables[AssetType.Label] = _labelsTable;
     }
 
     /// <summary>

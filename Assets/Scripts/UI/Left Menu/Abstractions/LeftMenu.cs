@@ -20,7 +20,7 @@ public class LeftMenu : MonoBehaviour
     private Color32 _selectedDots = new Color32(63, 106, 204, 255);
 
     // dictionary to relate object with table to write
-    public Dictionary<ObjectType, Table> tablesDict = new Dictionary<ObjectType, Table>();
+    public Dictionary<AssetType, Table> tablesDict = new Dictionary<AssetType, Table>();
 
     private void Awake()
     {
@@ -37,9 +37,9 @@ public class LeftMenu : MonoBehaviour
         camerasTable = tables[1];
         labelsTable = tables[2];
 
-        tablesDict[ObjectType.Model] = modelsTable;
-        tablesDict[ObjectType.Camera] = camerasTable;
-        tablesDict[ObjectType.Label] = labelsTable;
+        tablesDict[AssetType.Model] = modelsTable;
+        tablesDict[AssetType.Camera] = camerasTable;
+        tablesDict[AssetType.Label] = labelsTable;
     }
 
     /// <summary>
@@ -64,17 +64,17 @@ public class LeftMenu : MonoBehaviour
             selectedDots[1].color = isSelected ? this._selectedDots : _unselectedDots;
 
             // additional logic for camera selection
-            if (_selectionSystem.selectableObject.type == ObjectType.Camera)
+            if (_selectionSystem.selectableObject.type == AssetType.Camera)
             {
                 _cameraModesSelection.ballCamera = isSelected ? _selectionSystem.selectedObject.GetComponentInChildren<Camera>() : null;
             }
 
             // additional logic for label selection
-            if (_selectionSystem.selectableObject.type == ObjectType.Label)
+            if (_selectionSystem.selectableObject.type == AssetType.Label)
             {
-                _labelTabController.editLabelToggle = tablesDict[ObjectType.Label].rowsList[_selectionSystem.indexOfSelected].GetComponentInChildren<Toggle>();
+                _labelTabController.editLabelToggle = tablesDict[AssetType.Label].rowsList[_selectionSystem.indexOfSelected].GetComponentInChildren<Toggle>();
 
-                TMP_Text[] labelTexts = tablesDict[ObjectType.Label].rowsList[_selectionSystem.indexOfSelected].GetComponentsInChildren<TMP_Text>();
+                TMP_Text[] labelTexts = tablesDict[AssetType.Label].rowsList[_selectionSystem.indexOfSelected].GetComponentsInChildren<TMP_Text>();
 
                 _labelTabController.currentTitle = labelTexts[1];
                 _labelTabController.currentDescription = labelTexts[2];

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3696472538936825804}
   - component: {fileID: 9030885803283591928}
   m_Layer: 0
-  m_Name: Camera Ball
+  m_Name: Camera
   m_TagString: Ball
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
