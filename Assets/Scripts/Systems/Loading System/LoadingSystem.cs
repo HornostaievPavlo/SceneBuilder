@@ -10,6 +10,12 @@ public class LoadingSystem : MonoBehaviour
     [SerializeField]
     private TMP_InputField inputField;
 
+    [SerializeField]
+    private GameObject cameraAssetPrefab;
+
+    [SerializeField]
+    private GameObject labelAssetPrefab;
+
     private List<Transform> modelsInScene = new List<Transform>();
 
     public async void LoadAssetsFromDirectory() => await LoadModels(inputField.text);
@@ -21,6 +27,16 @@ public class LoadingSystem : MonoBehaviour
         if (success) AssignTextures();
     }
 
+    public void LoadCameraAsset()
+    {
+        CreateAsset(AssetType.Camera);
+    }
+
+    public void LoadLabelAsset()
+    {
+        CreateAsset(AssetType.Label);
+    }
+
     /// <summary>
     /// General model loading procedure 
     /// Handles adding of colliders to models
@@ -29,7 +45,7 @@ public class LoadingSystem : MonoBehaviour
     /// <returns>Success of loading</returns>
     private async Task<bool> LoadModels(string modelPath)
     {
-        var asset = CreateAsset(AssetType.Model);
+        var asset = CreateAsset(AssetType.Model).GetComponent<GltfAsset>();
 
         var success = await asset.Load(modelPath);
 
@@ -61,28 +77,52 @@ public class LoadingSystem : MonoBehaviour
     /// </summary>
     /// <param name="type">Specifies AssetType of created object</param>
     /// <returns>Asset instance</returns>
-    private GltfAsset CreateAsset(AssetType type)
+    private GameObject CreateAsset(AssetType type)
     {
-        GameObject asset = new GameObject
+        switch (type)
         {
-            name = "Asset"
-        };
+            case AssetType.Model:
 
-        asset.transform.SetParent(SaveLoadUtility.assetsParent);
+                GameObject asset = new GameObject
+                {
+                    name = "Asset"
+                };
 
-        SelectableObject selectable = asset.AddComponent<SelectableObject>();
-        selectable.type = type;
+                asset.transform.SetParent(SaveLoadUtility.assetsParent);
 
-        var gltfAsset = asset.AddComponent<GltfAsset>();
+                SelectableObject modelSelectable = asset.AddComponent<SelectableObject>();
+                modelSelectable.type = type;
 
-        return gltfAsset;
+                asset.AddComponent<GltfAsset>();
+                return asset;
+
+            case AssetType.Camera:
+
+                var camera = Instantiate(cameraAssetPrefab, SaveLoadUtility.assetsParent);
+                camera.name = "Asset";
+
+                SelectableObject cameraSelectable = camera.AddComponent<SelectableObject>();
+                cameraSelectable.type = type;
+                return camera;
+
+            case AssetType.Label:
+
+                var label = Instantiate(labelAssetPrefab, SaveLoadUtility.assetsParent);
+                label.name = "Asset";
+
+                SelectableObject labelSelectable = label.AddComponent<SelectableObject>();
+                labelSelectable.type = type;
+                return label;
+
+            default: return null;
+        }
     }
 
     private List<Transform> InitializeImportedAssets() // gabella
     {
         // setting scene obj as child of placeholder
         Transform sceneObj = GameObject.Find("Scene").transform;
-        sceneObj.SetParent(SaveLoadUtility.assetsParent);
+        if (sceneObj != null) sceneObj.SetParent(SaveLoadUtility.assetsParent);
 
         // removing spawner
         var spawner = SaveLoadUtility.assetsParent.gameObject.GetComponentInChildren<GltfAsset>();

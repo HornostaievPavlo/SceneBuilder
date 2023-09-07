@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SaveLoadUtility : MonoBehaviour
@@ -12,10 +11,8 @@ public class SaveLoadUtility : MonoBehaviour
 
     public static Transform assetsParent;
 
-    //public static List<GameObject> savingTargets = new List<GameObject>();
-
     private void Start()
     {
         assetsParent = GameObject.Find("Assets Placeholder").transform;
-    }   
+    }
 }
