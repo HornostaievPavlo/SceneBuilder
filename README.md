@@ -1,11 +1,27 @@
 # SceneBuilder
-Application for creating scenes from a set of loaded 3D models.
 
-Use orbit camera to easily navigate inside the scene.
+This application empowers you to create scenes using a collection of loaded 3D models of .glTF type. Whether you're a 3D artist, game developer, or simply someone who loves exploring 3D worlds, SceneBuilder is designed to spark your creativity.
 
-Import models, arrange them in scene and change appearance if needed.
+## About the Project
 
-Use cameras to capture a shot of your scene from any angle possible. 
+- **General purpose:** SceneBuilder serves as a versatile tool for constructing scenes from imported 3D models. Application allows arranging them in desired layout, and even customizing their appearances to bring certain vision to life.
+
+- **Orbit Camera:** Easily navigate inside your scenes using an orbit camera that allows you to view your creations from any angle. Get a complete 360-degree perspective and fine-tune your scene composition.
+
+- **Models Management:** Import your own 3D models. Arrange and position models within the scene with high precision using gizmo. Need a different look? You can customize their appearance to match your creative vision.
+
+- **Cameras for content:** Use cameras within SceneBuilder to capture stunning shots of your scenes. Whether you're showcasing your 3D assets, or simply capturing beautiful composition, our camera system has you covered.
+
+- **Labels for content:** Enhance your scenes with labels. Create a label and place near your 3D models to provide viewers with context or additional information about an element of the scene. Labels can be customized to include details such as model names and descriptions.
+
+- **User Interface:** The intuitive user interface of SceneBuilder ties all its powerful functionality together. Easily access and control features, import models, arrange scenes, customize appearances, add labels, and capture scenes with a user-friendly interface that streamlines your creative process.
+
+- **Scene saves:** SceneBuilder allows you to save progress of scene construction by saving them to local drive. Keep a library of your creations for future uses.
+
+- glTF models import implemented with [glTFast](https://github.com/atteneder/glTFast).
+
+## Screenshots
 
 ![Screenshot](https://github.com/HornostaievPavlo/SceneBuilder/assets/100617116/34dc6002-16f8-4135-8a37-3da567a48be4)
-glTF models import implemented with [glTFast](https://github.com/atteneder/glTFast).
+![Снимок экрана 2023-09-07 135543](https://github.com/HornostaievPavlo/SceneBuilder/assets/100617116/76cff2c8-f550-449f-b9a5-b757e5717e13)
+![Снимок экрана 2023-09-07 135958](https://github.com/HornostaievPavlo/SceneBuilder/assets/100617116/5f7a5ed3-0314-471f-9c2a-09e14959c2d3)
