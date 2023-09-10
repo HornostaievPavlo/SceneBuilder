@@ -11,7 +11,7 @@ public class ApplicationUI : MonoBehaviour
 
     [SerializeField] private SurfacePainter colorManipulator;
 
-    [SerializeField] private OrbitCameraController orbitCameraController;
+    //[SerializeField] private OrbitCameraController orbitCameraController;
 
     [Header("Objects")]
     [Space]
@@ -49,7 +49,7 @@ public class ApplicationUI : MonoBehaviour
 
     private void Start()
     {
-        AssignColorsButtons();
+        //AssignColorsButtons();
     }
 
     //public void CenterCameraFocalPoint()
