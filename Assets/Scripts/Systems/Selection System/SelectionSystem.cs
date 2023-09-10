@@ -1,4 +1,5 @@
 using RuntimeHandle;
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -22,56 +23,56 @@ public class SelectionSystem : MonoBehaviour
 
     [HideInInspector] public int indexOfSelected;
 
-    private Camera _mainCamera;
+    private Camera mainCamera;
+
+    /// <summary>
+    /// Changing selection logic to event based type
+    /// </summary>
+    public static event Action<SelectableObject> OnObjectSelected;
+    public static event Action OnObjectDeselected;
 
     private void Awake()
     {
-        _mainCamera = Camera.main;
+        mainCamera = Camera.main;
     }
 
     private void Update()
     {
-        RaycastSelection();
+        TryRaycastSelection();
     }
 
     /// <summary>
     /// Selects object if it has SelectableObject component attached,
     /// deselects if it has not
     /// </summary>
-    private void RaycastSelection()
+    private void TryRaycastSelection()
     {
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
-            RaycastHit raycastHit;
-            Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition); // throwing a raycast
+            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
 
-            if (Physics.Raycast(ray, out raycastHit, 100.0f)) // condition when raycast hits collider
+            if (Physics.Raycast(ray, out RaycastHit raycastHit, mainCamera.farClipPlane))
             {
-                Transform selectedTransform = raycastHit.transform;
+                var selected = raycastHit.transform.gameObject.GetComponentInParent<SelectableObject>();
 
-                // perform selection if it contains SelectableObject component
-                var selectionParameter = selectedTransform.GetComponentInParent<SelectableObject>();
-
-                if (selectionParameter != null)
+                if (selected != null)
                 {
-                    selectedObject = selectionParameter.gameObject;
-
-                    selectableObject = selectionParameter;
-
+                    //selectedObject = selectionParameter.gameObject;
+                    //selectableObject = selectionParameter;
                     //indexOfSelected = rowsInitializer.dictOfLists[selectionParameter.type].IndexOf(selectionParameter.gameObject);
-
-                    ItemSelection(true, selectionParameter.transform);
-
+                    //ItemSelection(true, selectionParameter.transform);
                     //leftMenu.SelectRow(true);
+
+                    OnObjectSelected.Invoke(selected);
                 }
             }
             else
             {
                 //leftMenu.SelectRow(false);
+                //ItemSelection(false, transform);
+                //selectableObject = null;
 
-                ItemSelection(false, transform);
-
-                selectableObject = null;
+                OnObjectDeselected.Invoke();
             }
         }
     }

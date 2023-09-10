@@ -19,9 +19,9 @@ public class Row : MonoBehaviour
     {
         Button[] buttons = GetComponentsInChildren<Button>();
 
-        buttons[0].onClick.AddListener(_applicationUI.RemoveObject);
+        //buttons[0].onClick.AddListener(_applicationUI.RemoveObject);
 
-        if (buttons.Length > 1)
-            buttons[1].onClick.AddListener(_applicationUI.CopySelectedObject);
+        //if (buttons.Length > 1)
+            //buttons[1].onClick.AddListener(_applicationUI.CopySelectedObject);
     }
 }

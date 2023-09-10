@@ -15,7 +15,7 @@ public class Table : MonoBehaviour
     {
         var applicationUI = GetComponentInParent<ApplicationUI>();
 
-        _selectionSystem = applicationUI.selectionSystem;
+        //_selectionSystem = applicationUI.selectionSystem;
     }
 
     /// <summary>

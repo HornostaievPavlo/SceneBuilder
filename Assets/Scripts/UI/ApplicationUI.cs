@@ -7,7 +7,7 @@ public class ApplicationUI : MonoBehaviour
     [Header("Classes")]
     [Space]
 
-    public SelectionSystem selectionSystem;
+    //public SelectionSystem selectionSystem;
 
     [SerializeField] private RuntimeTransformHandle runtimeTransformHandle;
 
@@ -23,6 +23,31 @@ public class ApplicationUI : MonoBehaviour
     [SerializeField] private GameObject colorsButtons;
 
     [SerializeField] private Transform hideUIToggle;
+
+    /// <summary>
+    /// Implementing selection event
+    /// </summary>
+    private void OnEnable()
+    {
+        SelectionSystem.OnObjectSelected += OnObjectSelected;
+        SelectionSystem.OnObjectDeselected += OnObjectDeselected;
+    }
+
+    private void OnDisable()
+    {
+        SelectionSystem.OnObjectSelected -= OnObjectSelected;
+        SelectionSystem.OnObjectDeselected -= OnObjectDeselected;
+    }
+
+    private void OnObjectSelected(SelectableObject selectable)
+    {
+        Debug.Log("selection event fired.");
+    }
+
+    private void OnObjectDeselected()
+    {
+        Debug.Log("DEselection event fired.");
+    }
 
     private void Start()
     {
@@ -49,33 +74,33 @@ public class ApplicationUI : MonoBehaviour
     /// <summary>
     /// Makes a copy of selected object
     /// </summary>
-    public void CopySelectedObject()
-    {
-        if (selectionSystem.selectedObject != null)
-        {
-            Vector3 copyPosition = new Vector3(0, selectionSystem.selectedObject.transform.position.y, 0);
+    //public void CopySelectedObject()
+    //{
+    //    if (selectionSystem.selectedObject != null)
+    //    {
+    //        Vector3 copyPosition = new Vector3(0, selectionSystem.selectedObject.transform.position.y, 0);
 
-            var copy = Instantiate(selectionSystem.selectedObject.transform,
-                        copyPosition,
-                        selectionSystem.selectedObject.transform.rotation,
-                        selectionSystem.selectedObject.transform.parent);
+    //        var copy = Instantiate(selectionSystem.selectedObject.transform,
+    //                    copyPosition,
+    //                    selectionSystem.selectedObject.transform.rotation,
+    //                    selectionSystem.selectedObject.transform.parent);
 
-            copy.gameObject.name = selectionSystem.selectedObject.name;
-        }
-    }
+    //        copy.gameObject.name = selectionSystem.selectedObject.name;
+    //    }
+    //}
 
     /// <summary>
     /// Deletes selected object and its ui row from the scene
     /// </summary>
-    public void RemoveObject()
-    {
-        if (selectionSystem.selectedObject != null)
-        {
-            Destroy(selectionSystem.selectedObject);
+    //public void RemoveObject()
+    //{
+    //    if (selectionSystem.selectedObject != null)
+    //    {
+    //        Destroy(selectionSystem.selectedObject);
 
-            selectionSystem.ItemSelection(false, selectionSystem.selectedObject.transform);
-        }
-    }
+    //        selectionSystem.ItemSelection(false, selectionSystem.selectedObject.transform);
+    //    }
+    //}
     #endregion
 
     #region TransformHandle

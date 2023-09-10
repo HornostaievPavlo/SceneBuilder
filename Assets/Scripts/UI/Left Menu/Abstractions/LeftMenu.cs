@@ -26,7 +26,7 @@ public class LeftMenu : MonoBehaviour
     {
         var applicationUI = GetComponentInParent<ApplicationUI>();
 
-        _selectionSystem = applicationUI.selectionSystem;
+        //_selectionSystem = applicationUI.selectionSystem;
 
         _labelTabController = GetComponentInChildren<LabelTabController>(true);
 
