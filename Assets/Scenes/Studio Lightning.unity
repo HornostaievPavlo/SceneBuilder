@@ -784,7 +784,7 @@ GameObject:
   - component: {fileID: 809214185}
   - component: {fileID: 809214187}
   m_Layer: 5
-  m_Name: Hide UI Toggle
+  m_Name: UI State Toggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1095,7 +1095,7 @@ GameObject:
   - component: {fileID: 1099585254}
   - component: {fileID: 1099585253}
   m_Layer: 5
-  m_Name: ControlsButtons
+  m_Name: Toolbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1275,9 +1275,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GeneralUI, Assembly-CSharp
-        m_MethodName: 
+      - m_Target: {fileID: 1170225654}
+        m_TargetAssemblyTypeName: ApplicationUI, Main
+        m_MethodName: CopySelectedObject
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1641,10 +1641,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f265db0f4cb790143b645031a95c185e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colorManipulator: {fileID: 1787243083}
-  colorTintSlider: {fileID: 0}
-  colorsButtons: {fileID: 0}
-  hideUIToggle: {fileID: 809214185}
+  Toolbox: {fileID: 1099585251}
+  uiStateToggle: {fileID: 809214185}
 --- !u!1 &1201872534
 GameObject:
   m_ObjectHideFlags: 0
@@ -2180,13 +2178,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   surfacePainter: {fileID: 1787243083}
-  runtimeTransformHandle: {fileID: 846435614}
-  rowsInitializer: {fileID: 0}
-  controlsButtons: {fileID: 1099585251}
   rightMenu: {fileID: 0}
-  selectableObject: {fileID: 0}
-  selectedObject: {fileID: 0}
-  indexOfSelected: 0
 --- !u!1 &1439486000
 GameObject:
   m_ObjectHideFlags: 0
@@ -3146,6 +3138,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1787243082}
+  - component: {fileID: 1787243084}
   - component: {fileID: 1787243083}
   m_Layer: 0
   m_Name: Painting System
@@ -3182,6 +3175,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetMaterials: []
+--- !u!114 &1787243084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1787243081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2f4349ccafb4b144b553beedb9a42f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colorTintSlider: {fileID: 0}
+  colorsButtonsParent: {fileID: 0}
 --- !u!1 &1790837917
 GameObject:
   m_ObjectHideFlags: 0
@@ -3265,9 +3272,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GeneralUI, Assembly-CSharp
-        m_MethodName: 
+      - m_Target: {fileID: 1170225654}
+        m_TargetAssemblyTypeName: ApplicationUI, Main
+        m_MethodName: DeleteSelectedObject
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

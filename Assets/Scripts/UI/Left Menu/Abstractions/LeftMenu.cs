@@ -47,57 +47,57 @@ public class LeftMenu : MonoBehaviour
     /// updates its number is list
     /// </summary>
     /// <param name="isSelected">Is object selected or not</param>
-    public void SelectRow(bool isSelected)
-    {
-        if (_selectionSystem.selectedObject != null)
-        {
-            foreach (Row item in tablesDict[_selectionSystem.selectableObject.type].rowsList)
-            {
-                Image[] allDots = item.GetComponentsInChildren<Image>();
+    //public void SelectRow(bool isSelected)
+    //{
+    //    if (_selectionSystem.selectedObject != null)
+    //    {
+    //        foreach (Row item in tablesDict[_selectionSystem.selectableObject.type].rowsList)
+    //        {
+    //            Image[] allDots = item.GetComponentsInChildren<Image>();
 
-                allDots[1].color = _unselectedDots;
-            }
+    //            allDots[1].color = _unselectedDots;
+    //        }
 
-            Image[] selectedDots = tablesDict[_selectionSystem.selectableObject.type].rowsList[_selectionSystem.indexOfSelected].gameObject.GetComponentsInChildren<Image>();
+    //        Image[] selectedDots = tablesDict[_selectionSystem.selectableObject.type].rowsList[_selectionSystem.indexOfSelected].gameObject.GetComponentsInChildren<Image>();
 
-            // changing selection dots color according to selection bool
-            selectedDots[1].color = isSelected ? this._selectedDots : _unselectedDots;
+    //        // changing selection dots color according to selection bool
+    //        selectedDots[1].color = isSelected ? this._selectedDots : _unselectedDots;
 
-            // additional logic for camera selection
-            if (_selectionSystem.selectableObject.type == AssetType.Camera)
-            {
-                _cameraModesSelection.ballCamera = isSelected ? _selectionSystem.selectedObject.GetComponentInChildren<Camera>() : null;
-            }
+    //        // additional logic for camera selection
+    //        if (_selectionSystem.selectableObject.type == AssetType.Camera)
+    //        {
+    //            _cameraModesSelection.ballCamera = isSelected ? _selectionSystem.selectedObject.GetComponentInChildren<Camera>() : null;
+    //        }
 
-            // additional logic for label selection
-            if (_selectionSystem.selectableObject.type == AssetType.Label)
-            {
-                _labelTabController.editLabelToggle = tablesDict[AssetType.Label].rowsList[_selectionSystem.indexOfSelected].GetComponentInChildren<Toggle>();
+    //        // additional logic for label selection
+    //        if (_selectionSystem.selectableObject.type == AssetType.Label)
+    //        {
+    //            _labelTabController.editLabelToggle = tablesDict[AssetType.Label].rowsList[_selectionSystem.indexOfSelected].GetComponentInChildren<Toggle>();
 
-                TMP_Text[] labelTexts = tablesDict[AssetType.Label].rowsList[_selectionSystem.indexOfSelected].GetComponentsInChildren<TMP_Text>();
+    //            TMP_Text[] labelTexts = tablesDict[AssetType.Label].rowsList[_selectionSystem.indexOfSelected].GetComponentsInChildren<TMP_Text>();
 
-                _labelTabController.currentTitle = labelTexts[1];
-                _labelTabController.currentDescription = labelTexts[2];
+    //            _labelTabController.currentTitle = labelTexts[1];
+    //            _labelTabController.currentDescription = labelTexts[2];
 
-                _labelTabController.ShowOnScreenLabel(isSelected);
-            }
+    //            _labelTabController.ShowOnScreenLabel(isSelected);
+    //        }
 
-            UpdateRowNumber();
-        }
-    }
+    //        UpdateRowNumber();
+    //    }
+    //}
 
     /// <summary>
     /// Assigns number of selected object to UI circle text
     /// </summary>
-    public void UpdateRowNumber() // assign text number to (index in list + 1)
-    {
-        foreach (Row item in tablesDict[_selectionSystem.selectableObject.type].rowsList)
-        {
-            var circleText = item.GetComponentInChildren<TMP_Text>();
+    //public void UpdateRowNumber() // assign text number to (index in list + 1)
+    //{
+    //    foreach (Row item in tablesDict[_selectionSystem.selectableObject.type].rowsList)
+    //    {
+    //        var circleText = item.GetComponentInChildren<TMP_Text>();
 
-            int numberOfObject = tablesDict[_selectionSystem.selectableObject.type].rowsList.IndexOf(item) + 1;
+    //        int numberOfObject = tablesDict[_selectionSystem.selectableObject.type].rowsList.IndexOf(item) + 1;
 
-            circleText.text = numberOfObject.ToString();
-        }
-    }
+    //        circleText.text = numberOfObject.ToString();
+    //    }
+    //}
 }

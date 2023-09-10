@@ -1,4 +1,3 @@
-using RuntimeHandle;
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -8,20 +7,7 @@ public class SelectionSystem : MonoBehaviour
     //[SerializeField] private LeftMenu leftMenu;
 
     [SerializeField] private SurfacePainter surfacePainter;
-
-    [SerializeField] private RuntimeTransformHandle runtimeTransformHandle;
-
-    [SerializeField] private RowsInitializer rowsInitializer;
-
-    [SerializeField] private GameObject controlsButtons;
-
     [SerializeField] private GameObject rightMenu;
-
-    [HideInInspector] public SelectableObject selectableObject;
-
-    [HideInInspector] public GameObject selectedObject;
-
-    [HideInInspector] public int indexOfSelected;
 
     private Camera mainCamera;
 
@@ -42,8 +28,8 @@ public class SelectionSystem : MonoBehaviour
     }
 
     /// <summary>
-    /// Selects object if it has SelectableObject component attached,
-    /// deselects if it has not
+    /// Fires OnObjectSelected or OnObjectDeselected
+    /// according to result of raycast 
     /// </summary>
     private void TryRaycastSelection()
     {
@@ -57,10 +43,6 @@ public class SelectionSystem : MonoBehaviour
 
                 if (selected != null)
                 {
-                    //selectedObject = selectionParameter.gameObject;
-                    //selectableObject = selectionParameter;
-                    //indexOfSelected = rowsInitializer.dictOfLists[selectionParameter.type].IndexOf(selectionParameter.gameObject);
-                    //ItemSelection(true, selectionParameter.transform);
                     //leftMenu.SelectRow(true);
 
                     OnObjectSelected.Invoke(selected);
@@ -69,31 +51,16 @@ public class SelectionSystem : MonoBehaviour
             else
             {
                 //leftMenu.SelectRow(false);
-                //ItemSelection(false, transform);
-                //selectableObject = null;
 
                 OnObjectDeselected.Invoke();
             }
         }
     }
 
-    /// <summary>
-    /// Performs selection and deselection of the object 
-    /// </summary>
-    /// <param name="isSelected">True to select, false to deselect</param>
-    /// <param name="target">Which object to operate</param>
     public void ItemSelection(bool isSelected, Transform target)
     {
-        //runtimeTransformHandle.gameObject.SetActive(isSelected);
-
-        controlsButtons.SetActive(isSelected);
-
         if (!isSelected) rightMenu.SetActive(false);
 
-        //runtimeTransformHandle.target = isSelected ? target.transform : runtimeTransformHandle.transform;
-
-        selectedObject = isSelected ? target.gameObject : null;
-
-        surfacePainter.GetAllModelMaterials(selectedObject, isSelected);
+        //surfacePainter.GetAllModelMaterials(selectedObject, isSelected);
     }
 }

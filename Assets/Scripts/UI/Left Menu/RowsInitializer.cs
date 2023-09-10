@@ -51,10 +51,10 @@ public class RowsInitializer : MonoBehaviour
     /// removes UI row from corresponding table
     /// </summary>
     /// <param name="selectableObject">Object to remove</param>
-    public void RemoveCreatedObjectFromList(SelectableObject selectableObject)
-    {
-        dictOfTables[selectableObject.type].DestroyRowAndRemoveFromList();
+    //public void RemoveCreatedObjectFromList(SelectableObject selectableObject)
+    //{
+    //    dictOfTables[selectableObject.type].DestroyRowAndRemoveFromList();
 
-        dictOfLists[selectableObject.type].Remove(selectableObject.gameObject);
-    }
+    //    dictOfLists[selectableObject.type].Remove(selectableObject.gameObject);
+    //}
 }

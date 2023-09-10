@@ -1,30 +1,15 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ApplicationUI : MonoBehaviour
 {
-    [Header("Classes")]
-    [Space]
+    [SerializeField]
+    private GameObject Toolbox;
 
-    //public SelectionSystem selectionSystem;
+    [SerializeField]
+    private Transform uiStateToggle;
 
+    private Transform currentSelection;
 
-    [SerializeField] private SurfacePainter colorManipulator;
-
-    //[SerializeField] private OrbitCameraController orbitCameraController;
-
-    [Header("Objects")]
-    [Space]
-
-    [SerializeField] private Slider colorTintSlider;
-
-    [SerializeField] private GameObject colorsButtons;
-
-    [SerializeField] private Transform hideUIToggle;
-
-    /// <summary>
-    /// Implementing selection event
-    /// </summary>
     private void OnEnable()
     {
         SelectionSystem.OnObjectSelected += OnObjectSelected;
@@ -39,87 +24,45 @@ public class ApplicationUI : MonoBehaviour
 
     private void OnObjectSelected(SelectableObject selectable)
     {
-
+        Toolbox.SetActive(true);
+        currentSelection = selectable.transform;
     }
 
     private void OnObjectDeselected()
     {
-
+        Toolbox.SetActive(false);
+        currentSelection = null;
     }
 
-    private void Start()
+    public void CopySelectedObject()
     {
-        //AssignColorsButtons();
+        if (currentSelection != null)
+        {
+            Vector3 copyPosition = new Vector3(0, currentSelection.transform.position.y, 0);
+
+            var copy = Instantiate(currentSelection.transform,
+                        copyPosition,
+                        currentSelection.transform.rotation,
+                        currentSelection.transform.parent);
+
+            copy.gameObject.name = currentSelection.name;
+        }
     }
 
-    //public void CenterCameraFocalPoint()
-    //{
-    //    orbitCameraController.CenterCameraFocalPoint();
-    //}
-
-
-    //public void CopySelectedObject()
-    //{
-    //    if (selectionSystem.selectedObject != null)
-    //    {
-    //        Vector3 copyPosition = new Vector3(0, selectionSystem.selectedObject.transform.position.y, 0);
-
-    //        var copy = Instantiate(selectionSystem.selectedObject.transform,
-    //                    copyPosition,
-    //                    selectionSystem.selectedObject.transform.rotation,
-    //                    selectionSystem.selectedObject.transform.parent);
-
-    //        copy.gameObject.name = selectionSystem.selectedObject.name;
-    //    }
-    //}
-
-
-    //public void RemoveObject()
-    //{
-    //    if (selectionSystem.selectedObject != null)
-    //    {
-    //        Destroy(selectionSystem.selectedObject);
-
-    //        selectionSystem.ItemSelection(false, selectionSystem.selectedObject.transform);
-    //    }
-    //}
-
-    #region PaintingSystem
-
-    private void AssignColorsButtons()
+    public void DeleteSelectedObject()
     {
-        Button[] buttons = colorsButtons.GetComponentsInChildren<Button>(true);
-
-        buttons[0].onClick.AddListener(() => colorManipulator.SetColor(Color.red));
-        buttons[1].onClick.AddListener(() => colorManipulator.SetColor(new Color(1, 0, 0.5f, 1))); //pink
-        buttons[2].onClick.AddListener(() => colorManipulator.SetColor(new Color(1, 0.5f, 0, 1))); //orange
-        buttons[3].onClick.AddListener(() => colorManipulator.SetColor(new Color(1, 1, 0, 1))); //yellow
-        buttons[4].onClick.AddListener(() => colorManipulator.SetColor(Color.green));
-        buttons[5].onClick.AddListener(() => colorManipulator.SetColor(new Color(0.75f, 1, 0.75f, 1))); //lgreen
-        buttons[6].onClick.AddListener(() => colorManipulator.SetColor(Color.blue)); //blue
-        buttons[7].onClick.AddListener(() => colorManipulator.SetColor(new Color(0.5f, 0.7f, 1, 1))); //lblue
-        buttons[8].onClick.AddListener(() => colorManipulator.SetColor(new Color(0, 0, 0.5f, 1))); //violet 
-        buttons[9].onClick.AddListener(() => colorManipulator.SetColor(new Color(0.5f, 0.5f, 0.75f, 1))); //purple
-        buttons[10].onClick.AddListener(() => colorManipulator.SetColor(Color.black));
-        buttons[11].onClick.AddListener(() => colorManipulator.SetColor(Color.white));
+        if (currentSelection != null)
+        {
+            Destroy(currentSelection.gameObject);
+            OnObjectDeselected();
+        }
     }
-
-    public void SetColorTint()
-    {
-        colorManipulator.SetColorTint(colorTintSlider);
-    }
-
-    public void ResetColor()
-    {
-        colorManipulator.ResetColor();
-    }
-    #endregion
 
     public void SetUIActive(bool isActive)
     {
         gameObject.SetActive(isActive);
 
-        hideUIToggle.eulerAngles = new Vector3(0, 0, isActive ? 0 : 180);
+        uiStateToggle.eulerAngles = new Vector3(0, 0, isActive ? 0 : 180);
     }
 
     public void QuitApplication() => Application.Quit();

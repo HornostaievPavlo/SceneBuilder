@@ -31,13 +31,13 @@ public class Table : MonoBehaviour
     /// <summary>
     /// Destroys row when object is deleted from scene
     /// </summary>
-    public void DestroyRowAndRemoveFromList()
-    {
-        if (rowsList[_selectionSystem.indexOfSelected] != null)
-        {
-            Destroy(rowsList[_selectionSystem.indexOfSelected].gameObject);
-        }
+    //public void DestroyRowAndRemoveFromList()
+    //{
+    //    if (rowsList[_selectionSystem.indexOfSelected] != null)
+    //    {
+    //        Destroy(rowsList[_selectionSystem.indexOfSelected].gameObject);
+    //    }
 
-        rowsList.RemoveAt(_selectionSystem.indexOfSelected);
-    }
+    //    rowsList.RemoveAt(_selectionSystem.indexOfSelected);
+    //}
 }
