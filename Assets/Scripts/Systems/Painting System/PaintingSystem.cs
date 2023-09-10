@@ -5,15 +5,39 @@ public class PaintingSystem : MonoBehaviour
 {
     private SurfacePainter surfacePainter;
 
-    [SerializeField] private Slider colorTintSlider;
+    [SerializeField]
+    private Slider colorTintSlider;
 
-    [SerializeField] private GameObject colorsButtonsParent;
+    [SerializeField]
+    private GameObject colorsButtonsParent;
 
     private void Start()
     {
         surfacePainter = GetComponent<SurfacePainter>();
 
-        //AssignColorsButtons();
+        AssignColorsButtons();
+    }
+
+    private void OnEnable()
+    {
+        SelectionSystem.OnObjectSelected += OnObjectSelected;
+        SelectionSystem.OnObjectDeselected += OnObjectDeselected;
+    }
+
+    private void OnDisable()
+    {
+        SelectionSystem.OnObjectSelected -= OnObjectSelected;
+        SelectionSystem.OnObjectDeselected -= OnObjectDeselected;
+    }
+
+    private void OnObjectSelected(SelectableObject selectable)
+    {
+        surfacePainter.GetAllModelMaterials(selectable.transform.gameObject, true);
+    }
+
+    private void OnObjectDeselected()
+    {
+        surfacePainter.GetAllModelMaterials(null, false);
     }
 
     private void AssignColorsButtons()

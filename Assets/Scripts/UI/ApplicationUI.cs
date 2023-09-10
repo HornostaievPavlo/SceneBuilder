@@ -6,6 +6,9 @@ public class ApplicationUI : MonoBehaviour
     private GameObject Toolbox;
 
     [SerializeField]
+    private GameObject rightMenu;
+
+    [SerializeField]
     private Transform uiStateToggle;
 
     private Transform currentSelection;
@@ -31,6 +34,8 @@ public class ApplicationUI : MonoBehaviour
     private void OnObjectDeselected()
     {
         Toolbox.SetActive(false);
+        rightMenu.SetActive(false);
+
         currentSelection = null;
     }
 
@@ -54,7 +59,9 @@ public class ApplicationUI : MonoBehaviour
         if (currentSelection != null)
         {
             Destroy(currentSelection.gameObject);
-            OnObjectDeselected();
+
+            TransformHandleSystem transformHandle = FindObjectOfType<TransformHandleSystem>();
+            transformHandle.OnObjectDeselected();
         }
     }
 

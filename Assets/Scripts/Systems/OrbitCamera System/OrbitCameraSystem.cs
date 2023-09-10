@@ -21,7 +21,7 @@ public class OrbitCameraSystem : MonoBehaviour
     private float _yRotation;
     private float _xRotation;
 
-    private void Awake() => mainCamera = GetComponentInChildren<Transform>();
+    private void Awake() => mainCamera = GetComponentInChildren<Camera>().transform;
 
     private void OnEnable()
     {
@@ -79,7 +79,7 @@ public class OrbitCameraSystem : MonoBehaviour
         float mouseWheel = Input.GetAxis("Mouse ScrollWheel") * zoomSensitivity * Time.deltaTime;
         mainCamera.Translate(Vector3.forward * mouseWheel);
 
-        float scrollingDownDivisor = 5.25f;
+        float scrollingDownDivisor = 5f;
         mainCamera.Translate((Vector3.down * mouseWheel) / scrollingDownDivisor);
     }
 

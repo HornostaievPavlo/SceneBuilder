@@ -28,7 +28,7 @@ public class TransformHandleSystem : MonoBehaviour
         handle.target = selectable.transform;
     }
 
-    private void OnObjectDeselected()
+    public void OnObjectDeselected()
     {
         handle.gameObject.SetActive(false);
         handle.target = null;
