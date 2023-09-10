@@ -1,4 +1,5 @@
 using GLTFast;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ public class LoadingSystem : MonoBehaviour
     [SerializeField]
     private GameObject labelAssetPrefab;
 
-    private List<Transform> modelsInScene = new List<Transform>();
+    [SerializeField] private List<Transform> modelsInScene = new List<Transform>();
 
     public async void LoadAssetsFromDirectory() => await LoadModels(inputField.text);
 
@@ -45,6 +46,8 @@ public class LoadingSystem : MonoBehaviour
     /// <returns>Success of loading</returns>
     private async Task<bool> LoadModels(string modelPath)
     {
+        modelsInScene.Clear();
+
         var asset = CreateAsset(AssetType.Model).GetComponent<GltfAsset>();
 
         var success = await asset.Load(modelPath);
@@ -118,19 +121,28 @@ public class LoadingSystem : MonoBehaviour
         }
     }
 
+    // setting assets up from a scene
+    public Transform[] children;
     private List<Transform> InitializeImportedAssets() // gabella
     {
         // setting scene obj as child of placeholder
-        Transform sceneObj = GameObject.Find("Scene").transform;
-        if (sceneObj != null) sceneObj.SetParent(SaveLoadUtility.assetsParent);
+        //Transform sceneObj = GameObject.Find("Scene").transform;
+        //if (sceneObj != null) sceneObj.SetParent(SaveLoadUtility.assetsParent);
 
         // removing spawner
-        var spawner = SaveLoadUtility.assetsParent.gameObject.GetComponentInChildren<GltfAsset>();
-        Destroy(spawner.gameObject.GetComponent<SelectableObject>());
-        spawner.gameObject.name = "SPAWNER";
+        //var spawner = SaveLoadUtility.assetsParent.gameObject.GetComponentInChildren<GltfAsset>();
+        //Destroy(spawner.gameObject.GetComponent<SelectableObject>());
+        //spawner.gameObject.name = "glTF Asset";
 
-        // setting assets up from a scene
-        Transform[] children = sceneObj.gameObject.GetComponentsInChildren<Transform>();
+        GltfAsset[] spawners = SaveLoadUtility.assetsParent.gameObject.GetComponentsInChildren<GltfAsset>();
+        foreach (GltfAsset spawner in spawners)
+        {
+            Destroy(spawner.gameObject.GetComponent<SelectableObject>());
+            spawner.gameObject.name = "glTF Asset";
+        }
+
+        Array.Clear(children, 0, children.Length);
+        children = SaveLoadUtility.assetsParent.gameObject.GetComponentsInChildren<Transform>();
 
         for (int i = 0; i < children.Length; i++)
         {
@@ -144,7 +156,7 @@ public class LoadingSystem : MonoBehaviour
             selectable.type = AssetType.Model;
         }
 
-        Destroy(sceneObj.gameObject);
+        //Destroy(sceneObj.gameObject);
 
         return modelsInScene;
     }

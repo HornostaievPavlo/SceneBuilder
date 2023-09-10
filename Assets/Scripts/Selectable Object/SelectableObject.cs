@@ -9,13 +9,13 @@ public class SelectableObject : MonoBehaviour
 
     private void Start()
     {
-        rowsInitializer = FindObjectOfType<RowsInitializer>();
+        //rowsInitializer = FindObjectOfType<RowsInitializer>();
 
-        rowsInitializer.AddCreatedObjectToList(this);
+        //rowsInitializer.AddCreatedObjectToList(this);
     }
 
     private void OnDestroy()
     {
-        rowsInitializer.RemoveCreatedObjectFromList(this);
+        //rowsInitializer.RemoveCreatedObjectFromList(this);
     }
 }

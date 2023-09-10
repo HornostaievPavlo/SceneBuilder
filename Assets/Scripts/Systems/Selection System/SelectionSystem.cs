@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 
 public class SelectionSystem : MonoBehaviour
 {
-    [SerializeField] private LeftMenu leftMenu;
+    //[SerializeField] private LeftMenu leftMenu;
 
     [SerializeField] private SurfacePainter surfacePainter;
 
@@ -58,16 +58,16 @@ public class SelectionSystem : MonoBehaviour
 
                     selectableObject = selectionParameter;
 
-                    indexOfSelected = rowsInitializer.dictOfLists[selectionParameter.type].IndexOf(selectionParameter.gameObject);
+                    //indexOfSelected = rowsInitializer.dictOfLists[selectionParameter.type].IndexOf(selectionParameter.gameObject);
 
                     ItemSelection(true, selectionParameter.transform);
 
-                    leftMenu.SelectRow(true);
+                    //leftMenu.SelectRow(true);
                 }
             }
             else
             {
-                leftMenu.SelectRow(false);
+                //leftMenu.SelectRow(false);
 
                 ItemSelection(false, transform);
 

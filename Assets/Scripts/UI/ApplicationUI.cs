@@ -55,10 +55,12 @@ public class ApplicationUI : MonoBehaviour
         {
             Vector3 copyPosition = new Vector3(0, selectionSystem.selectedObject.transform.position.y, 0);
 
-            Instantiate(selectionSystem.selectedObject.transform,
+            var copy = Instantiate(selectionSystem.selectedObject.transform,
                         copyPosition,
                         selectionSystem.selectedObject.transform.rotation,
                         selectionSystem.selectedObject.transform.parent);
+
+            copy.gameObject.name = selectionSystem.selectedObject.name;
         }
     }
 
