@@ -84,13 +84,13 @@ public class SelectionSystem : MonoBehaviour
     /// <param name="target">Which object to operate</param>
     public void ItemSelection(bool isSelected, Transform target)
     {
-        runtimeTransformHandle.gameObject.SetActive(isSelected);
+        //runtimeTransformHandle.gameObject.SetActive(isSelected);
 
         controlsButtons.SetActive(isSelected);
 
         if (!isSelected) rightMenu.SetActive(false);
 
-        runtimeTransformHandle.target = isSelected ? target.transform : runtimeTransformHandle.transform;
+        //runtimeTransformHandle.target = isSelected ? target.transform : runtimeTransformHandle.transform;
 
         selectedObject = isSelected ? target.gameObject : null;
 

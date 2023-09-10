@@ -1,4 +1,3 @@
-using RuntimeHandle;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,7 +8,6 @@ public class ApplicationUI : MonoBehaviour
 
     //public SelectionSystem selectionSystem;
 
-    [SerializeField] private RuntimeTransformHandle runtimeTransformHandle;
 
     [SerializeField] private SurfacePainter colorManipulator;
 
@@ -41,12 +39,12 @@ public class ApplicationUI : MonoBehaviour
 
     private void OnObjectSelected(SelectableObject selectable)
     {
-        Debug.Log("selection event fired.");
+
     }
 
     private void OnObjectDeselected()
     {
-        Debug.Log("DEselection event fired.");
+
     }
 
     private void Start()
@@ -54,26 +52,12 @@ public class ApplicationUI : MonoBehaviour
         AssignColorsButtons();
     }
 
-    #region MainUI
-    /// <summary>
-    /// Turns all UI elements on/off 
-    /// </summary>
-    /// <param name="isActive">Toggle value</param>
-    public void SetUIState(bool isActive)
-    {
-        gameObject.SetActive(isActive);
+    //public void CenterCameraFocalPoint()
+    //{
+    //    orbitCameraController.CenterCameraFocalPoint();
+    //}
 
-        hideUIToggle.eulerAngles = new Vector3(0, 0, isActive ? 0 : 180);
-    }
 
-    public void CenterCameraFocalPoint()
-    {
-        orbitCameraController.CenterCameraFocalPoint();
-    }
-
-    /// <summary>
-    /// Makes a copy of selected object
-    /// </summary>
     //public void CopySelectedObject()
     //{
     //    if (selectionSystem.selectedObject != null)
@@ -89,9 +73,7 @@ public class ApplicationUI : MonoBehaviour
     //    }
     //}
 
-    /// <summary>
-    /// Deletes selected object and its ui row from the scene
-    /// </summary>
+
     //public void RemoveObject()
     //{
     //    if (selectionSystem.selectedObject != null)
@@ -101,33 +83,6 @@ public class ApplicationUI : MonoBehaviour
     //        selectionSystem.ItemSelection(false, selectionSystem.selectedObject.transform);
     //    }
     //}
-    #endregion
-
-    #region TransformHandle
-    /// <summary>
-    /// Changes mode of the TransformHandle to translation 
-    /// </summary>
-    public void SetPositionType()
-    {
-        runtimeTransformHandle.type = HandleType.POSITION;
-    }
-
-    /// <summary>
-    /// Changes mode of the TransformHandle to rotation 
-    /// </summary>
-    public void SetRotationType()
-    {
-        runtimeTransformHandle.type = HandleType.ROTATION;
-    }
-
-    /// <summary>
-    /// Changes mode of the TransformHandle to scaling 
-    /// </summary>
-    public void SetScaleType()
-    {
-        runtimeTransformHandle.type = HandleType.SCALE;
-    }
-    #endregion
 
     #region PaintingSystem
 
@@ -160,8 +115,12 @@ public class ApplicationUI : MonoBehaviour
     }
     #endregion
 
-    public void QuitApplication()
+    public void SetUIActive(bool isActive)
     {
-        Application.Quit();
+        gameObject.SetActive(isActive);
+
+        hideUIToggle.eulerAngles = new Vector3(0, 0, isActive ? 0 : 180);
     }
+
+    public void QuitApplication() => Application.Quit();
 }
