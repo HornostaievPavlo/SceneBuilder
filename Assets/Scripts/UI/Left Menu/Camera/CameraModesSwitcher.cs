@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CameraModesSelection : MonoBehaviour
+public class CameraModesSwitcher : MonoBehaviour // TODO
 {
     [SerializeField] private Image mainViewImage;
     [SerializeField] private Sprite mainViewImageSelected;

@@ -14,7 +14,7 @@ public class LeftMenu : MonoBehaviour
 
     private LabelTabController _labelTabController;
 
-    private CameraModesSelection _cameraModesSelection;
+    private CameraModesSwitcher _cameraModesSelection;
 
     private Color32 _unselectedDots = new Color32(221, 223, 229, 255);
     private Color32 _selectedDots = new Color32(63, 106, 204, 255);
@@ -30,7 +30,7 @@ public class LeftMenu : MonoBehaviour
 
         _labelTabController = GetComponentInChildren<LabelTabController>(true);
 
-        _cameraModesSelection = GetComponentInChildren<CameraModesSelection>(true);
+        _cameraModesSelection = GetComponentInChildren<CameraModesSwitcher>(true);
 
         Table[] tables = GetComponentsInChildren<Table>(true);
         modelsTable = tables[0];
