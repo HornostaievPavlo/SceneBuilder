@@ -58,10 +58,12 @@ public class ApplicationUI : MonoBehaviour
     {
         if (currentSelection != null)
         {
+            TransformHandleSystem handle = FindObjectOfType<TransformHandleSystem>();
+
             Destroy(currentSelection.gameObject);
 
-            TransformHandleSystem transformHandle = FindObjectOfType<TransformHandleSystem>();
-            transformHandle.OnObjectDeselected();
+            handle.OnObjectDeselected();
+            this.OnObjectDeselected();
         }
     }
 
