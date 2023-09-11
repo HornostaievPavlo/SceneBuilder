@@ -7312,7 +7312,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2093245011}
         m_TargetAssemblyTypeName: LoadingSystem, Main
         m_MethodName: LoadLabelAsset
         m_Mode: 1
@@ -7363,7 +7363,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rowPrefab: {fileID: -4830769845822010318, guid: 86eda2ea53f746346b95e7118d4f3be9, type: 3}
   rowParent: {fileID: 6653091563819209852}
-  rowsList: []
+  rows: []
 --- !u!1 &2832371723906267249
 GameObject:
   m_ObjectHideFlags: 0
@@ -8124,7 +8124,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &3279036571432585898
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8254,9 +8254,6 @@ MonoBehaviour:
   editTogglePressed: {fileID: 21300000, guid: 4d00b960599668144b7c860a54ca6e91, type: 3}
   title: 
   description: 
-  editLabelToggle: {fileID: 0}
-  currentTitle: {fileID: 0}
-  currentDescription: {fileID: 0}
 --- !u!114 &3329686872737089900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8549,8 +8546,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5237167921698601857}
-        m_TargetAssemblyTypeName: CameraModesSelection, Assembly-CSharp
-        m_MethodName: SplitScreenView
+        m_TargetAssemblyTypeName: CameraModesSwitcher, Main
+        m_MethodName: SetSplitScreenView
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10014,8 +10011,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5237167921698601857}
-        m_TargetAssemblyTypeName: CameraModesSelection, Assembly-CSharp
-        m_MethodName: CameraView
+        m_TargetAssemblyTypeName: CameraModesSwitcher, Main
+        m_MethodName: SetCameraView
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10419,7 +10416,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rowPrefab: {fileID: 2388981990835224202, guid: 1d57b30d4e8526142ba55798fac90cfc, type: 3}
   rowParent: {fileID: 831219230311807171}
-  rowsList: []
+  rows: []
 --- !u!222 &5070434365399465573
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -10725,7 +10722,6 @@ MonoBehaviour:
   cameraViewImage: {fileID: 2119160569479365636}
   cameraViewImageSelected: {fileID: 21300000, guid: 39904168d20d05b4f962ed9e69772a77, type: 3}
   cameraViewImageDeselected: {fileID: 21300000, guid: 8880e914cded73c46bcd9eafdd84929d, type: 3}
-  ballCamera: {fileID: 0}
 --- !u!1 &5269309376256645737
 GameObject:
   m_ObjectHideFlags: 0
@@ -13763,7 +13759,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rowPrefab: {fileID: 576895234020867155, guid: ee2d964ec14347547b5a590d220551f6, type: 3}
   rowParent: {fileID: 5692145538668494435}
-  rowsList: []
+  rows: []
 --- !u!114 &7397467181379770250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14175,8 +14171,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5237167921698601857}
-        m_TargetAssemblyTypeName: CameraModesSelection, Assembly-CSharp
-        m_MethodName: MainView
+        m_TargetAssemblyTypeName: CameraModesSwitcher, Main
+        m_MethodName: SetMainView
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

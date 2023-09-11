@@ -1,59 +1,61 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CameraModesSwitcher : MonoBehaviour // TODO
+public class CameraModesSwitcher : MonoBehaviour
 {
     [SerializeField] private Image mainViewImage;
     [SerializeField] private Sprite mainViewImageSelected;
     [SerializeField] private Sprite mainViewImageDeselected;
-
+    [Space]
     [SerializeField] private Image splitScreenViewImage;
     [SerializeField] private Sprite splitScreenImageSelected;
     [SerializeField] private Sprite splitScreenImageDeselected;
-
+    [Space]
     [SerializeField] private Image cameraViewImage;
     [SerializeField] private Sprite cameraViewImageSelected;
     [SerializeField] private Sprite cameraViewImageDeselected;
 
-    [HideInInspector] public Camera ballCamera;
-
-    private Camera _mainCamera;
+    private Camera ballCamera;
+    private Camera mainCamera;
 
     private void Start()
     {
-        _mainCamera = Camera.main;
-
-        MainView(true);
+        mainCamera = Camera.main;
+        SetMainView(true);
     }
 
-    private void Update()
+    private void OnEnable()
     {
-        CheckForBallCamera();
+        SelectionSystem.OnObjectSelected += OnObjectSelected;
+        SelectionSystem.OnObjectDeselected += OnObjectDeselected;
     }
 
-    /// <summary>
-    /// Sets modes toggles active 
-    /// </summary>
-    /// <param name="isCameraNotNull">True if camera selected and false if not</param>
-    private void ShowToggles(bool isCameraNotNull)
+    private void OnDisable()
     {
-        splitScreenViewImage.gameObject.SetActive(isCameraNotNull);
-        cameraViewImage.gameObject.SetActive(isCameraNotNull);
+        SelectionSystem.OnObjectSelected -= OnObjectSelected;
+        SelectionSystem.OnObjectDeselected -= OnObjectDeselected;
     }
 
-    /// <summary>
-    /// Showing modes toggles if camera object is selected
-    /// </summary>
-    private void CheckForBallCamera()
+    private void OnObjectSelected(SelectableObject selectable)
     {
-        if (ballCamera != null)
+        if (selectable.type == AssetType.Camera)
         {
+            ballCamera = selectable.GetComponentInChildren<Camera>();
             ShowToggles(true);
         }
-        else
-        {
-            ShowToggles(false);
-        }
+        else ShowToggles(false);
+    }
+
+    private void OnObjectDeselected()
+    {
+        ShowToggles(false);
+    }
+
+    private void ShowToggles(bool isCameraSelected)
+    {
+        mainViewImage.gameObject.SetActive(isCameraSelected);
+        splitScreenViewImage.gameObject.SetActive(isCameraSelected);
+        cameraViewImage.gameObject.SetActive(isCameraSelected);
     }
 
     /// <summary>
@@ -61,7 +63,7 @@ public class CameraModesSwitcher : MonoBehaviour // TODO
     /// hides ball camera view 
     /// </summary>
     /// <param name="isMainView">Changes sprite of toggle</param>
-    public void MainView(bool isMainView)
+    public void SetMainView(bool isMainView)
     {
         if (!isMainView)
             mainViewImage.sprite = mainViewImageDeselected;
@@ -69,8 +71,8 @@ public class CameraModesSwitcher : MonoBehaviour // TODO
         {
             mainViewImage.sprite = mainViewImageSelected;
 
-            _mainCamera.rect = new Rect(0, 0, 1, 1);
-            _mainCamera.depth = 3;
+            mainCamera.rect = new Rect(0, 0, 1, 1);
+            mainCamera.depth = 3;
 
             if (ballCamera != null)
             {
@@ -83,7 +85,7 @@ public class CameraModesSwitcher : MonoBehaviour // TODO
     /// Sets both main and ball cameras to render on half of the screen
     /// </summary>
     /// <param name="isSplitScreenView">Changes sprite of toggle</param>
-    public void SplitScreenView(bool isSplitScreenView)
+    public void SetSplitScreenView(bool isSplitScreenView)
     {
         if (ballCamera != null)
         {
@@ -96,7 +98,7 @@ public class CameraModesSwitcher : MonoBehaviour // TODO
                 ballCamera.rect = new Rect(0.5f, 0, 0.5f, 1);
                 ballCamera.depth = 1;
 
-                _mainCamera.rect = new Rect(0, 0, 0.5f, 1);
+                mainCamera.rect = new Rect(0, 0, 0.5f, 1);
             }
         }
     }
@@ -106,7 +108,7 @@ public class CameraModesSwitcher : MonoBehaviour // TODO
     /// hides main camera view
     /// </summary>
     /// <param name="isCameraView">Changes sprite of toggle</param>
-    public void CameraView(bool isCameraView)
+    public void SetCameraView(bool isCameraView)
     {
         if (ballCamera != null)
         {
@@ -119,7 +121,7 @@ public class CameraModesSwitcher : MonoBehaviour // TODO
                 ballCamera.rect = new Rect(0, 0, 1, 1);
                 ballCamera.depth = 2;
 
-                _mainCamera.depth = 0;
+                mainCamera.depth = 0;
             }
         }
     }

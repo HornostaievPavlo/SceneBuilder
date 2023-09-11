@@ -4,18 +4,16 @@ public class SelectableObject : MonoBehaviour
 {
     public AssetType type;
 
-    public Row row;
-
     private RowsCoordinator rowsCoordinator;
+    private Row menuRow;
+
+    public Row MenuRow { get { return menuRow; } }
 
     private void Start()
     {
         rowsCoordinator = GetComponentInParent<RowsCoordinator>();
-        row = rowsCoordinator.AssignRow(this);
+        menuRow = rowsCoordinator.AssignRow(this);
     }
 
-    private void OnDestroy()
-    {
-        rowsCoordinator.DestroyRow(this);
-    }
+    private void OnDestroy() => rowsCoordinator.RemoveRow(this);
 }
