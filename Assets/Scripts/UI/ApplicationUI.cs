@@ -43,6 +43,8 @@ public class ApplicationUI : MonoBehaviour
     {
         if (currentSelection != null)
         {
+            Mesh meshCopy = currentSelection.GetComponentInChildren<MeshFilter>().sharedMesh;
+
             Vector3 copyPosition = new Vector3(0, currentSelection.transform.position.y, 0);
 
             var copy = Instantiate(currentSelection.transform,
@@ -51,6 +53,7 @@ public class ApplicationUI : MonoBehaviour
                         currentSelection.transform.parent);
 
             copy.gameObject.name = currentSelection.name;
+            copy.gameObject.GetComponentInChildren<MeshFilter>().sharedMesh = meshCopy;
         }
     }
 
