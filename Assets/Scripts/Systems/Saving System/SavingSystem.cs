@@ -4,21 +4,29 @@ using UnityEngine;
 
 public class SavingSystem : MonoBehaviour
 {
+    [SerializeField]
+    private SavesRowsCoordinator rowsCoordinator;
+
     public string scenePath;
 
     public void SaveNewScene()
     {
-        scenePath = SaveLoadUtility.CreateNewSceneDirectory();
+        scenePath = CreateNewSceneDirectory();
 
-        var saveTargets = CollectSelectableObjects();
+        var saveTargets = SaveLoadUtility.CollectSelectableObjects();
 
         SaveTextures(saveTargets);
         SaveModels(saveTargets);
+
+        rowsCoordinator.CreateRowForNewSaveFile();
     }
 
-    private SelectableObject[] CollectSelectableObjects()
+    public static string CreateNewSceneDirectory()
     {
-        return SaveLoadUtility.assetsParent.GetComponentsInChildren<SelectableObject>();
+        int number = SavesRowsCoordinator.scenesCounter;
+        number++;
+
+        return SaveLoadUtility.scenesPath + @"\Scene" + $"{number}";
     }
 
     /// <summary>
