@@ -2316,6 +2316,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1335881326}
   - component: {fileID: 1335881327}
+  - component: {fileID: 1335881328}
   m_Layer: 0
   m_Name: Selection System
   m_TagString: Untagged
@@ -2348,6 +2349,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a3fb3fd9628bfd04d99467e8c02cebac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1335881328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1335881325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0eb6559014575b440a04aaf33e5a3cc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1439486000

@@ -11,7 +11,7 @@ public class ApplicationUI : MonoBehaviour
     [SerializeField]
     private Transform uiStateToggle;
 
-    private Transform currentSelection;
+    private SelectableObject currentSelection;
 
     private void OnEnable()
     {
@@ -28,7 +28,7 @@ public class ApplicationUI : MonoBehaviour
     private void OnObjectSelected(SelectableObject selectable)
     {
         Toolbox.SetActive(true);
-        currentSelection = selectable.transform;
+        currentSelection = selectable;
     }
 
     private void OnObjectDeselected()
@@ -43,17 +43,7 @@ public class ApplicationUI : MonoBehaviour
     {
         if (currentSelection != null)
         {
-            Mesh meshCopy = currentSelection.GetComponentInChildren<MeshFilter>().sharedMesh;
-
-            Vector3 copyPosition = new Vector3(0, currentSelection.transform.position.y, 0);
-
-            var copy = Instantiate(currentSelection.transform,
-                        copyPosition,
-                        currentSelection.transform.rotation,
-                        currentSelection.transform.parent);
-
-            copy.gameObject.name = currentSelection.name;
-            copy.gameObject.GetComponentInChildren<MeshFilter>().sharedMesh = meshCopy;
+            SelectableObjectUtility.CopySelectableObject(currentSelection);
         }
     }
 
@@ -61,11 +51,7 @@ public class ApplicationUI : MonoBehaviour
     {
         if (currentSelection != null)
         {
-            TransformHandleSystem handle = FindObjectOfType<TransformHandleSystem>();
-
-            Destroy(currentSelection.gameObject);
-
-            handle.OnObjectDeselected();
+            SelectableObjectUtility.DeleteSelectableObject(currentSelection);
             this.OnObjectDeselected();
         }
     }
