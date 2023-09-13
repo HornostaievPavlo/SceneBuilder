@@ -21,12 +21,12 @@ public class LoadingSystem : MonoBehaviour
 
     public async void LoadAssetsFromDirectory() => await LoadModels(inputField.text);
 
-    public async void LoadAssetsFromSaveFile()
-    {
-        bool success = await LoadModels(SaveLoadUtility.scenePath);
+    //public async void LoadAssetsFromSaveFile()
+    //{
+    //    bool success = await LoadModels(SaveLoadUtility.modelsAssetPath);
 
-        if (success) AssignTextures();
-    }
+    //    if (success) AssignTextures();
+    //}
 
     public void LoadCameraAsset()
     {
@@ -54,13 +54,13 @@ public class LoadingSystem : MonoBehaviour
 
         if (success)
         {
-            if (modelPath == SaveLoadUtility.scenePath)
-            {
-                var assets = InitializeImportedAssets();
-                AddCollidersToAssets(assets);
-            }
-            else
-            {
+            //if (modelPath == SaveLoadUtility.modelsAssetPath)
+            //{
+            //    var assets = InitializeImportedAssets();
+            //    AddCollidersToAssets(assets);
+            //}
+            //else
+            //{
                 Transform[] children = SaveLoadUtility.assetsParent.gameObject.GetComponentsInChildren<Transform>();
 
                 for (int i = 0; i < children.Length; i++)
@@ -70,7 +70,7 @@ public class LoadingSystem : MonoBehaviour
 
                 AddCollidersToAssets(modelsInScene);
 
-            }
+            //}
         }
         return success;
     }
@@ -164,26 +164,26 @@ public class LoadingSystem : MonoBehaviour
     /// <summary>
     /// Assigns textures to corresponding materials
     /// </summary>
-    private void AssignTextures()
-    {
-        for (int i = 0; i < modelsInScene.Count; i++)
-        {
-            Renderer renderer = modelsInScene[i].gameObject.GetComponentInChildren<MeshRenderer>();
+    //private void AssignTextures()
+    //{
+    //    for (int i = 0; i < modelsInScene.Count; i++)
+    //    {
+    //        Renderer renderer = modelsInScene[i].gameObject.GetComponentInChildren<MeshRenderer>();
 
-            if (renderer != null)
-            {
-                Material material = renderer.material;
+    //        if (renderer != null)
+    //        {
+    //            Material material = renderer.material;
 
-                if (material != null)
-                {
-                    string currentAssetPath = @$"\Asset {i + 1}" + @"\Texture.png";
-                    string fullPath = SaveLoadUtility.assetsSavePath + currentAssetPath;
+    //            if (material != null)
+    //            {
+    //                string currentAssetPath = @$"\Asset {i + 1}" + @"\Texture.png";
+    //                string fullPath = SaveLoadUtility.assetsSavePath + currentAssetPath;
 
-                    material.mainTexture = OpenDirectoryAndLoadTexture(fullPath);
-                }
-            }
-        }
-    }
+    //                material.mainTexture = OpenDirectoryAndLoadTexture(fullPath);
+    //            }
+    //        }
+    //    }
+    //}
 
     /// <summary>
     /// Loads texture from given path

@@ -2,9 +2,11 @@ using UnityEngine;
 
 public class SaveLoadUtility : MonoBehaviour
 {
-    public static readonly string scenePath = @"D:\_GLTF\Saves\Asset.gltf";
+    public static readonly string scenePath = @"D:\_GLTF\Saves";
 
-    public static readonly string assetsSavePath = @"D:\_GLTF\Saves";
+    //public static readonly string modelsAssetPath = @"D:\_GLTF\Saves\Scene\Asset.gltf";
+
+    //public static readonly string assetsSavePath = @"D:\_GLTF\Saves\Scene";
 
     public static readonly string duckModelPath =
         "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF/Duck.gltf";
@@ -14,6 +16,11 @@ public class SaveLoadUtility : MonoBehaviour
     private void Start()
     {
         assetsParent = GameObject.Find("Assets Placeholder").transform;
+    }
+
+    public static string CreateNewSceneDirectory()
+    {
+        return scenePath + @"\Scene";
     }
 
     /// <summary>

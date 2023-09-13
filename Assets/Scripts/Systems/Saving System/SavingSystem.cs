@@ -4,19 +4,18 @@ using UnityEngine;
 
 public class SavingSystem : MonoBehaviour
 {
-    public void SaveAssets()
+    public string scenePath;
+
+    public void SaveNewScene()
     {
+        scenePath = SaveLoadUtility.CreateNewSceneDirectory();
+
         var saveTargets = CollectSelectableObjects();
 
         SaveTextures(saveTargets);
-
         SaveModels(saveTargets);
     }
 
-    /// <summary>
-    /// Finds all Selectables in scene
-    /// </summary>
-    /// <returns>Array of Selectables</returns>
     private SelectableObject[] CollectSelectableObjects()
     {
         return SaveLoadUtility.assetsParent.GetComponentsInChildren<SelectableObject>();
@@ -37,7 +36,9 @@ public class SavingSystem : MonoBehaviour
 
         var export = new GameObjectExport();
         export.AddScene(models);
-        await export.SaveToFileAndDispose(SaveLoadUtility.scenePath);
+
+        string filePath = scenePath + @"\Asset.gltf";
+        await export.SaveToFileAndDispose(filePath);
     }
 
     /// <summary>
@@ -56,7 +57,7 @@ public class SavingSystem : MonoBehaviour
             {
                 Texture2D texture = SaveLoadUtility.DuplicateTexture((Texture2D)material.mainTexture);
 
-                string directoryPath = SaveLoadUtility.assetsSavePath + @$"\Asset {i + 1}";
+                string directoryPath = scenePath + @$"\Asset {i + 1}";
 
                 string filePath = directoryPath + @"\Texture.png";
 

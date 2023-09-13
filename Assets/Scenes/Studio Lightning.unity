@@ -180,7 +180,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &217610274
 RectTransform:
   m_ObjectHideFlags: 0
@@ -893,7 +893,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1697327449}
         m_TargetAssemblyTypeName: SavingSystem, Main
-        m_MethodName: SaveAssets
+        m_MethodName: SaveNewScene
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3317,6 +3317,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54e2b29fa657b264fa303f5f657ebfb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scenePath: 
 --- !u!1 &1787243081
 GameObject:
   m_ObjectHideFlags: 0
