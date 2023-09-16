@@ -21,12 +21,16 @@ public class LoadingSystem : MonoBehaviour
 
     public async void LoadAssetsFromDirectory() => await LoadModels(inputField.text);
 
-    //public async void LoadAssetsFromSaveFile()
-    //{
-    //    bool success = await LoadModels(SaveLoadUtility.modelsAssetPath);
+    public async void LoadAssetsFromSaveFile(int sceneNumber)
+    {
+        string saveFilePath =
+            SaveLoadUtility.scenesPath + @"\Scene" + sceneNumber.ToString() + @"\Asset.gltf";
+        Debug.Log(saveFilePath);
 
-    //    if (success) AssignTextures();
-    //}
+        bool success = await LoadModels(saveFilePath);
+
+        if (success) AssignTextures(sceneNumber);
+    }
 
     public void LoadCameraAsset()
     {
@@ -54,13 +58,13 @@ public class LoadingSystem : MonoBehaviour
 
         if (success)
         {
-            //if (modelPath == SaveLoadUtility.modelsAssetPath)
-            //{
-            //    var assets = InitializeImportedAssets();
-            //    AddCollidersToAssets(assets);
-            //}
-            //else
-            //{
+            if (modelPath.Contains(SaveLoadUtility.scenesPath))
+            {
+                var assets = InitializeImportedAssets();
+                AddCollidersToAssets(assets);
+            }
+            else
+            {
                 Transform[] children = SaveLoadUtility.assetsParent.gameObject.GetComponentsInChildren<Transform>();
 
                 for (int i = 0; i < children.Length; i++)
@@ -70,7 +74,7 @@ public class LoadingSystem : MonoBehaviour
 
                 AddCollidersToAssets(modelsInScene);
 
-            //}
+            }
         }
         return success;
     }
@@ -126,19 +130,21 @@ public class LoadingSystem : MonoBehaviour
     private List<Transform> InitializeImportedAssets() // gabella
     {
         // setting scene obj as child of placeholder
-        //Transform sceneObj = GameObject.Find("Scene").transform;
-        //if (sceneObj != null) sceneObj.SetParent(SaveLoadUtility.assetsParent);
+
+        // TODO: single file loading falls here
+        Transform sceneObj = GameObject.Find("Scene").transform;
+        if (sceneObj != null) sceneObj.SetParent(SaveLoadUtility.assetsParent);
 
         // removing spawner
-        //var spawner = SaveLoadUtility.assetsParent.gameObject.GetComponentInChildren<GltfAsset>();
-        //Destroy(spawner.gameObject.GetComponent<SelectableObject>());
-        //spawner.gameObject.name = "glTF Asset";
+        var spawner = SaveLoadUtility.assetsParent.gameObject.GetComponentInChildren<GltfAsset>();
+        Destroy(spawner.gameObject.GetComponent<SelectableObject>());
+        spawner.gameObject.name = "glTF Asset";
 
         GltfAsset[] spawners = SaveLoadUtility.assetsParent.gameObject.GetComponentsInChildren<GltfAsset>();
-        foreach (GltfAsset spawner in spawners)
+        foreach (GltfAsset item in spawners)
         {
-            Destroy(spawner.gameObject.GetComponent<SelectableObject>());
-            spawner.gameObject.name = "glTF Asset";
+            Destroy(item.gameObject.GetComponent<SelectableObject>());
+            item.gameObject.name = "glTF Asset";
         }
 
         Array.Clear(children, 0, children.Length);
@@ -156,7 +162,7 @@ public class LoadingSystem : MonoBehaviour
             selectable.type = AssetType.Model;
         }
 
-        //Destroy(sceneObj.gameObject);
+        Destroy(sceneObj.gameObject);
 
         return modelsInScene;
     }
@@ -164,26 +170,27 @@ public class LoadingSystem : MonoBehaviour
     /// <summary>
     /// Assigns textures to corresponding materials
     /// </summary>
-    //private void AssignTextures()
-    //{
-    //    for (int i = 0; i < modelsInScene.Count; i++)
-    //    {
-    //        Renderer renderer = modelsInScene[i].gameObject.GetComponentInChildren<MeshRenderer>();
+    private void AssignTextures(int sceneNumber)
+    {
+        for (int i = 0; i < modelsInScene.Count; i++)
+        {
+            Renderer renderer = modelsInScene[i].gameObject.GetComponentInChildren<MeshRenderer>();
 
-    //        if (renderer != null)
-    //        {
-    //            Material material = renderer.material;
+            if (renderer != null)
+            {
+                Material material = renderer.material;
 
-    //            if (material != null)
-    //            {
-    //                string currentAssetPath = @$"\Asset {i + 1}" + @"\Texture.png";
-    //                string fullPath = SaveLoadUtility.assetsSavePath + currentAssetPath;
+                if (material != null)
+                {
+                    // TODO: multiple models loading falls here
+                    string currentAssetPath = @$"\Asset {i + 1}" + @"\Texture.png";
+                    string fullPath = SaveLoadUtility.scenesPath + @$"\Scene{sceneNumber}" + currentAssetPath;
 
-    //                material.mainTexture = OpenDirectoryAndLoadTexture(fullPath);
-    //            }
-    //        }
-    //    }
-    //}
+                    material.mainTexture = OpenDirectoryAndLoadTexture(fullPath);
+                }
+            }
+        }
+    }
 
     /// <summary>
     /// Loads texture from given path
