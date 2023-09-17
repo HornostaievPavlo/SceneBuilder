@@ -17,18 +17,18 @@ public class LoadingSystem : MonoBehaviour
     [SerializeField]
     private GameObject labelAssetPrefab;
 
-    [SerializeField] private List<Transform> modelsInScene = new List<Transform>();
+    private List<Transform> assetsInScene = new List<Transform>();
+
+    private List<Transform> modelsFromSingleSaveFile = new List<Transform>();
 
     public async void LoadAssetsFromDirectory() => await LoadModels(inputField.text);
 
     public async void LoadAssetsFromSaveFile(int sceneNumber)
     {
         string saveFilePath =
-            SaveLoadUtility.scenesPath + @"\Scene" + sceneNumber.ToString() + @"\Asset.gltf";
-        Debug.Log(saveFilePath);
+            SaveLoadUtility.scenePath + sceneNumber.ToString() + SaveLoadUtility.sceneFile;
 
         bool success = await LoadModels(saveFilePath);
-
         if (success) AssignTextures(sceneNumber);
     }
 
@@ -50,7 +50,7 @@ public class LoadingSystem : MonoBehaviour
     /// <returns>Success of loading</returns>
     private async Task<bool> LoadModels(string modelPath)
     {
-        modelsInScene.Clear();
+        assetsInScene.Clear();
 
         var asset = CreateAsset(AssetType.Model).GetComponent<GltfAsset>();
 
@@ -58,7 +58,7 @@ public class LoadingSystem : MonoBehaviour
 
         if (success)
         {
-            if (modelPath.Contains(SaveLoadUtility.scenesPath))
+            if (modelPath.Contains(SaveLoadUtility.savesPath))
             {
                 var assets = InitializeImportedAssets();
                 AddCollidersToAssets(assets);
@@ -69,11 +69,10 @@ public class LoadingSystem : MonoBehaviour
 
                 for (int i = 0; i < children.Length; i++)
                 {
-                    if (children[i].gameObject.name == "Asset") modelsInScene.Add(children[i]);
+                    if (children[i].gameObject.name == "Asset") assetsInScene.Add(children[i]);
                 }
 
-                AddCollidersToAssets(modelsInScene);
-
+                AddCollidersToAssets(assetsInScene);
             }
         }
         return success;
@@ -129,11 +128,17 @@ public class LoadingSystem : MonoBehaviour
     public Transform[] children;
     private List<Transform> InitializeImportedAssets() // gabella
     {
-        // setting scene obj as child of placeholder
+        modelsFromSingleSaveFile.Clear();
 
-        // TODO: single file loading falls here
-        Transform sceneObj = GameObject.Find("Scene").transform;
-        if (sceneObj != null) sceneObj.SetParent(SaveLoadUtility.assetsParent);
+        // setting scene obj as child of placeholder
+        bool isSingleAsset = GameObject.Find("Scene") == null;
+        Transform sceneObj = null;
+
+        if (!isSingleAsset)
+        {
+            sceneObj = GameObject.Find("Scene").transform;
+            sceneObj.SetParent(SaveLoadUtility.assetsParent);
+        }
 
         // removing spawner
         var spawner = SaveLoadUtility.assetsParent.gameObject.GetComponentInChildren<GltfAsset>();
@@ -152,19 +157,27 @@ public class LoadingSystem : MonoBehaviour
 
         for (int i = 0; i < children.Length; i++)
         {
-            if (children[i].gameObject.name == "Asset") modelsInScene.Add(children[i]);
+            if (children[i].gameObject.name == "Asset") assetsInScene.Add(children[i]);
         }
 
-        foreach (var asset in modelsInScene)
+        foreach (var asset in assetsInScene)
         {
             asset.SetParent(SaveLoadUtility.assetsParent);
-            var selectable = asset.gameObject.AddComponent<SelectableObject>();
-            selectable.type = AssetType.Model;
+
+            bool hasSelectable = asset.GetComponentInChildren<SelectableObject>() != null;
+
+            if (!hasSelectable)
+            {
+                var selectable = asset.gameObject.AddComponent<SelectableObject>();
+                selectable.type = AssetType.Model;
+
+                modelsFromSingleSaveFile.Add(asset.transform);
+            }
         }
 
-        Destroy(sceneObj.gameObject);
+        if (sceneObj) Destroy(sceneObj.gameObject);
 
-        return modelsInScene;
+        return assetsInScene;
     }
 
     /// <summary>
@@ -172,9 +185,9 @@ public class LoadingSystem : MonoBehaviour
     /// </summary>
     private void AssignTextures(int sceneNumber)
     {
-        for (int i = 0; i < modelsInScene.Count; i++)
+        for (int i = 0; i < modelsFromSingleSaveFile.Count; i++)
         {
-            Renderer renderer = modelsInScene[i].gameObject.GetComponentInChildren<MeshRenderer>();
+            Renderer renderer = modelsFromSingleSaveFile[i].gameObject.GetComponentInChildren<MeshRenderer>();
 
             if (renderer != null)
             {
@@ -182,14 +195,14 @@ public class LoadingSystem : MonoBehaviour
 
                 if (material != null)
                 {
-                    // TODO: multiple models loading falls here
-                    string currentAssetPath = @$"\Asset {i + 1}" + @"\Texture.png";
-                    string fullPath = SaveLoadUtility.scenesPath + @$"\Scene{sceneNumber}" + currentAssetPath;
+                    string currentAssetPath = @$"\Asset{i + 1}" + SaveLoadUtility.textureFile;
+                    string fullPath = SaveLoadUtility.scenePath + sceneNumber + currentAssetPath;
 
                     material.mainTexture = OpenDirectoryAndLoadTexture(fullPath);
                 }
             }
         }
+        modelsFromSingleSaveFile.Clear();
     }
 
     /// <summary>

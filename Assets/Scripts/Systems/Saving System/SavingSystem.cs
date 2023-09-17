@@ -26,7 +26,7 @@ public class SavingSystem : MonoBehaviour
         int number = SavesRowsCoordinator.scenesCounter;
         number++;
 
-        return SaveLoadUtility.scenesPath + @"\Scene" + $"{number}";
+        return SaveLoadUtility.scenePath + number;
     }
 
     /// <summary>
@@ -45,7 +45,7 @@ public class SavingSystem : MonoBehaviour
         var export = new GameObjectExport();
         export.AddScene(models);
 
-        string filePath = scenePath + @"\Asset.gltf";
+        string filePath = scenePath + SaveLoadUtility.sceneFile;
         await export.SaveToFileAndDispose(filePath);
     }
 
@@ -65,9 +65,9 @@ public class SavingSystem : MonoBehaviour
             {
                 Texture2D texture = SaveLoadUtility.DuplicateTexture((Texture2D)material.mainTexture);
 
-                string directoryPath = scenePath + @$"\Asset {i + 1}";
+                string directoryPath = scenePath + @$"\Asset{i + 1}";
 
-                string filePath = directoryPath + @"\Texture.png";
+                string filePath = directoryPath + SaveLoadUtility.textureFile;
 
                 CreateDirectoryAndSaveTexture(texture, directoryPath, filePath);
             }

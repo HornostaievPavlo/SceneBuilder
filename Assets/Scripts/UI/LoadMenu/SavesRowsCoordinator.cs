@@ -23,7 +23,7 @@ public class SavesRowsCoordinator : MonoBehaviour
 
     private void CreateRowsForExistingSaveFiles()
     {
-        directories = new List<string>(Directory.EnumerateDirectories(SaveLoadUtility.scenesPath));
+        directories = new List<string>(Directory.EnumerateDirectories(SaveLoadUtility.savesPath));
 
         foreach (var dir in directories)
         {
@@ -42,17 +42,17 @@ public class SavesRowsCoordinator : MonoBehaviour
         int currentRowNumber = scenesCounter;
         sceneNumber.text = currentRowNumber.ToString();
 
-        //Debug.Log("Counter - " + scenesCounter);
-
         AddRowButtonsListeners(row, currentRowNumber);
     }
 
     private void AddRowButtonsListeners(GameObject row, int rowNumber)
     {
-        Button[] rowButtons = row.GetComponentsInChildren<Button>(true);
+        Button closeMenuButton = gameObject.GetComponentInChildren<Button>();
+        closeMenuButton.onClick.AddListener(() => this.gameObject.SetActive(false));
 
+        Button[] rowButtons = row.GetComponentsInChildren<Button>(true);
         Button loadButton = rowButtons[0];
-        var deleteButton = rowButtons[1];
+        Button deleteButton = rowButtons[1];
 
         loadButton.onClick.AddListener(() => loadingSystem.LoadAssetsFromSaveFile(rowNumber));
         loadButton.onClick.AddListener(() => this.gameObject.SetActive(false));

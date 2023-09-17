@@ -2,7 +2,11 @@ using UnityEngine;
 
 public class SaveLoadUtility : MonoBehaviour
 {
-    public static readonly string scenesPath = @"D:\_GLTF\Saves";
+    public static readonly string savesPath = @"D:\_GLTF\Saves";
+    public static readonly string scenePath = @"D:\_GLTF\Saves\Scene";
+
+    public static readonly string sceneFile = @"\Asset.gltf";
+    public static readonly string textureFile = @"\Texture.png";
 
     public static readonly string duckModelPath =
         "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF/Duck.gltf";
@@ -12,7 +16,7 @@ public class SaveLoadUtility : MonoBehaviour
     private void Start()
     {
         assetsParent = GameObject.Find("Assets Placeholder").transform;
-    }   
+    }
 
     public static SelectableObject[] CollectSelectableObjects()
     {
