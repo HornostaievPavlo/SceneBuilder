@@ -1,4 +1,5 @@
 using GLTFast.Export;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class SavingSystem : MonoBehaviour
@@ -9,16 +10,23 @@ public class SavingSystem : MonoBehaviour
     [SerializeField]
     private ScreenshotMaker screenshotMaker;
 
+    [SerializeField]
+    private GameObject savePopUp;
+
     public string scenePath;
 
-    public void SaveNewScene()
+    public async void SaveNewScene()
     {
+        savePopUp.SetActive(true);
+
         scenePath = CreateNewSceneDirectory();
 
         var saveTargets = SaveLoadUtility.CollectSelectableObjects();
 
         SaveTextures(saveTargets);
-        SaveModels(saveTargets);
+        await SaveModels(saveTargets);
+
+        savePopUp.SetActive(false);
 
         rowsCoordinator.CreateRowForNewSaveFile();
     }
@@ -37,7 +45,7 @@ public class SavingSystem : MonoBehaviour
     /// Saves all Selectables to file
     /// </summary>
     /// <param name="targets">Array of objects to save</param>
-    private async void SaveModels(SelectableObject[] targets)
+    private async Task<bool> SaveModels(SelectableObject[] targets)
     {
         GameObject[] models = new GameObject[targets.Length];
 
@@ -50,7 +58,9 @@ public class SavingSystem : MonoBehaviour
         export.AddScene(models);
 
         string filePath = scenePath + SaveLoadUtility.sceneFile;
-        await export.SaveToFileAndDispose(filePath);
+        bool success = await export.SaveToFileAndDispose(filePath);
+
+        return success;
     }
 
     /// <summary>
