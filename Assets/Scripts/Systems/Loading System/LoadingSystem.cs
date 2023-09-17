@@ -1,7 +1,6 @@
 using GLTFast;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -198,26 +197,11 @@ public class LoadingSystem : MonoBehaviour
                     string currentAssetPath = @$"\Asset{i + 1}" + SaveLoadUtility.textureFile;
                     string fullPath = SaveLoadUtility.scenePath + sceneNumber + currentAssetPath;
 
-                    material.mainTexture = OpenDirectoryAndLoadTexture(fullPath);
+                    material.mainTexture = SaveLoadUtility.OpenDirectoryAndLoadTexture(fullPath);
                 }
             }
         }
         modelsFromSingleSaveFile.Clear();
-    }
-
-    /// <summary>
-    /// Loads texture from given path
-    /// </summary>
-    /// <param name="path"></param>
-    /// <returns></returns>
-    private Texture2D OpenDirectoryAndLoadTexture(string path)
-    {
-        byte[] loadedBytes = File.ReadAllBytes(path);
-
-        Texture2D textureFromBytes = new Texture2D(2, 2);
-        textureFromBytes.LoadImage(loadedBytes);
-
-        return textureFromBytes;
     }
 
     /// <summary>

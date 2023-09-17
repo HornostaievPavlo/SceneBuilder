@@ -1,11 +1,13 @@
 using GLTFast.Export;
-using System.IO;
 using UnityEngine;
 
 public class SavingSystem : MonoBehaviour
 {
     [SerializeField]
     private SavesRowsCoordinator rowsCoordinator;
+
+    [SerializeField]
+    private ScreenshotMaker screenshotMaker;
 
     public string scenePath;
 
@@ -21,10 +23,12 @@ public class SavingSystem : MonoBehaviour
         rowsCoordinator.CreateRowForNewSaveFile();
     }
 
-    public static string CreateNewSceneDirectory()
+    public string CreateNewSceneDirectory()
     {
         int number = SavesRowsCoordinator.scenesCounter;
         number++;
+
+        screenshotMaker.MakePreviewScreenshot(number);
 
         return SaveLoadUtility.scenePath + number;
     }
@@ -69,24 +73,8 @@ public class SavingSystem : MonoBehaviour
 
                 string filePath = directoryPath + SaveLoadUtility.textureFile;
 
-                CreateDirectoryAndSaveTexture(texture, directoryPath, filePath);
+                SaveLoadUtility.CreateDirectoryAndSaveTexture(texture, directoryPath, filePath);
             }
         }
-    }
-
-    /// <summary>
-    /// Creates directory and saves given texture
-    /// </summary>
-    /// <param name="texture">File to save</param>
-    /// <param name="directory">Path to directory</param>
-    /// <param name="file">Path to file</param>
-    private void CreateDirectoryAndSaveTexture(Texture2D texture, string directory, string file)
-    {
-        byte[] textureBytes = texture.EncodeToPNG();
-
-        var folder = Directory.CreateDirectory(directory);
-        var fullPath = Path.Combine(folder.FullName, file);
-
-        File.WriteAllBytes(fullPath, textureBytes);
     }
 }

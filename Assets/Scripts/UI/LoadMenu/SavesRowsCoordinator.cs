@@ -43,6 +43,7 @@ public class SavesRowsCoordinator : MonoBehaviour
         sceneNumber.text = currentRowNumber.ToString();
 
         AddRowButtonsListeners(row, currentRowNumber);
+        AddSaveFilePreview(row, currentRowNumber);
     }
 
     private void AddRowButtonsListeners(GameObject row, int rowNumber)
@@ -56,5 +57,17 @@ public class SavesRowsCoordinator : MonoBehaviour
 
         loadButton.onClick.AddListener(() => loadingSystem.LoadAssetsFromSaveFile(rowNumber));
         loadButton.onClick.AddListener(() => this.gameObject.SetActive(false));
+    }
+
+    public void AddSaveFilePreview(GameObject row, int rowNumber)
+    {
+        string pathToPreviewTexture =
+            SaveLoadUtility.scenePath +
+            rowNumber.ToString() + SaveLoadUtility.previewFile;
+
+        Texture loadedPreview = SaveLoadUtility.OpenDirectoryAndLoadTexture(pathToPreviewTexture);
+
+        RawImage preview = row.GetComponentInChildren<RawImage>();
+        preview.texture = loadedPreview;
     }
 }

@@ -1,18 +1,12 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ScreenshotMaker : MonoBehaviour
 {
     private Camera mainCamera;
 
-    public RawImage icon;
+    private void Awake() => mainCamera = GetComponent<Camera>();
 
-    private void Awake()
-    {
-        mainCamera = GetComponent<Camera>();
-    }
-
-    public byte[] CaptureCameraView()
+    private Texture2D CaptureCameraView()
     {
         var width = Screen.width;
         var height = Screen.height;
@@ -31,21 +25,16 @@ public class ScreenshotMaker : MonoBehaviour
         DestroyImmediate(renderTexture);
 
         photo.Apply();
-
-        var bytes = photo.EncodeToJPG(100);
-        Destroy(photo);
-
-        return bytes;
+        return photo;
     }
 
-    public void TestScreenshot()
-    {        
-        byte[] bytes = CaptureCameraView();
+    public void MakePreviewScreenshot(int sceneNumber)
+    {
+        Texture2D screenshot = CaptureCameraView();
 
-        Texture2D tex = new Texture2D(Screen.width, Screen.height);
-        tex.LoadImage(bytes);
-        tex.Apply();
-
-        icon.texture = tex;
+        string directoryPath = SaveLoadUtility.scenePath + sceneNumber;
+        string screenshotPath = directoryPath + SaveLoadUtility.previewFile;
+        SaveLoadUtility.CreateDirectoryAndSaveTexture
+            (screenshot, directoryPath, screenshotPath);
     }
 }
