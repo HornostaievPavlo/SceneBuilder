@@ -2,20 +2,18 @@ using UnityEngine;
 
 public class SelectableObject : MonoBehaviour
 {
-    [HideInInspector]
     public AssetType type;
 
-    private RowsInitializer rowsInitializer;
+    private RowsCoordinator rowsCoordinator;
+    private Row menuRow;
+
+    public Row MenuRow { get { return menuRow; } }
 
     private void Start()
     {
-        rowsInitializer = FindObjectOfType<RowsInitializer>();
-
-        rowsInitializer.AddCreatedObjectToList(this);
+        rowsCoordinator = GetComponentInParent<RowsCoordinator>();
+        menuRow = rowsCoordinator.AssignRow(this);
     }
 
-    private void OnDestroy()
-    {
-        rowsInitializer.RemoveCreatedObjectFromList(this);
-    }
+    private void OnDestroy() => rowsCoordinator.RemoveRow(this);
 }

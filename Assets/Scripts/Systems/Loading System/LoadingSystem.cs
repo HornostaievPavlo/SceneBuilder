@@ -1,4 +1,5 @@
 using GLTFast;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -16,15 +17,19 @@ public class LoadingSystem : MonoBehaviour
     [SerializeField]
     private GameObject labelAssetPrefab;
 
-    private List<Transform> modelsInScene = new List<Transform>();
+    private List<Transform> assetsInScene = new List<Transform>();
+
+    private List<Transform> modelsFromSingleSaveFile = new List<Transform>();
 
     public async void LoadAssetsFromDirectory() => await LoadModels(inputField.text);
 
-    public async void LoadAssetsFromSaveFile()
+    public async void LoadAssetsFromSaveFile(int sceneNumber)
     {
-        bool success = await LoadModels(SaveLoadUtility.scenePath);
+        string saveFilePath =
+            SaveLoadUtility.scenePath + sceneNumber.ToString() + SaveLoadUtility.sceneFile;
 
-        if (success) AssignTextures();
+        bool success = await LoadModels(saveFilePath);
+        if (success) AssignTextures(sceneNumber);
     }
 
     public void LoadCameraAsset()
@@ -45,13 +50,15 @@ public class LoadingSystem : MonoBehaviour
     /// <returns>Success of loading</returns>
     private async Task<bool> LoadModels(string modelPath)
     {
+        assetsInScene.Clear();
+
         var asset = CreateAsset(AssetType.Model).GetComponent<GltfAsset>();
 
         var success = await asset.Load(modelPath);
 
         if (success)
         {
-            if (modelPath == SaveLoadUtility.scenePath)
+            if (modelPath.Contains(SaveLoadUtility.savesPath))
             {
                 var assets = InitializeImportedAssets();
                 AddCollidersToAssets(assets);
@@ -62,11 +69,10 @@ public class LoadingSystem : MonoBehaviour
 
                 for (int i = 0; i < children.Length; i++)
                 {
-                    if (children[i].gameObject.name == "Asset") modelsInScene.Add(children[i]);
+                    if (children[i].gameObject.name == "Asset") assetsInScene.Add(children[i]);
                 }
 
-                AddCollidersToAssets(modelsInScene);
-
+                AddCollidersToAssets(assetsInScene);
             }
         }
         return success;
@@ -118,45 +124,70 @@ public class LoadingSystem : MonoBehaviour
         }
     }
 
+    // setting assets up from a scene
+    public Transform[] children;
     private List<Transform> InitializeImportedAssets() // gabella
     {
+        modelsFromSingleSaveFile.Clear();
+
         // setting scene obj as child of placeholder
-        Transform sceneObj = GameObject.Find("Scene").transform;
-        if (sceneObj != null) sceneObj.SetParent(SaveLoadUtility.assetsParent);
+        bool isSingleAsset = GameObject.Find("Scene") == null;
+        Transform sceneObj = null;
+
+        if (!isSingleAsset)
+        {
+            sceneObj = GameObject.Find("Scene").transform;
+            sceneObj.SetParent(SaveLoadUtility.assetsParent);
+        }
 
         // removing spawner
         var spawner = SaveLoadUtility.assetsParent.gameObject.GetComponentInChildren<GltfAsset>();
         Destroy(spawner.gameObject.GetComponent<SelectableObject>());
-        spawner.gameObject.name = "SPAWNER";
+        spawner.gameObject.name = "glTF Asset";
 
-        // setting assets up from a scene
-        Transform[] children = sceneObj.gameObject.GetComponentsInChildren<Transform>();
+        GltfAsset[] spawners = SaveLoadUtility.assetsParent.gameObject.GetComponentsInChildren<GltfAsset>();
+        foreach (GltfAsset item in spawners)
+        {
+            Destroy(item.gameObject.GetComponent<SelectableObject>());
+            item.gameObject.name = "glTF Asset";
+        }
+
+        Array.Clear(children, 0, children.Length);
+        children = SaveLoadUtility.assetsParent.gameObject.GetComponentsInChildren<Transform>();
 
         for (int i = 0; i < children.Length; i++)
         {
-            if (children[i].gameObject.name == "Asset") modelsInScene.Add(children[i]);
+            if (children[i].gameObject.name == "Asset") assetsInScene.Add(children[i]);
         }
 
-        foreach (var asset in modelsInScene)
+        foreach (var asset in assetsInScene)
         {
             asset.SetParent(SaveLoadUtility.assetsParent);
-            var selectable = asset.gameObject.AddComponent<SelectableObject>();
-            selectable.type = AssetType.Model;
+
+            bool hasSelectable = asset.GetComponentInChildren<SelectableObject>() != null;
+
+            if (!hasSelectable)
+            {
+                var selectable = asset.gameObject.AddComponent<SelectableObject>();
+                selectable.type = AssetType.Model;
+
+                modelsFromSingleSaveFile.Add(asset.transform);
+            }
         }
 
-        Destroy(sceneObj.gameObject);
+        if (sceneObj) Destroy(sceneObj.gameObject);
 
-        return modelsInScene;
+        return assetsInScene;
     }
 
     /// <summary>
     /// Assigns textures to corresponding materials
     /// </summary>
-    private void AssignTextures()
+    private void AssignTextures(int sceneNumber)
     {
-        for (int i = 0; i < modelsInScene.Count; i++)
+        for (int i = 0; i < modelsFromSingleSaveFile.Count; i++)
         {
-            Renderer renderer = modelsInScene[i].gameObject.GetComponentInChildren<MeshRenderer>();
+            Renderer renderer = modelsFromSingleSaveFile[i].gameObject.GetComponentInChildren<MeshRenderer>();
 
             if (renderer != null)
             {
@@ -164,13 +195,14 @@ public class LoadingSystem : MonoBehaviour
 
                 if (material != null)
                 {
-                    string currentAssetPath = @$"\Asset {i + 1}" + @"\Texture.png";
-                    string fullPath = SaveLoadUtility.assetsSavePath + currentAssetPath;
+                    string currentAssetPath = @$"\Asset{i + 1}" + SaveLoadUtility.textureFile;
+                    string fullPath = SaveLoadUtility.scenePath + sceneNumber + currentAssetPath;
 
                     material.mainTexture = OpenDirectoryAndLoadTexture(fullPath);
                 }
             }
         }
+        modelsFromSingleSaveFile.Clear();
     }
 
     /// <summary>

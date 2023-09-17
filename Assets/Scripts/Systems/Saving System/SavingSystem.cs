@@ -4,22 +4,29 @@ using UnityEngine;
 
 public class SavingSystem : MonoBehaviour
 {
-    public void SaveAssets()
+    [SerializeField]
+    private SavesRowsCoordinator rowsCoordinator;
+
+    public string scenePath;
+
+    public void SaveNewScene()
     {
-        var saveTargets = CollectSelectableObjects();
+        scenePath = CreateNewSceneDirectory();
+
+        var saveTargets = SaveLoadUtility.CollectSelectableObjects();
 
         SaveTextures(saveTargets);
-
         SaveModels(saveTargets);
+
+        rowsCoordinator.CreateRowForNewSaveFile();
     }
 
-    /// <summary>
-    /// Finds all Selectables in scene
-    /// </summary>
-    /// <returns>Array of Selectables</returns>
-    private SelectableObject[] CollectSelectableObjects()
+    public static string CreateNewSceneDirectory()
     {
-        return SaveLoadUtility.assetsParent.GetComponentsInChildren<SelectableObject>();
+        int number = SavesRowsCoordinator.scenesCounter;
+        number++;
+
+        return SaveLoadUtility.scenePath + number;
     }
 
     /// <summary>
@@ -37,7 +44,9 @@ public class SavingSystem : MonoBehaviour
 
         var export = new GameObjectExport();
         export.AddScene(models);
-        await export.SaveToFileAndDispose(SaveLoadUtility.scenePath);
+
+        string filePath = scenePath + SaveLoadUtility.sceneFile;
+        await export.SaveToFileAndDispose(filePath);
     }
 
     /// <summary>
@@ -54,11 +63,11 @@ public class SavingSystem : MonoBehaviour
 
             if (material.mainTexture != null)
             {
-                Texture2D texture = DuplicateTexture((Texture2D)material.mainTexture);
+                Texture2D texture = SaveLoadUtility.DuplicateTexture((Texture2D)material.mainTexture);
 
-                string directoryPath = SaveLoadUtility.assetsSavePath + @$"\Asset {i + 1}";
+                string directoryPath = scenePath + @$"\Asset{i + 1}";
 
-                string filePath = directoryPath + @"\Texture.png";
+                string filePath = directoryPath + SaveLoadUtility.textureFile;
 
                 CreateDirectoryAndSaveTexture(texture, directoryPath, filePath);
             }
@@ -79,30 +88,5 @@ public class SavingSystem : MonoBehaviour
         var fullPath = Path.Combine(folder.FullName, file);
 
         File.WriteAllBytes(fullPath, textureBytes);
-    }
-
-    /// <summary>
-    /// Makes readable copy of texture
-    /// </summary>
-    /// <param name="source">Original texture</param>
-    /// <returns>Readable copy</returns>
-    private Texture2D DuplicateTexture(Texture2D source)
-    {
-        RenderTexture renderTex = RenderTexture.GetTemporary(
-                    source.width,
-                    source.height,
-                    0,
-                    RenderTextureFormat.Default,
-                    RenderTextureReadWrite.Linear);
-
-        Graphics.Blit(source, renderTex);
-        RenderTexture previous = RenderTexture.active;
-        RenderTexture.active = renderTex;
-        Texture2D readableText = new Texture2D(source.width, source.height);
-        readableText.ReadPixels(new Rect(0, 0, renderTex.width, renderTex.height), 0, 0);
-        readableText.Apply();
-        RenderTexture.active = previous;
-        RenderTexture.ReleaseTemporary(renderTex);
-        return readableText;
     }
 }
