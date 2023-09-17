@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class SavesRowsCoordinator : MonoBehaviour
 {
@@ -10,20 +8,23 @@ public class SavesRowsCoordinator : MonoBehaviour
     private LoadingSystem loadingSystem;
 
     [SerializeField]
-    private GameObject rowPrefab;
+    private GameObject panelPrefab;
 
     [SerializeField]
     private RectTransform content;
 
-    public static int scenesCounter;
+    public static int panelsCounter = 0;
+
+    public List<SaveFilePanel> panels = new List<SaveFilePanel>();
 
     List<string> directories;
 
-    private void Awake() => CreateRowsForExistingSaveFiles();
+    //TODO: refactor to be able to run rows creation on disabled menu (separate system)
+    private void Start() => CreateRowsForExistingSaveFiles();
 
     private void CreateRowsForExistingSaveFiles()
     {
-        directories = new List<string>(Directory.EnumerateDirectories(SaveLoadUtility.savesPath));
+        directories = new List<string>(Directory.EnumerateDirectories(IOUtility.savesPath));
 
         foreach (var dir in directories)
         {
@@ -33,41 +34,77 @@ public class SavesRowsCoordinator : MonoBehaviour
 
     public void CreateRowForNewSaveFile()
     {
-        scenesCounter++;
+        panelsCounter++;
 
-        var row = Instantiate(rowPrefab, content);
+        var panelGO = Instantiate(panelPrefab, content);
+        SaveFilePanel panel = panelGO.GetComponentInChildren<SaveFilePanel>(true);
+        panel.currentNumber = panelsCounter;
 
-        TMP_Text sceneNumber = row.GetComponentInChildren<TMP_Text>();
+        panels.Add(panel);
 
-        int currentRowNumber = scenesCounter;
-        sceneNumber.text = currentRowNumber.ToString();
-
-        AddRowButtonsListeners(row, currentRowNumber);
-        AddSaveFilePreview(row, currentRowNumber);
+        AddRowButtonsListeners(panel);
+        AddSaveFilePreview(panel);
     }
 
-    private void AddRowButtonsListeners(GameObject row, int rowNumber)
+    private void AddRowButtonsListeners(SaveFilePanel panel)
     {
-        Button closeMenuButton = gameObject.GetComponentInChildren<Button>();
-        closeMenuButton.onClick.AddListener(() => this.gameObject.SetActive(false));
+        panel.loadButton.onClick.AddListener(() => loadingSystem.LoadAssetsFromSaveFile(panel.currentNumber));
+        panel.loadButton.onClick.AddListener(() => this.gameObject.SetActive(false));
 
-        Button[] rowButtons = row.GetComponentsInChildren<Button>(true);
-        Button loadButton = rowButtons[0];
-        Button deleteButton = rowButtons[1];
-
-        loadButton.onClick.AddListener(() => loadingSystem.LoadAssetsFromSaveFile(rowNumber));
-        loadButton.onClick.AddListener(() => this.gameObject.SetActive(false));
+        panel.deleteButton.onClick.AddListener(() => DeleteSaveFile(panel));
     }
 
-    public void AddSaveFilePreview(GameObject row, int rowNumber)
+    private void UpdateLoadingButtonIndex(SaveFilePanel panel)
+    {
+        panel.loadButton.onClick.RemoveAllListeners();
+        panel.loadButton.onClick.AddListener(() => loadingSystem.LoadAssetsFromSaveFile(panel.currentNumber));
+        panel.loadButton.onClick.AddListener(() => this.gameObject.SetActive(false));
+
+        panel.deleteButton.onClick.RemoveAllListeners();
+        panel.deleteButton.onClick.AddListener(() => DeleteSaveFile(panel));
+    }
+
+    public void AddSaveFilePreview(SaveFilePanel panel)
     {
         string pathToPreviewTexture =
-            SaveLoadUtility.scenePath +
-            rowNumber.ToString() + SaveLoadUtility.previewFile;
+            IOUtility.scenePath +
+            panel.currentNumber.ToString() +
+            IOUtility.previewFile;
 
-        Texture loadedPreview = SaveLoadUtility.OpenDirectoryAndLoadTexture(pathToPreviewTexture);
+        Texture loadedPreview = IOUtility.OpenDirectoryAndLoadTexture(pathToPreviewTexture);
+        panel.preview.texture = loadedPreview;
+    }
 
-        RawImage preview = row.GetComponentInChildren<RawImage>();
-        preview.texture = loadedPreview;
+    private void DeleteSaveFile(SaveFilePanel panel)
+    {
+        panelsCounter--;
+
+        panels.Remove(panel);
+
+        string directoryPath = IOUtility.scenePath + panel.currentNumber.ToString();
+        Directory.Delete(directoryPath, true);
+
+        string[] directories = Directory.GetDirectories(IOUtility.savesPath);
+
+        for (int i = 0; i < directories.Length; i++)
+        {
+            DirectoryInfo directoryInfo = new DirectoryInfo(directories[i]);
+
+            string currentName = IOUtility.savesPath + @"\" + directoryInfo.Name;
+            Debug.Log(currentName);
+
+            string targetName = IOUtility.scenePath + (i + 1);
+            Debug.Log(targetName);
+
+            Directory.Move(currentName, targetName);
+        }
+
+        for (int i = 0; i < panels.Count; i++)
+        {
+            panels[i].currentNumber = i + 1;
+            UpdateLoadingButtonIndex(panels[i]);
+        }
+
+        Destroy(panel.gameObject);
     }
 }

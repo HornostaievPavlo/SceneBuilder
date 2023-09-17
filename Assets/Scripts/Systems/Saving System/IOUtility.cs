@@ -1,7 +1,7 @@
 using System.IO;
 using UnityEngine;
 
-public class SaveLoadUtility : MonoBehaviour
+public class IOUtility : MonoBehaviour
 {
     public static readonly string savesPath = @"D:\_GLTF\Saves";
     public static readonly string scenePath = @"D:\_GLTF\Saves\Scene";

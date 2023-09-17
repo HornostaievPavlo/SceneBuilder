@@ -8,7 +8,7 @@ public class SelectableObjectUtility : MonoBehaviour
 
         Mesh meshCopy = selectableTr.GetComponentInChildren<MeshFilter>().mesh;
         Material materialCopy = selectableTr.GetComponentInChildren<MeshRenderer>().material;
-        Texture2D textureCopy = SaveLoadUtility.DuplicateTexture((Texture2D)materialCopy.mainTexture);
+        Texture2D textureCopy = IOUtility.DuplicateTexture((Texture2D)materialCopy.mainTexture);
         MeshCollider colliderCopy = selectableTr.GetComponentInChildren<MeshCollider>();
 
         var copy = Instantiate(selectable, Vector3.zero, Quaternion.identity, selectableTr.parent);
