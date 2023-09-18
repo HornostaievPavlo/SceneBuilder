@@ -5,7 +5,7 @@ using UnityEngine;
 public class SavingSystem : MonoBehaviour
 {
     [SerializeField]
-    private SavesRowsCoordinator rowsCoordinator;
+    private SavePanelsCoordinator rowsCoordinator;
 
     [SerializeField]
     private ScreenshotMaker screenshotMaker;
@@ -13,7 +13,7 @@ public class SavingSystem : MonoBehaviour
     [SerializeField]
     private GameObject savePopUp;
 
-    public string scenePath;
+    private string scenePath;
 
     public async void SaveNewScene()
     {
@@ -33,7 +33,7 @@ public class SavingSystem : MonoBehaviour
 
     public string CreateNewSceneDirectory()
     {
-        int number = SavesRowsCoordinator.panelsCounter;
+        int number = SavePanelsCoordinator.panelsCounter;
         number++;
 
         screenshotMaker.MakePreviewScreenshot(number);

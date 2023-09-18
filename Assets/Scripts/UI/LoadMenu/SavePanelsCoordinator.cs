@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public class SavesRowsCoordinator : MonoBehaviour
+public class SavePanelsCoordinator : MonoBehaviour
 {
     [SerializeField]
-    private LoadingSystem loadingSystem;
+    private GameObject loadMenu;
 
     [SerializeField]
     private GameObject panelPrefab;
@@ -13,14 +13,20 @@ public class SavesRowsCoordinator : MonoBehaviour
     [SerializeField]
     private RectTransform content;
 
+    private LoadingSystem loadingSystem;
+
     public static int panelsCounter = 0;
 
-    public List<SaveFilePanel> panels = new List<SaveFilePanel>();
+    public List<SavePanel> panels = new List<SavePanel>();
 
     List<string> directories;
 
-    //TODO: refactor to be able to run rows creation on disabled menu (separate system)
-    private void Start() => CreateRowsForExistingSaveFiles();
+    private void Start()
+    {
+        loadingSystem = GetComponent<LoadingSystem>();
+
+        CreateRowsForExistingSaveFiles();
+    }
 
     private void CreateRowsForExistingSaveFiles()
     {
@@ -37,7 +43,7 @@ public class SavesRowsCoordinator : MonoBehaviour
         panelsCounter++;
 
         var panelGO = Instantiate(panelPrefab, content);
-        SaveFilePanel panel = panelGO.GetComponentInChildren<SaveFilePanel>(true);
+        SavePanel panel = panelGO.GetComponentInChildren<SavePanel>(true);
         panel.currentNumber = panelsCounter;
 
         panels.Add(panel);
@@ -46,25 +52,25 @@ public class SavesRowsCoordinator : MonoBehaviour
         AddSaveFilePreview(panel);
     }
 
-    private void AddRowButtonsListeners(SaveFilePanel panel)
+    private void AddRowButtonsListeners(SavePanel panel)
     {
         panel.loadButton.onClick.AddListener(() => loadingSystem.LoadAssetsFromSaveFile(panel.currentNumber));
-        panel.loadButton.onClick.AddListener(() => this.gameObject.SetActive(false));
+        panel.loadButton.onClick.AddListener(() => loadMenu.SetActive(false));
 
         panel.deleteButton.onClick.AddListener(() => DeleteSaveFile(panel));
     }
 
-    private void UpdateLoadingButtonIndex(SaveFilePanel panel)
+    private void UpdateLoadingButtonIndex(SavePanel panel)
     {
         panel.loadButton.onClick.RemoveAllListeners();
         panel.loadButton.onClick.AddListener(() => loadingSystem.LoadAssetsFromSaveFile(panel.currentNumber));
-        panel.loadButton.onClick.AddListener(() => this.gameObject.SetActive(false));
+        panel.loadButton.onClick.AddListener(() => loadMenu.SetActive(false));
 
         panel.deleteButton.onClick.RemoveAllListeners();
         panel.deleteButton.onClick.AddListener(() => DeleteSaveFile(panel));
     }
 
-    public void AddSaveFilePreview(SaveFilePanel panel)
+    public void AddSaveFilePreview(SavePanel panel)
     {
         string pathToPreviewTexture =
             IOUtility.scenePath +
@@ -75,7 +81,7 @@ public class SavesRowsCoordinator : MonoBehaviour
         panel.preview.texture = loadedPreview;
     }
 
-    private void DeleteSaveFile(SaveFilePanel panel)
+    private void DeleteSaveFile(SavePanel panel)
     {
         panelsCounter--;
 
@@ -84,6 +90,13 @@ public class SavesRowsCoordinator : MonoBehaviour
         string directoryPath = IOUtility.scenePath + panel.currentNumber.ToString();
         Directory.Delete(directoryPath, true);
 
+        RearrangeSaveFiles();
+
+        Destroy(panel.gameObject);
+    }
+
+    private void RearrangeSaveFiles()
+    {
         string[] directories = Directory.GetDirectories(IOUtility.savesPath);
 
         for (int i = 0; i < directories.Length; i++)
@@ -91,20 +104,15 @@ public class SavesRowsCoordinator : MonoBehaviour
             DirectoryInfo directoryInfo = new DirectoryInfo(directories[i]);
 
             string currentName = IOUtility.savesPath + @"\" + directoryInfo.Name;
-            Debug.Log(currentName);
+            Debug.Log("Current name" + currentName);
 
             string targetName = IOUtility.scenePath + (i + 1);
-            Debug.Log(targetName);
+            Debug.Log("Target name" + targetName);
 
             Directory.Move(currentName, targetName);
-        }
 
-        for (int i = 0; i < panels.Count; i++)
-        {
             panels[i].currentNumber = i + 1;
             UpdateLoadingButtonIndex(panels[i]);
         }
-
-        Destroy(panel.gameObject);
     }
 }

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SaveFilePanel : MonoBehaviour
+public class SavePanel : MonoBehaviour
 {
     public int currentNumber;
 
