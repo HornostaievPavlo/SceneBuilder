@@ -3,47 +3,59 @@ using UnityEngine.UI;
 
 public class MenuSizeSwitcher : MonoBehaviour
 {
+    [Header("Backgrounds")]
     [SerializeField]
-    private RectTransform menuBackground;
+    private RectTransform normalBackground;
 
     [SerializeField]
-    private RectTransform upperSizeToggle;
+    private RectTransform expandedBackground;
+
+    [Space]
+    [Header("Toggles")]
+    [SerializeField]
+    private RectTransform openToggle;
 
     [SerializeField]
-    private RectTransform lowerSizeToggle;
+    private RectTransform expandToggle;
 
     [SerializeField]
     private GameObject tabsToggleGroup;
 
+    [Space]
+    [Header("Viewports")]
     [SerializeField]
-    private RectTransform modelsViewport;
+    private RectTransform modelsScrollView;
 
     [SerializeField]
-    private RectTransform camerasViewport;
+    private RectTransform camerasScrollView;
 
     [SerializeField]
-    private RectTransform labelsViewport;
+    private RectTransform labelsScrollView;
+
+    private bool isExpanded = false;
 
     /// <summary>
     /// Opens left menu according to bool value of toggle
     /// </summary>
-    /// <param name="isOpened">Is menu opened or not</param>
-    public void OpenLeftMenu(bool isOpened)
+    /// <param name="isClosed">Is menu opened or not</param>
+    public void OpenMenu(bool isClosed)
     {
-        Vector3 toggleRotation = new Vector3(0, 0, isOpened ? 0 : 180);
-        upperSizeToggle.eulerAngles = toggleRotation;
+        if (isExpanded) ExpandMenu(false);
 
-        menuBackground.gameObject.SetActive(!isOpened);
-        lowerSizeToggle.gameObject.SetActive(!isOpened);
+        Vector3 toggleRotation = new Vector3(0, 0, isClosed ? 0 : 180);
+        openToggle.eulerAngles = toggleRotation;
+
+        normalBackground.gameObject.SetActive(isClosed);
+        expandToggle.gameObject.SetActive(isClosed);
 
         Toggle[] toggles = tabsToggleGroup.GetComponentsInChildren<Toggle>();
 
         foreach (Toggle item in toggles)
         {
-            item.interactable = !isOpened;
+            item.interactable = isClosed;
         }
 
-        if (isOpened)
+        if (!isClosed)
         {
             foreach (Toggle item in toggles)
             {
@@ -53,31 +65,64 @@ public class MenuSizeSwitcher : MonoBehaviour
     }
 
     /// <summary>
-    /// Expands/collapses menu accrding to its current state
+    /// Expands/collapses menu according to its state
     /// </summary>
-    /// <param name="isHalfSize">Is menu half or full view</param>
-    public void ChangeLeftMenuSize(bool isHalfSize)
+    /// <param name="isCollapsed">Is menu half or full view</param>
+    public void ExpandMenu(bool isCollapsed)
     {
-        int toggleHalfSizePosition = 426;
-        int toggleFullSizePosition = 29;
+        isExpanded = isCollapsed ? true : false;
 
-        Vector2 halfSizeViewport = new Vector2(0, 0);
-        Vector2 fullSizeViewport = new Vector2(0, -401);
+        normalBackground.gameObject.SetActive(!isCollapsed);
+        expandedBackground.gameObject.SetActive(isCollapsed);
 
-        Vector3 toggleRotation = new Vector3(0, 0, isHalfSize ? 0 : 180);
-        Vector3 togglePosition = new Vector3(0, isHalfSize ? toggleHalfSizePosition : toggleFullSizePosition, 0);
+        UpdateExpandToggleTransform(isCollapsed);
 
-        Vector2 backgroundPosition = new Vector2(215, isHalfSize ? 198.5f : 0);
-        Vector2 backgroundSize = new Vector2(430, isHalfSize ? 491 : 888);
+        ResizeScrollView(modelsScrollView, isCollapsed);
+        ResizeScrollView(camerasScrollView, isCollapsed);
+        ResizeScrollView(labelsScrollView, isCollapsed);
+    }
 
-        menuBackground.anchoredPosition = backgroundPosition;
-        menuBackground.sizeDelta = backgroundSize;
+    private void UpdateExpandToggleTransform(bool isCollapsed)
+    {
+        Transform expandToggleParent = isCollapsed ? expandedBackground : normalBackground;
+        expandToggle.transform.SetParent(expandToggleParent);
 
-        lowerSizeToggle.eulerAngles = toggleRotation;
-        lowerSizeToggle.anchoredPosition = togglePosition;
+        float offsetFromBottomOfMenu = 15f;
+        expandToggle.anchoredPosition = new Vector3(0, offsetFromBottomOfMenu, 0);
+        expandToggle.eulerAngles = new Vector3(0, 0, isCollapsed ? 0 : 180);
+    }
 
-        modelsViewport.offsetMin = isHalfSize ? halfSizeViewport : fullSizeViewport;
-        camerasViewport.offsetMin = isHalfSize ? halfSizeViewport : fullSizeViewport;
-        labelsViewport.offsetMin = isHalfSize ? halfSizeViewport : fullSizeViewport;
+    private void ResizeScrollView(RectTransform scrollView, bool isCollapsed)
+    {
+        Vector2 normalScrollView = new Vector2(scrollView.offsetMin.x, scrollView.offsetMin.y);
+
+        float offsetFromBottomOfMenu = 40f;
+        Vector2 expandedScrollView = new Vector2(scrollView.offsetMin.x, offsetFromBottomOfMenu);
+
+        scrollView.SetParent(isCollapsed ? expandedBackground : normalBackground);
+        scrollView.offsetMin = isCollapsed ? expandedScrollView : normalScrollView;
     }
 }
+
+
+//int toggleHalfSizePosition = 426;
+//int toggleFullSizePosition = 29;
+
+//Vector2 halfSizeViewport = new Vector2(0, 0);
+//Vector2 fullSizeViewport = new Vector2(0, -401);
+
+//Vector3 toggleRotation = new Vector3(0, 0, isCollapsed ? 0 : 180);
+//Vector3 togglePosition = new Vector3(0, isCollapsed ? toggleHalfSizePosition : toggleFullSizePosition, 0);
+
+//Vector2 backgroundPosition = new Vector2(215, isCollapsed ? 198.5f : 0);
+//Vector2 backgroundSize = new Vector2(430, isCollapsed ? 491 : 888);
+
+//normalBackground.anchoredPosition = backgroundPosition;
+//normalBackground.sizeDelta = backgroundSize;
+
+//expandToggle.eulerAngles = toggleRotation;
+//expandToggle.anchoredPosition = togglePosition;
+
+//scrollView.offsetMin = isCollapsed ? halfSizeViewport : fullSizeViewport;
+//camerasViewport.offsetMin = isCollapsed ? halfSizeViewport : fullSizeViewport;
+//labelsViewport.offsetMin = isCollapsed ? halfSizeViewport : fullSizeViewport;
