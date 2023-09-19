@@ -1,17 +1,14 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class OrbitCameraSystem : MonoBehaviour
 {
-    [Tooltip("Responsiveness of camera movement")]
-    [SerializeField]
+    [SerializeField] private Slider rotationSlider;
+    [SerializeField] private Slider zoomSlider;
+    [SerializeField] private Slider movementSlider;
+
     private float rotationSensitivity;
-
-    [Tooltip("Responsiveness of camera zoom")]
-    [SerializeField]
     private float zoomSensitivity;
-
-    [Tooltip("Responsiveness of focal point movement")]
-    [SerializeField]
     private float movingSensitivity;
 
     private Transform currentSelection;
@@ -21,7 +18,30 @@ public class OrbitCameraSystem : MonoBehaviour
     private float _yRotation;
     private float _xRotation;
 
-    private void Awake() => mainCamera = GetComponentInChildren<Camera>().transform;
+    private void Awake()
+    {
+        mainCamera = GetComponentInChildren<Camera>().transform;
+
+        InitializeSensitivity();
+    }
+
+    private void InitializeSensitivity()
+    {
+        rotationSensitivity = rotationSlider.value;
+        rotationSlider.onValueChanged.AddListener(OnRotationValueChanged);
+
+        zoomSensitivity = zoomSlider.value;
+        zoomSlider.onValueChanged.AddListener(OnZoomValueChanged);
+
+        movingSensitivity = movementSlider.value;
+        movementSlider.onValueChanged.AddListener(OnMovementValueChanged);
+    }
+
+    private void OnRotationValueChanged(float value) => rotationSensitivity = value;
+
+    private void OnZoomValueChanged(float value) => zoomSensitivity = value;
+
+    private void OnMovementValueChanged(float value) => movingSensitivity = value;
 
     private void OnEnable()
     {
@@ -29,15 +49,9 @@ public class OrbitCameraSystem : MonoBehaviour
         SelectionSystem.OnObjectDeselected += OnObjectDeselected;
     }
 
-    private void OnObjectSelected(SelectableObject selectable)
-    {
-        currentSelection = selectable.transform;
-    }
+    private void OnObjectSelected(SelectableObject selectable) => currentSelection = selectable.transform;
 
-    private void OnObjectDeselected()
-    {
-        currentSelection = null;
-    }
+    private void OnObjectDeselected() => currentSelection = null;
 
     private void OnDisable()
     {
@@ -98,9 +112,9 @@ public class OrbitCameraSystem : MonoBehaviour
     }
 
     /// <summary>
-    /// Alligns camera focal point to currently selected object
+    /// Aligns camera focal point to currently selected object
     /// </summary>
-    public void AllignCameraWithSelection()
+    public void AlignCameraWithSelection()
     {
         if (currentSelection) transform.position = currentSelection.position;
     }
