@@ -1,39 +1,51 @@
 using GLTFast.Export;
-using System.IO;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class SavingSystem : MonoBehaviour
 {
     [SerializeField]
-    private SavesRowsCoordinator rowsCoordinator;
+    private SavePanelsCoordinator rowsCoordinator;
 
-    public string scenePath;
+    [SerializeField]
+    private ScreenshotMaker screenshotMaker;
 
-    public void SaveNewScene()
+    [SerializeField]
+    private GameObject savePopUp;
+
+    private string scenePath;
+
+    public async void SaveNewScene()
     {
+        savePopUp.SetActive(true);
+
         scenePath = CreateNewSceneDirectory();
 
-        var saveTargets = SaveLoadUtility.CollectSelectableObjects();
+        var saveTargets = IOUtility.CollectSelectableObjects();
 
         SaveTextures(saveTargets);
-        SaveModels(saveTargets);
+        await SaveModels(saveTargets);
+
+        savePopUp.SetActive(false);
 
         rowsCoordinator.CreateRowForNewSaveFile();
     }
 
-    public static string CreateNewSceneDirectory()
+    public string CreateNewSceneDirectory()
     {
-        int number = SavesRowsCoordinator.scenesCounter;
+        int number = SavePanelsCoordinator.panelsCounter;
         number++;
 
-        return SaveLoadUtility.scenePath + number;
+        screenshotMaker.MakePreviewScreenshot(number);
+
+        return IOUtility.scenePath + number;
     }
 
     /// <summary>
     /// Saves all Selectables to file
     /// </summary>
     /// <param name="targets">Array of objects to save</param>
-    private async void SaveModels(SelectableObject[] targets)
+    private async Task<bool> SaveModels(SelectableObject[] targets)
     {
         GameObject[] models = new GameObject[targets.Length];
 
@@ -45,8 +57,10 @@ public class SavingSystem : MonoBehaviour
         var export = new GameObjectExport();
         export.AddScene(models);
 
-        string filePath = scenePath + SaveLoadUtility.sceneFile;
-        await export.SaveToFileAndDispose(filePath);
+        string filePath = scenePath + IOUtility.sceneFile;
+        bool success = await export.SaveToFileAndDispose(filePath);
+
+        return success;
     }
 
     /// <summary>
@@ -63,30 +77,14 @@ public class SavingSystem : MonoBehaviour
 
             if (material.mainTexture != null)
             {
-                Texture2D texture = SaveLoadUtility.DuplicateTexture((Texture2D)material.mainTexture);
+                Texture2D texture = IOUtility.DuplicateTexture((Texture2D)material.mainTexture);
 
                 string directoryPath = scenePath + @$"\Asset{i + 1}";
 
-                string filePath = directoryPath + SaveLoadUtility.textureFile;
+                string filePath = directoryPath + IOUtility.textureFile;
 
-                CreateDirectoryAndSaveTexture(texture, directoryPath, filePath);
+                IOUtility.CreateDirectoryAndSaveTexture(texture, directoryPath, filePath);
             }
         }
-    }
-
-    /// <summary>
-    /// Creates directory and saves given texture
-    /// </summary>
-    /// <param name="texture">File to save</param>
-    /// <param name="directory">Path to directory</param>
-    /// <param name="file">Path to file</param>
-    private void CreateDirectoryAndSaveTexture(Texture2D texture, string directory, string file)
-    {
-        byte[] textureBytes = texture.EncodeToPNG();
-
-        var folder = Directory.CreateDirectory(directory);
-        var fullPath = Path.Combine(folder.FullName, file);
-
-        File.WriteAllBytes(fullPath, textureBytes);
     }
 }

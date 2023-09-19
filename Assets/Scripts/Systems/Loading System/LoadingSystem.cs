@@ -1,7 +1,6 @@
 using GLTFast;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -26,7 +25,7 @@ public class LoadingSystem : MonoBehaviour
     public async void LoadAssetsFromSaveFile(int sceneNumber)
     {
         string saveFilePath =
-            SaveLoadUtility.scenePath + sceneNumber.ToString() + SaveLoadUtility.sceneFile;
+            IOUtility.scenePath + sceneNumber.ToString() + IOUtility.sceneFile;
 
         bool success = await LoadModels(saveFilePath);
         if (success) AssignTextures(sceneNumber);
@@ -58,14 +57,14 @@ public class LoadingSystem : MonoBehaviour
 
         if (success)
         {
-            if (modelPath.Contains(SaveLoadUtility.savesPath))
+            if (modelPath.Contains(IOUtility.savesPath))
             {
                 var assets = InitializeImportedAssets();
                 AddCollidersToAssets(assets);
             }
             else
             {
-                Transform[] children = SaveLoadUtility.assetsParent.gameObject.GetComponentsInChildren<Transform>();
+                Transform[] children = IOUtility.assetsParent.gameObject.GetComponentsInChildren<Transform>();
 
                 for (int i = 0; i < children.Length; i++)
                 {
@@ -94,7 +93,7 @@ public class LoadingSystem : MonoBehaviour
                     name = "Asset"
                 };
 
-                asset.transform.SetParent(SaveLoadUtility.assetsParent);
+                asset.transform.SetParent(IOUtility.assetsParent);
 
                 SelectableObject modelSelectable = asset.AddComponent<SelectableObject>();
                 modelSelectable.type = type;
@@ -104,7 +103,7 @@ public class LoadingSystem : MonoBehaviour
 
             case AssetType.Camera:
 
-                var camera = Instantiate(cameraAssetPrefab, SaveLoadUtility.assetsParent);
+                var camera = Instantiate(cameraAssetPrefab, IOUtility.assetsParent);
                 camera.name = "Asset";
 
                 SelectableObject cameraSelectable = camera.AddComponent<SelectableObject>();
@@ -113,7 +112,7 @@ public class LoadingSystem : MonoBehaviour
 
             case AssetType.Label:
 
-                var label = Instantiate(labelAssetPrefab, SaveLoadUtility.assetsParent);
+                var label = Instantiate(labelAssetPrefab, IOUtility.assetsParent);
                 label.name = "Asset";
 
                 SelectableObject labelSelectable = label.AddComponent<SelectableObject>();
@@ -137,15 +136,15 @@ public class LoadingSystem : MonoBehaviour
         if (!isSingleAsset)
         {
             sceneObj = GameObject.Find("Scene").transform;
-            sceneObj.SetParent(SaveLoadUtility.assetsParent);
+            sceneObj.SetParent(IOUtility.assetsParent);
         }
 
         // removing spawner
-        var spawner = SaveLoadUtility.assetsParent.gameObject.GetComponentInChildren<GltfAsset>();
+        var spawner = IOUtility.assetsParent.gameObject.GetComponentInChildren<GltfAsset>();
         Destroy(spawner.gameObject.GetComponent<SelectableObject>());
         spawner.gameObject.name = "glTF Asset";
 
-        GltfAsset[] spawners = SaveLoadUtility.assetsParent.gameObject.GetComponentsInChildren<GltfAsset>();
+        GltfAsset[] spawners = IOUtility.assetsParent.gameObject.GetComponentsInChildren<GltfAsset>();
         foreach (GltfAsset item in spawners)
         {
             Destroy(item.gameObject.GetComponent<SelectableObject>());
@@ -153,7 +152,7 @@ public class LoadingSystem : MonoBehaviour
         }
 
         Array.Clear(children, 0, children.Length);
-        children = SaveLoadUtility.assetsParent.gameObject.GetComponentsInChildren<Transform>();
+        children = IOUtility.assetsParent.gameObject.GetComponentsInChildren<Transform>();
 
         for (int i = 0; i < children.Length; i++)
         {
@@ -162,7 +161,7 @@ public class LoadingSystem : MonoBehaviour
 
         foreach (var asset in assetsInScene)
         {
-            asset.SetParent(SaveLoadUtility.assetsParent);
+            asset.SetParent(IOUtility.assetsParent);
 
             bool hasSelectable = asset.GetComponentInChildren<SelectableObject>() != null;
 
@@ -195,29 +194,14 @@ public class LoadingSystem : MonoBehaviour
 
                 if (material != null)
                 {
-                    string currentAssetPath = @$"\Asset{i + 1}" + SaveLoadUtility.textureFile;
-                    string fullPath = SaveLoadUtility.scenePath + sceneNumber + currentAssetPath;
+                    string currentAssetPath = @$"\Asset{i + 1}" + IOUtility.textureFile;
+                    string fullPath = IOUtility.scenePath + sceneNumber + currentAssetPath;
 
-                    material.mainTexture = OpenDirectoryAndLoadTexture(fullPath);
+                    material.mainTexture = IOUtility.OpenDirectoryAndLoadTexture(fullPath);
                 }
             }
         }
         modelsFromSingleSaveFile.Clear();
-    }
-
-    /// <summary>
-    /// Loads texture from given path
-    /// </summary>
-    /// <param name="path"></param>
-    /// <returns></returns>
-    private Texture2D OpenDirectoryAndLoadTexture(string path)
-    {
-        byte[] loadedBytes = File.ReadAllBytes(path);
-
-        Texture2D textureFromBytes = new Texture2D(2, 2);
-        textureFromBytes.LoadImage(loadedBytes);
-
-        return textureFromBytes;
     }
 
     /// <summary>
