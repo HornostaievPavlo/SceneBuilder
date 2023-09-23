@@ -20,6 +20,21 @@ public class LoadingSystem : MonoBehaviour
 
     private List<Transform> modelsFromSingleSaveFile = new List<Transform>();
 
+    private void OnEnable()
+    {
+        ModelUploadingSystem.OnModelUploaded += OnModelUploadedAsync;
+    }
+
+    private void OnDisable()
+    {
+        ModelUploadingSystem.OnModelUploaded -= OnModelUploadedAsync;
+    }
+
+    private void OnModelUploadedAsync(byte[] data)
+    {
+        LoadAssetFromBytes(data);
+    }
+
     public async void LoadAssetsFromDirectory() => await LoadModelsFromPath(inputField.text);
 
     public async void LoadAssetsFromSaveFile(int sceneNumber)
@@ -77,9 +92,9 @@ public class LoadingSystem : MonoBehaviour
         return success;
     }
 
-    public async Task<bool> LoadAssetsFromBytes(byte[] bytes)
+    public async void LoadAssetFromBytes(byte[] bytes)
     {
-        //assetsInScene.Clear();
+        assetsInScene.Clear();
 
         var asset = CreateAsset(AssetType.Model);
 
@@ -102,7 +117,6 @@ public class LoadingSystem : MonoBehaviour
 
             AddCollidersToAssets(assets);
         }
-        return success;
     }
 
     /// <summary>

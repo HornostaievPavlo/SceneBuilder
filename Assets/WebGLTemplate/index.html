@@ -33,7 +33,7 @@
           event.preventDefault();
           const files = event.dataTransfer.files;
           const first = files[0];
-          unityInstance.SendMessage("FileUploader", "FileSelected",
+          unityInstance.SendMessage("ModelUploading System", "FileSelected",
             window.URL.createObjectURL(first), first);
         });
       });
