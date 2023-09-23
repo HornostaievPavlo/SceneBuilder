@@ -3,12 +3,12 @@ using UnityEngine;
 
 public class IOUtility : MonoBehaviour
 {
-    public static readonly string savesPath = @"D:\_GLTF\Saves";
-    public static readonly string scenePath = @"D:\_GLTF\Saves\Scene";
+    public static readonly string savesPath = "D:/_GLTF/Saves";
+    public static readonly string scenePath = "D:/_GLTF/Saves/Scene";
 
-    public static readonly string sceneFile = @"\Asset.gltf";
-    public static readonly string textureFile = @"\Texture.png";
-    public static readonly string previewFile = @"\Preview.png";
+    public static readonly string sceneFile = "/Asset.gltf";
+    public static readonly string textureFile = "/Texture.png";
+    public static readonly string previewFile = "/Preview.png";
 
     public static readonly string duckModelPath =
         "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF/Duck.gltf";
