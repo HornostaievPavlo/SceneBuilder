@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class SurfacePainter : MonoBehaviour
 {
@@ -52,8 +51,6 @@ public class SurfacePainter : MonoBehaviour
         }
     }
 
-    #region ColorManipulation
-
     public void SetColor(Color color)
     {
         foreach (var material in targetMaterials)
@@ -67,10 +64,8 @@ public class SurfacePainter : MonoBehaviour
         }
     }
 
-    public void SetColorTint(Slider slider)
+    public void SetColorTint(float value)
     {
-        float tintValue = slider.value;
-
         Color originalColorCopy = originalMaterials[0].color;
 
         foreach (var material in targetMaterials)
@@ -80,9 +75,9 @@ public class SurfacePainter : MonoBehaviour
                 renderer.material = material;
             }
 
-            Color tintedColor = new Color(originalColorCopy.r * tintValue,
-                                          originalColorCopy.g * tintValue,
-                                          originalColorCopy.b * tintValue);
+            Color tintedColor = new Color(originalColorCopy.r * value,
+                                          originalColorCopy.g * value,
+                                          originalColorCopy.b * value);
 
             material.SetColor(COLOR_PROPERTY_NAME, tintedColor);
         }
@@ -97,7 +92,6 @@ public class SurfacePainter : MonoBehaviour
             targetRenderers[i].material.color = Color.white;
         }
     }
-    #endregion
 
     public void SetTexture(Texture texture)
     {

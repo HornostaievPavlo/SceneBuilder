@@ -104,7 +104,7 @@ public class LoadingSystem : MonoBehaviour
 
         if (success)
         {
-            success = await gltf.InstantiateMainSceneAsync(asset.transform);
+            await gltf.InstantiateMainSceneAsync(asset.transform);
 
             List<Transform> assets = new List<Transform>();
 

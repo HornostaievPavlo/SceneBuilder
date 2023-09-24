@@ -15,6 +15,7 @@ public class PaintingSystem : MonoBehaviour
     {
         surfacePainter = GetComponent<SurfacePainter>();
 
+        colorTintSlider.onValueChanged.AddListener(surfacePainter.SetColorTint);
         AssignColorsButtons();
     }
 
@@ -56,15 +57,5 @@ public class PaintingSystem : MonoBehaviour
         buttons[9].onClick.AddListener(() => surfacePainter.SetColor(new Color(0.5f, 0.5f, 0.75f, 1))); //purple
         buttons[10].onClick.AddListener(() => surfacePainter.SetColor(Color.black));
         buttons[11].onClick.AddListener(() => surfacePainter.SetColor(Color.white));
-    }
-
-    public void SetColorTint()
-    {
-        surfacePainter.SetColorTint(colorTintSlider);
-    }
-
-    public void ResetColor()
-    {
-        surfacePainter.ResetColor();
     }
 }
