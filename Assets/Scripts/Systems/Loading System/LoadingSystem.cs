@@ -16,6 +16,9 @@ public class LoadingSystem : MonoBehaviour
     [SerializeField]
     private GameObject labelAssetPrefab;
 
+    [SerializeField]
+    private GameObject loadPopUp;
+
     private List<Transform> assetsInScene = new List<Transform>();
 
     private List<Transform> modelsFromSingleSaveFile = new List<Transform>();
@@ -64,6 +67,8 @@ public class LoadingSystem : MonoBehaviour
     /// <returns>Success of loading</returns>
     private async Task<bool> LoadModelsFromPath(string modelPath)
     {
+        loadPopUp.SetActive(true);
+
         assetsInScene.Clear();
 
         var asset = CreateAsset(AssetType.Model).GetComponent<GltfAsset>();
@@ -88,12 +93,16 @@ public class LoadingSystem : MonoBehaviour
 
                 AddCollidersToAssets(assetsInScene);
             }
+            loadPopUp.SetActive(false);
         }
+
         return success;
     }
 
     public async void LoadAssetFromBytes(byte[] bytes)
     {
+        loadPopUp.SetActive(true);
+
         assetsInScene.Clear();
 
         var asset = CreateAsset(AssetType.Model);
@@ -116,6 +125,8 @@ public class LoadingSystem : MonoBehaviour
             }
 
             AddCollidersToAssets(assets);
+
+            loadPopUp.SetActive(false);
         }
     }
 
