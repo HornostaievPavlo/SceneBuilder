@@ -1,5 +1,9 @@
+using GLTFast;
 using GLTFast.Export;
+using GLTFast.Logging;
+using System.IO;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 
 public class SavingSystem : MonoBehaviour
@@ -14,6 +18,62 @@ public class SavingSystem : MonoBehaviour
     private GameObject savePopUp;
 
     private string scenePath;
+
+
+    /////
+
+    public TMP_Text text;
+
+    public GameObject[] save;
+
+    public async void TryLoadFromPDP()
+    {
+        string saveFilePath = Application.persistentDataPath + "/Model.glb";
+
+        var gltf = new GltfImport();
+
+        bool success = await gltf.Load(saveFilePath);
+
+        if (success)
+        {
+            text.text += "/// Load successful";
+
+            success = await gltf.InstantiateMainSceneAsync(IOUtility.assetsParent);
+        }
+    }
+
+    public async void TrySaveToPDP()
+    {
+        text.text = Application.persistentDataPath;
+
+        string saveFilePath = Application.persistentDataPath + "/Model.glb";
+
+        using (FileStream fileStream = new FileStream(saveFilePath, FileMode.CreateNew))
+        {
+            var logger = new CollectingLogger();
+            var exportSettings = new ExportSettings
+            {
+                Format = GltfFormat.Binary,
+                FileConflictResolution = FileConflictResolution.Overwrite,
+                ComponentMask = ~(ComponentType.Camera | ComponentType.Animation),
+                LightIntensityFactor = 100f,
+            };
+
+            var gameObjectExportSettings = new GameObjectExportSettings
+            {
+                OnlyActiveInHierarchy = false,
+                DisabledComponents = true,
+                LayerMask = LayerMask.GetMask("Default", "MyCustomLayer"),
+            };
+
+            var export = new GameObjectExport(exportSettings, gameObjectExportSettings, logger: logger);
+            export.AddScene(save);
+
+            bool success = await export.SaveToStreamAndDispose(fileStream);
+
+            if (success) text.text += " //Save successful";
+        }
+    }
 
     public async void SaveNewScene()
     {
