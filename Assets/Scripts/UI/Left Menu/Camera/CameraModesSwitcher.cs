@@ -42,6 +42,7 @@ public class CameraModesSwitcher : MonoBehaviour
         {
             ballCamera = selectable.GetComponentInChildren<Camera>();
             ShowToggles(true);
+            mainViewImage.gameObject.GetComponent<Toggle>().isOn = true;
         }
         else ShowToggles(false);
     }
@@ -49,6 +50,11 @@ public class CameraModesSwitcher : MonoBehaviour
     private void OnObjectDeselected()
     {
         ShowToggles(false);
+
+        SetCameraView(false);
+
+        SetMainView(true);
+        mainViewImage.gameObject.GetComponent<Toggle>().isOn = true;
     }
 
     private void ShowToggles(bool isCameraSelected)
@@ -59,7 +65,7 @@ public class CameraModesSwitcher : MonoBehaviour
     }
 
     /// <summary>
-    /// Enables fullscreen main camera view,
+    /// Enables full screen main camera view,
     /// hides ball camera view 
     /// </summary>
     /// <param name="isMainView">Changes sprite of toggle</param>

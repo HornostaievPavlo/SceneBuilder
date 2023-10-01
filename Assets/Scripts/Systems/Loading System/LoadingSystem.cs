@@ -16,18 +16,81 @@ public class LoadingSystem : MonoBehaviour
     [SerializeField]
     private GameObject labelAssetPrefab;
 
+    [SerializeField]
+    private GameObject loadPopUp;
+
     private List<Transform> assetsInScene = new List<Transform>();
 
     private List<Transform> modelsFromSingleSaveFile = new List<Transform>();
 
-    public async void LoadAssetsFromDirectory() => await LoadModels(inputField.text);
+    private void OnEnable()
+    {
+        ModelUploadingSystem.OnModelUploaded += OnModelUploaded;
+    }
 
+    private void OnDisable()
+    {
+        ModelUploadingSystem.OnModelUploaded -= OnModelUploaded;
+    }
+
+    private void OnModelUploaded(byte[] data)
+    {
+        LoadAssetFromBytes(data);
+    }
+
+    /// <summary>
+    /// Handles loading of model from byte array 
+    /// </summary>
+    /// <param name="bytes">Bytes to load into scene</param>
+    public async void LoadAssetFromBytes(byte[] bytes)
+    {
+        loadPopUp.SetActive(true);
+
+        assetsInScene.Clear();
+
+        var asset = CreateAsset(AssetType.Model);
+
+        var gltf = new GltfImport();
+
+        bool success = await gltf.LoadGltfBinary(bytes);
+
+        if (success)
+        {
+            await gltf.InstantiateMainSceneAsync(asset.transform);
+
+            List<Transform> assets = new List<Transform>();
+
+            SelectableObject[] loadedSelectables = IOUtility.assetsParent.GetComponentsInChildren<SelectableObject>();
+
+            foreach (var selectable in loadedSelectables)
+            {
+                assets.Add(selectable.gameObject.transform);
+            }
+
+            AddCollidersToAssets(assets);
+
+            loadPopUp.SetActive(false);
+        }
+    }
+
+    /// <summary>
+    /// Handles loading assets from local path
+    /// </summary>
+    public async void LoadAssetsFromDirectory()
+    {
+        await LoadModelsFromPath(inputField.text);
+    }
+
+    /// <summary>
+    /// Handles loading assets from local save file
+    /// </summary>
+    /// <param name="sceneNumber">Index of save file</param>
     public async void LoadAssetsFromSaveFile(int sceneNumber)
     {
         string saveFilePath =
             IOUtility.scenePath + sceneNumber.ToString() + IOUtility.sceneFile;
 
-        bool success = await LoadModels(saveFilePath);
+        bool success = await LoadModelsFromPath(saveFilePath);
         if (success) AssignTextures(sceneNumber);
     }
 
@@ -47,8 +110,10 @@ public class LoadingSystem : MonoBehaviour
     /// </summary>
     /// <param name="modelPath">Local storage or save file</param>
     /// <returns>Success of loading</returns>
-    private async Task<bool> LoadModels(string modelPath)
+    private async Task<bool> LoadModelsFromPath(string modelPath)
     {
+        loadPopUp.SetActive(true);
+
         assetsInScene.Clear();
 
         var asset = CreateAsset(AssetType.Model).GetComponent<GltfAsset>();
@@ -73,12 +138,14 @@ public class LoadingSystem : MonoBehaviour
 
                 AddCollidersToAssets(assetsInScene);
             }
+            loadPopUp.SetActive(false);
         }
+
         return success;
     }
 
     /// <summary>
-    /// Creates new Selecetable asset of specified type
+    /// Creates new Selectable asset of specified type
     /// </summary>
     /// <param name="type">Specifies AssetType of created object</param>
     /// <returns>Asset instance</returns>
@@ -123,13 +190,11 @@ public class LoadingSystem : MonoBehaviour
         }
     }
 
-    // setting assets up from a scene
     public Transform[] children;
-    private List<Transform> InitializeImportedAssets() // gabella
+    private List<Transform> InitializeImportedAssets()
     {
         modelsFromSingleSaveFile.Clear();
 
-        // setting scene obj as child of placeholder
         bool isSingleAsset = GameObject.Find("Scene") == null;
         Transform sceneObj = null;
 
@@ -139,7 +204,6 @@ public class LoadingSystem : MonoBehaviour
             sceneObj.SetParent(IOUtility.assetsParent);
         }
 
-        // removing spawner
         var spawner = IOUtility.assetsParent.gameObject.GetComponentInChildren<GltfAsset>();
         Destroy(spawner.gameObject.GetComponent<SelectableObject>());
         spawner.gameObject.name = "glTF Asset";
@@ -194,7 +258,7 @@ public class LoadingSystem : MonoBehaviour
 
                 if (material != null)
                 {
-                    string currentAssetPath = @$"\Asset{i + 1}" + IOUtility.textureFile;
+                    string currentAssetPath = $"/Asset{i + 1}" + IOUtility.textureFile;
                     string fullPath = IOUtility.scenePath + sceneNumber + currentAssetPath;
 
                     material.mainTexture = IOUtility.OpenDirectoryAndLoadTexture(fullPath);

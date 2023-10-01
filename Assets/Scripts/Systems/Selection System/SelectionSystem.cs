@@ -21,11 +21,11 @@ public class SelectionSystem : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
-            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+            var ray = mainCamera.ScreenPointToRay(Input.mousePosition);
 
-            if (Physics.Raycast(ray, out RaycastHit raycastHit, mainCamera.farClipPlane))
+            if (Physics.Raycast(ray, out RaycastHit hit, mainCamera.farClipPlane))
             {
-                var selected = raycastHit.transform.gameObject.GetComponentInParent<SelectableObject>();
+                var selected = hit.transform.gameObject.GetComponentInParent<SelectableObject>();
 
                 if (selected != null)
                     OnObjectSelected.Invoke(selected);

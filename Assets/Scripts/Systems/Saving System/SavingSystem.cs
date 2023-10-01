@@ -79,7 +79,7 @@ public class SavingSystem : MonoBehaviour
             {
                 Texture2D texture = IOUtility.DuplicateTexture((Texture2D)material.mainTexture);
 
-                string directoryPath = scenePath + @$"\Asset{i + 1}";
+                string directoryPath = scenePath + $"/Asset{i + 1}";
 
                 string filePath = directoryPath + IOUtility.textureFile;
 

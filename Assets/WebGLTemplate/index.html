@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>SceneBuilder</title>
+  <link rel="icon" href="TemplateData/logo.png">
+</head>
+
+<body>
+  <div id="unity-container" class="unity-desktop">
+    <canvas id="unity-canvas" style="width: 100%; height: 100%; padding: 0px; margin: 0px;"></canvas>
+  </div>
+  <script>
+    var container = document.querySelector("#unity-container");
+    var script = document.createElement("script");
+    script.src = "Build/WebBuilder.loader.js";
+    script.onload = () => {
+      createUnityInstance(document.querySelector("#unity-canvas"), {
+        dataUrl: "Build/WebBuilder.data",
+        frameworkUrl: "Build/WebBuilder.framework.js",
+        codeUrl: "Build/WebBuilder.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "Pavlo Hornostaiev",
+        productName: "SceneBuilder",
+        productVersion: "1.0",
+      }).then((unityInstance) => {
+        container.addEventListener('dragover', (event) => {
+          event.preventDefault();
+        });
+        container.addEventListener('drop', (event) => {
+          event.preventDefault();
+          const files = event.dataTransfer.files;
+          const first = files[0];
+          unityInstance.SendMessage("ModelUploading System", "FileSelected",
+            window.URL.createObjectURL(first), first);
+        });
+      });
+    };
+    document.body.appendChild(script);
+  </script>
+</body>
+
+</html>

@@ -5,15 +5,13 @@ using UnityEngine.UI;
 
 public class SurfacePainter : MonoBehaviour
 {
-    [SerializeField]
-    private List<Material> targetMaterials;
+    [HideInInspector] public List<Material> copiedMaterials;
 
     private List<Renderer> targetRenderers = new List<Renderer>();
 
     private List<Material> originalMaterials = new List<Material>();
 
     private const string COLOR_PROPERTY_NAME = "baseColorFactor";
-
     private const string TEXTURE_PATH = "baseColorTexture";
 
     public void GetAllModelMaterials(GameObject target, bool isSelected)
@@ -25,15 +23,14 @@ public class SurfacePainter : MonoBehaviour
             foreach (Renderer renderer in targetRenderers)
             {
                 originalMaterials.Add(renderer.material);
-
-                CopyOriginalMaterials();
             }
+            CopyOriginalMaterials();
         }
         else
         {
             targetRenderers.Clear();
             originalMaterials.Clear();
-            targetMaterials.Clear();
+            copiedMaterials.Clear();
         }
     }
 
@@ -42,21 +39,18 @@ public class SurfacePainter : MonoBehaviour
         foreach (Material mat in originalMaterials)
         {
             Material copy = new Material(mat);
-
-            targetMaterials.Add(copy);
+            copiedMaterials.Add(copy);
         }
 
-        for (int i = 0; i < targetMaterials.Count; i++)
+        for (int i = 0; i < copiedMaterials.Count; i++)
         {
-            targetMaterials[i].name = $"Material {i}";
+            copiedMaterials[i].name = $"Material{i + 1}";
         }
     }
 
-    #region ColorManipulation
-
     public void SetColor(Color color)
     {
-        foreach (var material in targetMaterials)
+        foreach (var material in copiedMaterials)
         {
             foreach (Renderer renderer in targetRenderers)
             {
@@ -67,43 +61,39 @@ public class SurfacePainter : MonoBehaviour
         }
     }
 
-    public void SetColorTint(Slider slider)
+    public void SetColorTint(float value)
     {
-        float tintValue = slider.value;
-
-        Color originalColorCopy = originalMaterials[0].color;
-
-        foreach (var material in targetMaterials)
+        foreach (var material in copiedMaterials)
         {
             foreach (Renderer renderer in targetRenderers)
             {
                 renderer.material = material;
             }
 
-            Color tintedColor = new Color(originalColorCopy.r * tintValue,
-                                          originalColorCopy.g * tintValue,
-                                          originalColorCopy.b * tintValue);
+            Color tintedColor = new Color(Color.white.r * value,
+                                          Color.white.r * value,
+                                          Color.white.r * value);
 
             material.SetColor(COLOR_PROPERTY_NAME, tintedColor);
         }
     }
 
-    public void ResetColor()
+    public void SetOriginalMaterial(Slider slider)
     {
-        for (int i = 0; i < targetMaterials.Count; i++)
+        slider.value = 1;
+
+        for (int i = 0; i < copiedMaterials.Count; i++)
         {
             targetRenderers[i].material = originalMaterials[i];
-
             targetRenderers[i].material.color = Color.white;
         }
     }
-    #endregion
 
     public void SetTexture(Texture texture)
     {
         DeleteOriginalTextures();
 
-        foreach (var material in targetMaterials)
+        foreach (var material in copiedMaterials)
         {
             foreach (Renderer renderer in targetRenderers)
             {
@@ -114,9 +104,9 @@ public class SurfacePainter : MonoBehaviour
         }
     }
 
-    public void DeleteOriginalTextures()
+    private void DeleteOriginalTextures()
     {
-        foreach (var material in targetMaterials)
+        foreach (var material in copiedMaterials)
         {
             material.SetTexture(TEXTURE_PATH, null);
         }
