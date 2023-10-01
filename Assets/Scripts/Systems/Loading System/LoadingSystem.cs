@@ -25,21 +25,66 @@ public class LoadingSystem : MonoBehaviour
 
     private void OnEnable()
     {
-        ModelUploadingSystem.OnModelUploaded += OnModelUploadedAsync;
+        ModelUploadingSystem.OnModelUploaded += OnModelUploaded;
     }
 
     private void OnDisable()
     {
-        ModelUploadingSystem.OnModelUploaded -= OnModelUploadedAsync;
+        ModelUploadingSystem.OnModelUploaded -= OnModelUploaded;
     }
 
-    private void OnModelUploadedAsync(byte[] data)
+    private void OnModelUploaded(byte[] data)
     {
         LoadAssetFromBytes(data);
     }
 
-    public async void LoadAssetsFromDirectory() => await LoadModelsFromPath(inputField.text);
+    /// <summary>
+    /// Handles loading of model from byte array 
+    /// </summary>
+    /// <param name="bytes">Bytes to load into scene</param>
+    public async void LoadAssetFromBytes(byte[] bytes)
+    {
+        loadPopUp.SetActive(true);
 
+        assetsInScene.Clear();
+
+        var asset = CreateAsset(AssetType.Model);
+
+        var gltf = new GltfImport();
+
+        bool success = await gltf.LoadGltfBinary(bytes);
+
+        if (success)
+        {
+            await gltf.InstantiateMainSceneAsync(asset.transform);
+
+            List<Transform> assets = new List<Transform>();
+
+            SelectableObject[] loadedSelectables = IOUtility.assetsParent.GetComponentsInChildren<SelectableObject>();
+
+            foreach (var selectable in loadedSelectables)
+            {
+                assets.Add(selectable.gameObject.transform);
+            }
+
+            AddCollidersToAssets(assets);
+
+            loadPopUp.SetActive(false);
+        }
+    }
+
+    /// <summary>
+    /// Handles loading assets from local path
+    /// </summary>
+    public async void LoadAssetsFromDirectory()
+    {
+        await LoadModelsFromPath(inputField.text);
+    }
+
+    /// <summary>
+    /// Handles loading assets from local save file
+    /// </summary>
+    /// <param name="sceneNumber">Index of save file</param>
     public async void LoadAssetsFromSaveFile(int sceneNumber)
     {
         string saveFilePath =
@@ -97,37 +142,6 @@ public class LoadingSystem : MonoBehaviour
         }
 
         return success;
-    }
-
-    public async void LoadAssetFromBytes(byte[] bytes)
-    {
-        loadPopUp.SetActive(true);
-
-        assetsInScene.Clear();
-
-        var asset = CreateAsset(AssetType.Model);
-
-        var gltf = new GltfImport();
-
-        bool success = await gltf.LoadGltfBinary(bytes);
-
-        if (success)
-        {
-            await gltf.InstantiateMainSceneAsync(asset.transform);
-
-            List<Transform> assets = new List<Transform>();
-
-            SelectableObject[] loadedSelectables = IOUtility.assetsParent.GetComponentsInChildren<SelectableObject>();
-
-            foreach (var selectable in loadedSelectables)
-            {
-                assets.Add(selectable.gameObject.transform);
-            }
-
-            AddCollidersToAssets(assets);
-
-            loadPopUp.SetActive(false);
-        }
     }
 
     /// <summary>

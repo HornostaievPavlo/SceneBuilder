@@ -103,26 +103,3 @@ public class MenuSizeSwitcher : MonoBehaviour
         scrollView.offsetMin = isCollapsed ? expandedScrollView : normalScrollView;
     }
 }
-
-
-//int toggleHalfSizePosition = 426;
-//int toggleFullSizePosition = 29;
-
-//Vector2 halfSizeViewport = new Vector2(0, 0);
-//Vector2 fullSizeViewport = new Vector2(0, -401);
-
-//Vector3 toggleRotation = new Vector3(0, 0, isCollapsed ? 0 : 180);
-//Vector3 togglePosition = new Vector3(0, isCollapsed ? toggleHalfSizePosition : toggleFullSizePosition, 0);
-
-//Vector2 backgroundPosition = new Vector2(215, isCollapsed ? 198.5f : 0);
-//Vector2 backgroundSize = new Vector2(430, isCollapsed ? 491 : 888);
-
-//normalBackground.anchoredPosition = backgroundPosition;
-//normalBackground.sizeDelta = backgroundSize;
-
-//expandToggle.eulerAngles = toggleRotation;
-//expandToggle.anchoredPosition = togglePosition;
-
-//scrollView.offsetMin = isCollapsed ? halfSizeViewport : fullSizeViewport;
-//camerasViewport.offsetMin = isCollapsed ? halfSizeViewport : fullSizeViewport;
-//labelsViewport.offsetMin = isCollapsed ? halfSizeViewport : fullSizeViewport;
