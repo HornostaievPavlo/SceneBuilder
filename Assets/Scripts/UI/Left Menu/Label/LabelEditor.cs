@@ -5,39 +5,28 @@ using UnityEngine.UI;
 public class LabelEditor : MonoBehaviour
 {
     [SerializeField] private GameObject labelDataMenu;
-    [SerializeField] private Button updateButton;
 
-    [SerializeField] private GameObject onScreenLabel;
+    [SerializeField] private Sprite editNormal;
+    [SerializeField] private Sprite editSelected;
 
-    [SerializeField] private Sprite editToggle;
-    [SerializeField] private Sprite editTogglePressed;
+    private GameObject currentSelectable;
+
+    private Toggle editLabelToggle;
 
     private TMP_InputField titleInput;
     private TMP_InputField descriptionInput;
 
-    private TMP_Text onScreenLabelTitle;
-    private TMP_Text onScreenLabelDescription;
-
-    [HideInInspector] public string title;
-
-    [HideInInspector] public string description;
-
-    private Toggle editLabelToggle;
-
+    private string title;
+    private string description;
     private TMP_Text currentTitle;
     private TMP_Text currentDescription;
 
     private void Awake()
     {
-        TMP_InputField[] inputFields = GetComponentsInChildren<TMP_InputField>(true);
+        var inputFields = labelDataMenu.GetComponentsInChildren<TMP_InputField>(true);
 
         titleInput = inputFields[0];
         descriptionInput = inputFields[1];
-
-        TMP_Text[] onScreenTexts = onScreenLabel.GetComponentsInChildren<TMP_Text>(true);
-
-        onScreenLabelTitle = onScreenTexts[0];
-        onScreenLabelDescription = onScreenTexts[1];
     }
 
     private void OnEnable()
@@ -54,60 +43,39 @@ public class LabelEditor : MonoBehaviour
 
     private void OnObjectSelected(SelectableObject selectable)
     {
-        if (selectable.type == AssetType.Label)
-        {
-            editLabelToggle = selectable.MenuRow.gameObject.GetComponentInChildren<Toggle>(true);
-            editLabelToggle.gameObject.SetActive(true);
+        if (selectable.type != AssetType.Label)
+            return;
 
-            TMP_Text[] labelTexts = selectable.MenuRow.gameObject.GetComponentsInChildren<TMP_Text>();
+        currentSelectable = selectable.gameObject;
 
-            currentTitle = labelTexts[1];
-            currentDescription = labelTexts[2];
+        editLabelToggle = selectable.MenuRow.gameObject.GetComponentInChildren<Toggle>(true);
+        editLabelToggle.gameObject.SetActive(true);
 
-            ShowOnScreenLabel(true);
-        }
+        TMP_Text[] labelTexts = selectable.MenuRow.gameObject.GetComponentsInChildren<TMP_Text>();
+
+        currentTitle = labelTexts[1];
+        currentDescription = labelTexts[2];
     }
 
     private void OnObjectDeselected()
     {
-        ShowOnScreenLabel(false);
+        if (labelDataMenu.activeSelf) HideDataMenu();
+
         editLabelToggle.gameObject.SetActive(false);
     }
 
-    /// <summary>
-    /// Turns on adding label window
-    /// </summary>
-    public void AddNewLabel()
-    {
-        labelDataMenu.SetActive(true);
-        updateButton.gameObject.SetActive(false);
-    }
-
-    /// <summary>
-    /// Reads title text from input field
-    /// </summary>
     public void GetTitleText() => title = titleInput.text.ToString();
 
-    /// <summary>
-    /// Reads description text from input field
-    /// </summary>
     public void GetDescriptionText() => description = descriptionInput.text.ToString();
 
-    /// <summary>
-    /// Turns on UI allowing to edit existing label 
-    /// </summary>
-    /// <param name="isEditMode">True if edit toggle is pressed</param>
-    public void EditLabel(bool isEditMode)
+    public void SetLabelEditMode(bool isEditModeOn)
     {
-        editLabelToggle.image.sprite = isEditMode ? editTogglePressed : editToggle;
+        editLabelToggle.image.sprite = isEditModeOn ? editSelected : editNormal;
 
-        labelDataMenu.SetActive(isEditMode);
-        updateButton.gameObject.SetActive(isEditMode);
+        labelDataMenu.SetActive(isEditModeOn);
 
         titleInput.text = currentTitle.text;
         descriptionInput.text = currentDescription.text;
-
-        ShowOnScreenLabel(false);
     }
 
     /// <summary>
@@ -118,32 +86,25 @@ public class LabelEditor : MonoBehaviour
         GetTitleText();
         GetDescriptionText();
 
-        TMP_Text[] texts = editLabelToggle.transform.parent.gameObject.GetComponentsInChildren<TMP_Text>();
+        var rowTexts = editLabelToggle.transform.parent.gameObject.GetComponentsInChildren<TMP_Text>();
 
-        texts[1].text = title;
-        texts[2].text = description;
+        rowTexts[1].text = title;
+        rowTexts[2].text = description;
+
+        var labelText = currentSelectable.GetComponentInChildren<TMP_Text>();
+        labelText.text = title + "\n" + description;
 
         HideDataMenu();
-
-        editLabelToggle.image.sprite = editToggle;
     }
 
-    /// <summary>
-    /// Turns on/off on screen label depending on selection
-    /// </summary>
-    /// <param name="isLabelSelected">True if label object is selected, false if not</param>
-    public void ShowOnScreenLabel(bool isLabelSelected)
-    {
-        onScreenLabel.SetActive(isLabelSelected);
-
-        onScreenLabelTitle.text = currentTitle.text;
-        onScreenLabelDescription.text = currentDescription.text;
-    }
-
-    /// <summary>
-    /// Turns off input menu
-    /// </summary>
     public void HideDataMenu()
+    {
+        labelDataMenu.SetActive(false);
+
+        ResetTemporaryData();
+    }
+
+    private void ResetTemporaryData()
     {
         titleInput.text = string.Empty;
         title = string.Empty;
@@ -151,8 +112,7 @@ public class LabelEditor : MonoBehaviour
         descriptionInput.text = string.Empty;
         description = string.Empty;
 
-        labelDataMenu.SetActive(false);
-
-        if (editLabelToggle != null && editLabelToggle.image.sprite == editTogglePressed) editLabelToggle.image.sprite = editToggle;
+        if (editLabelToggle.image.sprite == editSelected)
+            editLabelToggle.image.sprite = editNormal;
     }
 }
