@@ -9,17 +9,18 @@ public class LabelEditor : MonoBehaviour
     [SerializeField] private Sprite editNormal;
     [SerializeField] private Sprite editSelected;
 
-    private GameObject currentSelectable;
+    private Transform currentSelectable;
 
     private Toggle editLabelToggle;
 
     private TMP_InputField titleInput;
     private TMP_InputField descriptionInput;
 
-    private string title;
-    private string description;
     private TMP_Text currentTitle;
     private TMP_Text currentDescription;
+
+    private string InputTitle => titleInput.text.ToString();
+    private string InputDescription => descriptionInput.text.ToString();
 
     private void Awake()
     {
@@ -46,7 +47,7 @@ public class LabelEditor : MonoBehaviour
         if (selectable.type != AssetType.Label)
             return;
 
-        currentSelectable = selectable.gameObject;
+        currentSelectable = selectable.transform;
 
         editLabelToggle = selectable.MenuRow.gameObject.GetComponentInChildren<Toggle>(true);
         editLabelToggle.gameObject.SetActive(true);
@@ -64,10 +65,6 @@ public class LabelEditor : MonoBehaviour
         editLabelToggle.gameObject.SetActive(false);
     }
 
-    public void GetTitleText() => title = titleInput.text.ToString();
-
-    public void GetDescriptionText() => description = descriptionInput.text.ToString();
-
     public void SetLabelEditMode(bool isEditModeOn)
     {
         editLabelToggle.image.sprite = isEditModeOn ? editSelected : editNormal;
@@ -78,21 +75,15 @@ public class LabelEditor : MonoBehaviour
         descriptionInput.text = currentDescription.text;
     }
 
-    /// <summary>
-    /// Takes input and changes text values to new ones
-    /// </summary>
     public void UpdateLabel()
     {
-        GetTitleText();
-        GetDescriptionText();
-
         var rowTexts = editLabelToggle.transform.parent.gameObject.GetComponentsInChildren<TMP_Text>();
 
-        rowTexts[1].text = title;
-        rowTexts[2].text = description;
+        rowTexts[1].text = InputTitle;
+        rowTexts[2].text = InputDescription;
 
         var labelText = currentSelectable.GetComponentInChildren<TMP_Text>();
-        labelText.text = title + "\n" + description;
+        labelText.text = InputTitle + "\n" + InputDescription;
 
         HideDataMenu();
     }
@@ -101,16 +92,8 @@ public class LabelEditor : MonoBehaviour
     {
         labelDataMenu.SetActive(false);
 
-        ResetTemporaryData();
-    }
-
-    private void ResetTemporaryData()
-    {
         titleInput.text = string.Empty;
-        title = string.Empty;
-
         descriptionInput.text = string.Empty;
-        description = string.Empty;
 
         if (editLabelToggle.image.sprite == editSelected)
             editLabelToggle.image.sprite = editNormal;
