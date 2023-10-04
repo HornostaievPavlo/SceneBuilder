@@ -1,133 +1,19 @@
+using System;
+using System.Linq;
 using UnityEngine;
 
+[RequireComponent(typeof(Camera))]
 public class OrbitCameraSystem : MonoBehaviour
 {
-    //[SerializeField] private Slider rotationSlider;
-    //[SerializeField] private Slider zoomSlider;
-    //[SerializeField] private Slider movementSlider;
+    [SerializeField] private InputSystem inputSystem;
+    [SerializeField] private float minPitchAngle = -90f;
+    [SerializeField] private float maxPitchAngle = 90f;
 
-    //private float rotationSensitivity;
-    //private float zoomSensitivity;
-    //private float movingSensitivity;
+    private Vector3 defaultCameraPosition;
+    private Quaternion defaultCameraRotation;
+    private Camera mainCamera;
 
-    //private Transform currentSelection;
-
-    //private Transform mainCamera;
-
-    //private float _yRotation;
-    //private float _xRotation;
-
-    //private void Awake()
-    //{
-    //    mainCamera = GetComponentInChildren<Camera>().transform;
-
-    //    InitializeSensitivity();
-    //}
-
-    //private void InitializeSensitivity()
-    //{
-    //    rotationSensitivity = rotationSlider.value;
-    //    rotationSlider.onValueChanged.AddListener(OnRotationValueChanged);
-
-    //    zoomSensitivity = zoomSlider.value;
-    //    zoomSlider.onValueChanged.AddListener(OnZoomValueChanged);
-
-    //    movingSensitivity = movementSlider.value;
-    //    movementSlider.onValueChanged.AddListener(OnMovementValueChanged);
-    //}
-
-    //private void OnRotationValueChanged(float value) => rotationSensitivity = value;
-
-    //private void OnZoomValueChanged(float value) => zoomSensitivity = value;
-
-    //private void OnMovementValueChanged(float value) => movingSensitivity = value;
-
-    //private void OnEnable()
-    //{
-    //    SelectionSystem.OnObjectSelected += OnObjectSelected;
-    //    SelectionSystem.OnObjectDeselected += OnObjectDeselected;
-    //}
-
-    //private void OnObjectSelected(SelectableObject selectable) => currentSelection = selectable.transform;
-
-    //private void OnObjectDeselected() => currentSelection = null;
-
-    //private void OnDisable()
-    //{
-    //    SelectionSystem.OnObjectSelected -= OnObjectSelected;
-    //    SelectionSystem.OnObjectDeselected -= OnObjectDeselected;
-    //}
-
-    //private void Update()
-    //{
-    //    if (Input.GetMouseButton(1))
-    //        RotateCamera();
-
-    //    if (Input.GetAxis("Mouse ScrollWheel") != 0)
-    //        ZoomCamera();
-
-    //    if (Input.GetMouseButton(0) && Input.GetKey(KeyCode.LeftControl))
-    //        MoveFocalPoint();
-    //}
-
-    ///// <summary>
-    ///// Rotates camera around focal point
-    ///// </summary>
-    //private void RotateCamera()
-    //{
-    //    float mousePositionX = Input.GetAxis("Mouse X") * rotationSensitivity * Time.deltaTime;
-    //    float mousePositionY = Input.GetAxis("Mouse Y") * rotationSensitivity * Time.deltaTime;
-
-    //    _yRotation += mousePositionX;
-    //    _xRotation -= mousePositionY;
-
-    //    transform.rotation = Quaternion.Euler(_xRotation, _yRotation, 0);
-    //}
-
-    ///// <summary>
-    ///// Zooms camera is side of focal point
-    ///// </summary>
-    //private void ZoomCamera()
-    //{
-    //    float mouseWheel = Input.GetAxis("Mouse ScrollWheel") * zoomSensitivity * Time.deltaTime;
-    //    mainCamera.Translate(Vector3.forward * mouseWheel);
-
-    //    float scrollingDownDivisor = 5f;
-    //    mainCamera.Translate((Vector3.down * mouseWheel) / scrollingDownDivisor);
-    //}
-
-    ///// <summary>
-    ///// Moves camera focal point according to direction of mouse movement
-    ///// Works on both LCTRL and LMB are pressed
-    ///// </summary>
-    //private void MoveFocalPoint()
-    //{
-    //    float mousePositionX = Input.GetAxis("Mouse X") * movingSensitivity * Time.deltaTime;
-    //    float mousePositionY = Input.GetAxis("Mouse Y") * movingSensitivity * Time.deltaTime;
-
-    //    Vector3 movingVector = new Vector3(-mousePositionX, -mousePositionY, 0);
-
-    //    transform.Translate(movingVector * movingSensitivity * Time.deltaTime);
-    //}
-
-    ///// <summary>
-    ///// Aligns camera focal point to currently selected object
-    ///// </summary>
-    //public void AlignCameraWithSelection()
-    //{
-    //    if (currentSelection) transform.position = currentSelection.position;
-    //}
-
-
-    //////////////////////////////
-
-    [SerializeField] InputSystem inputSystem;
-    [SerializeField] float minPitchAngle = -90f;
-    [SerializeField] float maxPitchAngle = 90f;
-
-    Vector3 defaultCameraPosition;
-    Quaternion defaultCameraRotation;
-    Camera cam;
+    private GameObject currentSelection;
 
     Vector3 focusPosition;
     /// <summary>
@@ -199,6 +85,7 @@ public class OrbitCameraSystem : MonoBehaviour
             UpdateTransform();
         }
     }
+
     void UpdateTransform()
     {
         transform.SetPositionAndRotation(cameraPosition + rotation * pan, rotation);
@@ -206,7 +93,7 @@ public class OrbitCameraSystem : MonoBehaviour
 
     void Awake()
     {
-        cam = GetComponent<Camera>();
+        mainCamera = GetComponent<Camera>();
 
         CameraPosition = transform.position;
         defaultCameraPosition = CameraPosition;
@@ -215,6 +102,8 @@ public class OrbitCameraSystem : MonoBehaviour
 
     void OnEnable()
     {
+        SelectionSystem.OnObjectSelected += OnObjectSelected;
+        SelectionSystem.OnObjectDeselected += OnObjectDeselected;
         inputSystem.SecondaryDragAction += Move;
         inputSystem.PrimaryDragAction += Rotate;
         inputSystem.ZoomAction += Zoom;
@@ -222,10 +111,19 @@ public class OrbitCameraSystem : MonoBehaviour
 
     void OnDisable()
     {
+        SelectionSystem.OnObjectSelected -= OnObjectSelected;
+        SelectionSystem.OnObjectDeselected -= OnObjectDeselected;
         inputSystem.SecondaryDragAction -= Move;
         inputSystem.PrimaryDragAction -= Rotate;
         inputSystem.ZoomAction -= Zoom;
     }
+
+    private void OnObjectSelected(SelectableObject selectable)
+    {
+        currentSelection = selectable.gameObject;
+    }
+
+    private void OnObjectDeselected() => currentSelection = null;
 
     /// <summary>
     /// Returns world space camera position from orbit values.
@@ -297,17 +195,45 @@ public class OrbitCameraSystem : MonoBehaviour
     /// <summary>
     /// Focuses camera on target object. Sets new default camera position.
     /// </summary>
-    //public void FocusCamera(GameObject target)
-    //{
-    //    Bounds b = target.GetBounds(2f);
-    //    float radius = b.extents.magnitude;
-    //    radius *= 1.1f; // 10% zoom out
-    //    float distance = radius / Mathf.Sin(cam.fieldOfView * Mathf.Deg2Rad * 0.5f);
-    //    FocusPosition = b.center;
-    //    CameraPosition = GetCameraPosition(FocusPosition, defaultCameraRotation, distance);
-    //    defaultCameraPosition = CameraPosition;
-    //    Pan = Vector2.zero;
-    //}
+    public void FocusCamera(GameObject target)
+    {
+        Bounds b = GetBounds(target, 2f);
+        float radius = b.extents.magnitude;
+        radius *= 1.1f; // 10% zoom out
+        float distance = radius / Mathf.Sin(mainCamera.fieldOfView * Mathf.Deg2Rad * 0.5f);
+        FocusPosition = b.center;
+        CameraPosition = GetCameraPosition(FocusPosition, defaultCameraRotation, distance);
+        defaultCameraPosition = CameraPosition;
+        Pan = Vector2.zero;
+    }
+
+    /// <summary>
+    /// Iterates through all Renderers on the GameObject and returns their combined Bounds.
+    /// </summary>
+    /// <param name="maxDeviation">standard deviation of outliers to discard</param>
+    public static Bounds GetBounds(GameObject root, float maxDeviation = 0f)
+    {
+        var allBounds = root.GetComponentsInChildren<Renderer>(false).Select(r => r.bounds);
+        int count = allBounds.Count();
+        if (maxDeviation > 0f && count > 0)
+        {
+            var meanPosition = allBounds.Select(b => b.center).Aggregate((a, b) => a + b) / count;
+            var boundsMagnitudes = allBounds.Select(bounds => Tuple.Create((bounds.center - meanPosition).magnitude, bounds));
+            var meanMagnitude = boundsMagnitudes.Select(b => b.Item1).Aggregate((a, b) => a + b) / count;
+            allBounds = boundsMagnitudes.Where(b =>
+            {
+                var v = b.Item1 - meanMagnitude;
+                return Mathf.Sqrt(v * v) <= maxDeviation;
+            }).Select(b => b.Item2);
+        }
+        if (!allBounds.Any()) return new Bounds();
+        var bounds = allBounds.First();
+        foreach (var b in allBounds)
+        {
+            bounds.Encapsulate(b);
+        }
+        return bounds;
+    }
 
     /// <summary>
     /// Resets pan, rotation, zoom and camera parameters to default values.
@@ -316,5 +242,15 @@ public class OrbitCameraSystem : MonoBehaviour
     {
         CameraPosition = defaultCameraPosition;
         Pan = Vector2.zero;
+    }
+
+    /// <summary>
+    /// Aligns camera focal point to currently selected object
+    /// </summary>
+    public void AlignCameraWithSelection()
+    {
+        //mainCamera.transform.position = currentSelection.position;
+
+        FocusCamera(currentSelection.gameObject);
     }
 }

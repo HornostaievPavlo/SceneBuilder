@@ -1,37 +1,35 @@
 using System;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class SelectionSystem : MonoBehaviour
 {
-    private Camera mainCamera;
+    [SerializeField] private InputSystem inputSystem;
 
     public static event Action<SelectableObject> OnObjectSelected;
     public static event Action OnObjectDeselected;
 
-    private void Awake() => mainCamera = Camera.main;
-
-    private void Update() => TryRaycastSelection();
-
-    /// <summary>
-    /// Fires OnObjectSelected or OnObjectDeselected
-    /// according to result of raycast 
-    /// </summary>
-    private void TryRaycastSelection()
+    private void OnEnable()
     {
-        if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
-        {
-            var ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        inputSystem.RayHit += OnRayHit;
+        inputSystem.RayMiss += OnRayMiss;
+    }
 
-            if (Physics.Raycast(ray, out RaycastHit hit, mainCamera.farClipPlane))
-            {
-                var selected = hit.transform.gameObject.GetComponentInParent<SelectableObject>();
+    private void OnDisable()
+    {
+        inputSystem.RayHit -= OnRayHit;
+        inputSystem.RayMiss -= OnRayMiss;
+    }
 
-                if (selected != null)
-                    OnObjectSelected.Invoke(selected);
-            }
-            else
-                OnObjectDeselected.Invoke();
-        }
+    private void OnRayHit(RaycastHit hit)
+    {
+        var selected = hit.transform.gameObject.GetComponentInParent<SelectableObject>();
+
+        if (selected != null)
+            OnObjectSelected(selected);
+    }
+
+    private void OnRayMiss()
+    {
+        OnObjectDeselected();
     }
 }

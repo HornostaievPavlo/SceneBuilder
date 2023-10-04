@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class InputSystem : MonoBehaviour
 {
@@ -9,7 +10,6 @@ public class InputSystem : MonoBehaviour
     [SerializeField] private float mouseRotRate = 100f;
     [SerializeField] private float mouseZoomRate = 0.05f;
 
-
     public event Action TouchBeginAction = delegate { };
     public event Action TouchReleaseAction = delegate { };
     public event Action<Vector2> SecondaryDragAction = delegate { };
@@ -17,24 +17,21 @@ public class InputSystem : MonoBehaviour
     public event Action<float> ZoomAction = delegate { };
     public event Action<Vector2> TapAction = delegate { };
     public event Action<RaycastHit> RayHit;
+    public event Action RayMiss;
 
     public Vector2 InputScreenSpacePosition { get; private set; }
 
     private bool hadFocus;
-    private Vector3 previousMousePosition;
     private bool hasTouch;
+    private Vector3 previousMousePosition;
     private Camera mainCamera;
 
-    private void Awake()
-    {
-        mainCamera = Camera.main;
-    }
+    private void Awake() => mainCamera = Camera.main;
 
-    void Update()
+    private void Update()
     {
         PollMouse();
 
-        PollKeys();
         previousMousePosition = Input.mousePosition;
         hadFocus = Application.isFocused;
     }
@@ -42,7 +39,7 @@ public class InputSystem : MonoBehaviour
     /// <summary>
     /// Process mouse input.
     /// </summary>
-    void PollMouse()
+    private void PollMouse()
     {
         InputScreenSpacePosition = Input.mousePosition;
         Vector2 delta = Vector2.zero;
@@ -53,7 +50,7 @@ public class InputSystem : MonoBehaviour
             delta = NormalizeScreenVector(Input.mousePosition - previousMousePosition);
         }
         // On left mouse button single click - raycast
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
             Raycast(Input.mousePosition);
         }
@@ -79,7 +76,7 @@ public class InputSystem : MonoBehaviour
         }
     }
 
-    void BeginTouch()
+    private void BeginTouch()
     {
         if (hasTouch) return;
 
@@ -87,7 +84,7 @@ public class InputSystem : MonoBehaviour
         TouchBeginAction();
     }
 
-    void EndTouch()
+    private void EndTouch()
     {
         if (!hasTouch) return;
 
@@ -96,19 +93,9 @@ public class InputSystem : MonoBehaviour
     }
 
     /// <summary>
-    /// Process keyboard input.
-    /// </summary>
-    void PollKeys()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-        }
-    }
-
-    /// <summary>
     /// Normalize a screen space vector by dividing it by native screen height.
     /// </summary>
-    Vector2 NormalizeScreenVector(Vector2 v)
+    private Vector2 NormalizeScreenVector(Vector2 v)
     {
         int height = Screen.currentResolution.height;
         return v / height;
@@ -137,7 +124,7 @@ public class InputSystem : MonoBehaviour
     /// <summary>
     /// Performs a raycast from screenPosition. Fires RayHit
     /// </summary>
-    void Raycast(Vector2 screenPosition)
+    private void Raycast(Vector2 screenPosition)
     {
         if (RayHit == null) return;
 
@@ -145,8 +132,8 @@ public class InputSystem : MonoBehaviour
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, mainCamera.farClipPlane))
-        {
             RayHit(hit);
-        }
+        else
+            RayMiss();
     }
 }
