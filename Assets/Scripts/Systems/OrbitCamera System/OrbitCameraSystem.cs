@@ -1,128 +1,127 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class OrbitCameraSystem : MonoBehaviour
 {
-    [SerializeField] private Slider rotationSlider;
-    [SerializeField] private Slider zoomSlider;
-    [SerializeField] private Slider movementSlider;
+    //[SerializeField] private Slider rotationSlider;
+    //[SerializeField] private Slider zoomSlider;
+    //[SerializeField] private Slider movementSlider;
 
-    private float rotationSensitivity;
-    private float zoomSensitivity;
-    private float movingSensitivity;
+    //private float rotationSensitivity;
+    //private float zoomSensitivity;
+    //private float movingSensitivity;
 
-    private Transform currentSelection;
+    //private Transform currentSelection;
 
-    private Transform mainCamera;
+    //private Transform mainCamera;
 
-    private float _yRotation;
-    private float _xRotation;
+    //private float _yRotation;
+    //private float _xRotation;
 
-    private void Awake()
-    {
-        mainCamera = GetComponentInChildren<Camera>().transform;
+    //private void Awake()
+    //{
+    //    mainCamera = GetComponentInChildren<Camera>().transform;
 
-        InitializeSensitivity();
-    }
+    //    InitializeSensitivity();
+    //}
 
-    private void InitializeSensitivity()
-    {
-        rotationSensitivity = rotationSlider.value;
-        rotationSlider.onValueChanged.AddListener(OnRotationValueChanged);
+    //private void InitializeSensitivity()
+    //{
+    //    rotationSensitivity = rotationSlider.value;
+    //    rotationSlider.onValueChanged.AddListener(OnRotationValueChanged);
 
-        zoomSensitivity = zoomSlider.value;
-        zoomSlider.onValueChanged.AddListener(OnZoomValueChanged);
+    //    zoomSensitivity = zoomSlider.value;
+    //    zoomSlider.onValueChanged.AddListener(OnZoomValueChanged);
 
-        movingSensitivity = movementSlider.value;
-        movementSlider.onValueChanged.AddListener(OnMovementValueChanged);
-    }
+    //    movingSensitivity = movementSlider.value;
+    //    movementSlider.onValueChanged.AddListener(OnMovementValueChanged);
+    //}
 
-    private void OnRotationValueChanged(float value) => rotationSensitivity = value;
+    //private void OnRotationValueChanged(float value) => rotationSensitivity = value;
 
-    private void OnZoomValueChanged(float value) => zoomSensitivity = value;
+    //private void OnZoomValueChanged(float value) => zoomSensitivity = value;
 
-    private void OnMovementValueChanged(float value) => movingSensitivity = value;
+    //private void OnMovementValueChanged(float value) => movingSensitivity = value;
 
-    private void OnEnable()
-    {
-        SelectionSystem.OnObjectSelected += OnObjectSelected;
-        SelectionSystem.OnObjectDeselected += OnObjectDeselected;
-    }
+    //private void OnEnable()
+    //{
+    //    SelectionSystem.OnObjectSelected += OnObjectSelected;
+    //    SelectionSystem.OnObjectDeselected += OnObjectDeselected;
+    //}
 
-    private void OnObjectSelected(SelectableObject selectable) => currentSelection = selectable.transform;
+    //private void OnObjectSelected(SelectableObject selectable) => currentSelection = selectable.transform;
 
-    private void OnObjectDeselected() => currentSelection = null;
+    //private void OnObjectDeselected() => currentSelection = null;
 
-    private void OnDisable()
-    {
-        SelectionSystem.OnObjectSelected -= OnObjectSelected;
-        SelectionSystem.OnObjectDeselected -= OnObjectDeselected;
-    }
+    //private void OnDisable()
+    //{
+    //    SelectionSystem.OnObjectSelected -= OnObjectSelected;
+    //    SelectionSystem.OnObjectDeselected -= OnObjectDeselected;
+    //}
 
-    private void Update()
-    {
-        if (Input.GetMouseButton(1))
-            RotateCamera();
+    //private void Update()
+    //{
+    //    if (Input.GetMouseButton(1))
+    //        RotateCamera();
 
-        if (Input.GetAxis("Mouse ScrollWheel") != 0)
-            ZoomCamera();
+    //    if (Input.GetAxis("Mouse ScrollWheel") != 0)
+    //        ZoomCamera();
 
-        if (Input.GetMouseButton(0) && Input.GetKey(KeyCode.LeftControl))
-            MoveFocalPoint();
-    }
+    //    if (Input.GetMouseButton(0) && Input.GetKey(KeyCode.LeftControl))
+    //        MoveFocalPoint();
+    //}
 
-    /// <summary>
-    /// Rotates camera around focal point
-    /// </summary>
-    private void RotateCamera()
-    {
-        float mousePositionX = Input.GetAxis("Mouse X") * rotationSensitivity * Time.deltaTime;
-        float mousePositionY = Input.GetAxis("Mouse Y") * rotationSensitivity * Time.deltaTime;
+    ///// <summary>
+    ///// Rotates camera around focal point
+    ///// </summary>
+    //private void RotateCamera()
+    //{
+    //    float mousePositionX = Input.GetAxis("Mouse X") * rotationSensitivity * Time.deltaTime;
+    //    float mousePositionY = Input.GetAxis("Mouse Y") * rotationSensitivity * Time.deltaTime;
 
-        _yRotation += mousePositionX;
-        _xRotation -= mousePositionY;
+    //    _yRotation += mousePositionX;
+    //    _xRotation -= mousePositionY;
 
-        transform.rotation = Quaternion.Euler(_xRotation, _yRotation, 0);
-    }
+    //    transform.rotation = Quaternion.Euler(_xRotation, _yRotation, 0);
+    //}
 
-    /// <summary>
-    /// Zooms camera is side of focal point
-    /// </summary>
-    private void ZoomCamera()
-    {
-        float mouseWheel = Input.GetAxis("Mouse ScrollWheel") * zoomSensitivity * Time.deltaTime;
-        mainCamera.Translate(Vector3.forward * mouseWheel);
+    ///// <summary>
+    ///// Zooms camera is side of focal point
+    ///// </summary>
+    //private void ZoomCamera()
+    //{
+    //    float mouseWheel = Input.GetAxis("Mouse ScrollWheel") * zoomSensitivity * Time.deltaTime;
+    //    mainCamera.Translate(Vector3.forward * mouseWheel);
 
-        float scrollingDownDivisor = 5f;
-        mainCamera.Translate((Vector3.down * mouseWheel) / scrollingDownDivisor);
-    }
+    //    float scrollingDownDivisor = 5f;
+    //    mainCamera.Translate((Vector3.down * mouseWheel) / scrollingDownDivisor);
+    //}
 
-    /// <summary>
-    /// Moves camera focal point according to direction of mouse movement
-    /// Works on both LCTRL and LMB are pressed
-    /// </summary>
-    private void MoveFocalPoint()
-    {
-        float mousePositionX = Input.GetAxis("Mouse X") * movingSensitivity * Time.deltaTime;
-        float mousePositionY = Input.GetAxis("Mouse Y") * movingSensitivity * Time.deltaTime;
+    ///// <summary>
+    ///// Moves camera focal point according to direction of mouse movement
+    ///// Works on both LCTRL and LMB are pressed
+    ///// </summary>
+    //private void MoveFocalPoint()
+    //{
+    //    float mousePositionX = Input.GetAxis("Mouse X") * movingSensitivity * Time.deltaTime;
+    //    float mousePositionY = Input.GetAxis("Mouse Y") * movingSensitivity * Time.deltaTime;
 
-        Vector3 movingVector = new Vector3(-mousePositionX, -mousePositionY, 0);
+    //    Vector3 movingVector = new Vector3(-mousePositionX, -mousePositionY, 0);
 
-        transform.Translate(movingVector * movingSensitivity * Time.deltaTime);
-    }
+    //    transform.Translate(movingVector * movingSensitivity * Time.deltaTime);
+    //}
 
-    /// <summary>
-    /// Aligns camera focal point to currently selected object
-    /// </summary>
-    public void AlignCameraWithSelection()
-    {
-        if (currentSelection) transform.position = currentSelection.position;
-    }
+    ///// <summary>
+    ///// Aligns camera focal point to currently selected object
+    ///// </summary>
+    //public void AlignCameraWithSelection()
+    //{
+    //    if (currentSelection) transform.position = currentSelection.position;
+    //}
 
 
     //////////////////////////////
 
-    [SerializeField] InputManager inputManager;
+    [SerializeField] InputSystem inputSystem;
     [SerializeField] float minPitchAngle = -90f;
     [SerializeField] float maxPitchAngle = 90f;
 
@@ -216,18 +215,16 @@ public class OrbitCameraSystem : MonoBehaviour
 
     void OnEnable()
     {
-        inputManager.SecondaryDragAction += Move;
-        inputManager.PrimaryDragAction += Rotate;
-        inputManager.ZoomAction += Zoom;
-        inputManager.Reset += Reset;
+        inputSystem.SecondaryDragAction += Move;
+        inputSystem.PrimaryDragAction += Rotate;
+        inputSystem.ZoomAction += Zoom;
     }
 
     void OnDisable()
     {
-        inputManager.SecondaryDragAction -= Move;
-        inputManager.PrimaryDragAction -= Rotate;
-        inputManager.ZoomAction -= Zoom;
-        inputManager.Reset -= Reset;
+        inputSystem.SecondaryDragAction -= Move;
+        inputSystem.PrimaryDragAction -= Rotate;
+        inputSystem.ZoomAction -= Zoom;
     }
 
     /// <summary>
@@ -300,17 +297,17 @@ public class OrbitCameraSystem : MonoBehaviour
     /// <summary>
     /// Focuses camera on target object. Sets new default camera position.
     /// </summary>
-    public void FocusCamera(GameObject target)
-    {
-        Bounds b = target.GetBounds(2f);
-        float radius = b.extents.magnitude;
-        radius *= 1.1f; // 10% zoom out
-        float distance = radius / Mathf.Sin(cam.fieldOfView * Mathf.Deg2Rad * 0.5f);
-        FocusPosition = b.center;
-        CameraPosition = GetCameraPosition(FocusPosition, defaultCameraRotation, distance);
-        defaultCameraPosition = CameraPosition;
-        Pan = Vector2.zero;
-    }
+    //public void FocusCamera(GameObject target)
+    //{
+    //    Bounds b = target.GetBounds(2f);
+    //    float radius = b.extents.magnitude;
+    //    radius *= 1.1f; // 10% zoom out
+    //    float distance = radius / Mathf.Sin(cam.fieldOfView * Mathf.Deg2Rad * 0.5f);
+    //    FocusPosition = b.center;
+    //    CameraPosition = GetCameraPosition(FocusPosition, defaultCameraRotation, distance);
+    //    defaultCameraPosition = CameraPosition;
+    //    Pan = Vector2.zero;
+    //}
 
     /// <summary>
     /// Resets pan, rotation, zoom and camera parameters to default values.
@@ -320,5 +317,4 @@ public class OrbitCameraSystem : MonoBehaviour
         CameraPosition = defaultCameraPosition;
         Pan = Vector2.zero;
     }
-
 }
