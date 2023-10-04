@@ -2077,53 +2077,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 733601348}
   m_CullTransparentMesh: 1
---- !u!1 &782628375
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 782628378}
-  - component: {fileID: 782628379}
-  m_Layer: 0
-  m_Name: OrbitCamera System
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &782628378
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 782628375}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1627617347}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &782628379
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 782628375}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71266420625bfd14b8246d085f8c08e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inputSystem: {fileID: 0}
-  minPitchAngle: -90
-  maxPitchAngle: 90
 --- !u!1 &783570709
 GameObject:
   m_ObjectHideFlags: 0
@@ -5563,6 +5516,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3fb3fd9628bfd04d99467e8c02cebac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputSystem: {fileID: 1096536735}
 --- !u!114 &1335881328
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5932,7 +5886,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 782628379}
+      - m_Target: {fileID: 1685503929}
         m_TargetAssemblyTypeName: OrbitCameraSystem, Main
         m_MethodName: AlignCameraWithSelection
         m_Mode: 1
@@ -7212,7 +7166,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1096536736}
-  - {fileID: 782628378}
   - {fileID: 672740411}
   - {fileID: 1335881326}
   - {fileID: 1787243082}
@@ -7415,14 +7368,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1685503924}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.13052616, y: 0, z: 0, w: 0.9914449}
+  m_LocalPosition: {x: 0, y: 3, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 15, y: 0, z: 0}
 --- !u!81 &1685503926
 AudioListener:
   m_ObjectHideFlags: 0

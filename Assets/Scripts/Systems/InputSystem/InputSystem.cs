@@ -59,14 +59,14 @@ public class InputSystem : MonoBehaviour
         {
             EndTouch();
         }
-        // If the left mouse button is held - rotate
-        if (Input.GetMouseButton(0))
+        // If the right mouse button is held - rotate
+        if (Input.GetMouseButton(1))
         {
             BeginTouch();
             PrimaryDragAction(delta * mouseRotRate);
         }
-        // If right mouse held or middle mouse held - pan
-        else if (Input.GetMouseButton(1) || Input.GetMouseButton(2))
+        // If middle mouse held - pan
+        else if (Input.GetMouseButton(2))
         {
             SecondaryDragAction(delta * mousePanRate);
         }
