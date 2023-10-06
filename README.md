@@ -22,6 +22,6 @@ This application empowers you to create scenes using a collection of loaded 3D m
 
 ## Screenshots
 
-![Screenshot](https://github.com/HornostaievPavlo/SceneBuilder/assets/100617116/34dc6002-16f8-4135-8a37-3da567a48be4)
-![Снимок экрана 2023-09-07 135543](https://github.com/HornostaievPavlo/SceneBuilder/assets/100617116/76cff2c8-f550-449f-b9a5-b757e5717e13)
-![Снимок экрана 2023-09-07 135958](https://github.com/HornostaievPavlo/SceneBuilder/assets/100617116/5f7a5ed3-0314-471f-9c2a-09e14959c2d3)
+![Screenshot1](https://github.com/HornostaievPavlo/SceneBuilder/assets/100617116/aab3ff76-31c5-4d18-806b-8b55210c1732)
+![Screenshot2](https://github.com/HornostaievPavlo/SceneBuilder/assets/100617116/0d751148-e954-4a01-9538-28a749757b6c)
+![Screenshot3](https://github.com/HornostaievPavlo/SceneBuilder/assets/100617116/78ad3ec8-d7df-4559-8f72-7f23d152697d)
