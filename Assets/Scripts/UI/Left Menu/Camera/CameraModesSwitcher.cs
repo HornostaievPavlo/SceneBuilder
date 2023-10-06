@@ -15,13 +15,32 @@ public class CameraModesSwitcher : MonoBehaviour
     [SerializeField] private Sprite cameraViewImageSelected;
     [SerializeField] private Sprite cameraViewImageDeselected;
 
-    private Camera ballCamera;
     private Camera mainCamera;
+    private Camera selectableCamera;
+
+    private Button[] modesButtons;
+
+    private const int zeroDepth = 0;
+    private const int lowestDepth = 1;
+    private const int middleDepth = 2;
+    private const int highestDepth = 3;
+
+    private enum CameraMode
+    {
+        mainView,
+        splitScreenView,
+        cameraView
+    }
+
+    private CameraMode currentMode;
 
     private void Start()
     {
         mainCamera = Camera.main;
-        SetMainView(true);
+
+        modesButtons = this.GetComponentsInChildren<Button>(true);
+
+        currentMode = CameraMode.mainView;
     }
 
     private void OnEnable()
@@ -38,97 +57,102 @@ public class CameraModesSwitcher : MonoBehaviour
 
     private void OnObjectSelected(SelectableObject selectable)
     {
-        if (selectable.type == AssetType.Camera)
-        {
-            ballCamera = selectable.GetComponentInChildren<Camera>();
-            ShowToggles(true);
-            mainViewImage.gameObject.GetComponent<Toggle>().isOn = true;
-        }
-        else ShowToggles(false);
+        if (selectable.type != AssetType.Camera)
+            return;
+
+        ShowButtons(true);
+
+        selectableCamera = selectable.GetComponentInChildren<Camera>();
+
+        UpdateModesButtonsEvents(selectableCamera);
+
+        SetCameraMode(currentMode, selectableCamera);
     }
 
     private void OnObjectDeselected()
     {
-        ShowToggles(false);
+        ShowButtons(false);
 
-        SetCameraView(false);
-
-        SetMainView(true);
-        mainViewImage.gameObject.GetComponent<Toggle>().isOn = true;
-    }
-
-    private void ShowToggles(bool isCameraSelected)
-    {
-        mainViewImage.gameObject.SetActive(isCameraSelected);
-        splitScreenViewImage.gameObject.SetActive(isCameraSelected);
-        cameraViewImage.gameObject.SetActive(isCameraSelected);
-    }
-
-    /// <summary>
-    /// Enables full screen main camera view,
-    /// hides ball camera view 
-    /// </summary>
-    /// <param name="isMainView">Changes sprite of toggle</param>
-    public void SetMainView(bool isMainView)
-    {
-        if (!isMainView)
-            mainViewImage.sprite = mainViewImageDeselected;
-        else
+        if (currentMode == CameraMode.cameraView)
         {
-            mainViewImage.sprite = mainViewImageSelected;
+            SetCameraMode(CameraMode.mainView, selectableCamera);
+        }
+    }
 
-            mainCamera.rect = new Rect(0, 0, 1, 1);
-            mainCamera.depth = 3;
-
-            if (ballCamera != null)
-            {
-                ballCamera.depth = 0;
-            }
+    private void ShowButtons(bool isCameraSelected)
+    {
+        foreach (var toggle in modesButtons)
+        {
+            toggle.gameObject.SetActive(isCameraSelected);
         }
     }
 
     /// <summary>
-    /// Sets both main and ball cameras to render on half of the screen
+    /// Reassigns modes according to camera
     /// </summary>
-    /// <param name="isSplitScreenView">Changes sprite of toggle</param>
-    public void SetSplitScreenView(bool isSplitScreenView)
+    /// <param name="selectableCamera">Currently selected Camera</param>
+    private void UpdateModesButtonsEvents(Camera selectableCamera)
     {
-        if (ballCamera != null)
+        modesButtons[0].onClick.AddListener(() => SetCameraMode(CameraMode.mainView, selectableCamera));
+        modesButtons[1].onClick.AddListener(() => SetCameraMode(CameraMode.splitScreenView, selectableCamera));
+        modesButtons[2].onClick.AddListener(() => SetCameraMode(CameraMode.cameraView, selectableCamera));
+    }
+
+    /// <summary>
+    /// Changes cameras properties according to mode
+    /// </summary>
+    /// <param name="mode">Defines changes to be made</param>
+    /// <param name="selectableCamera">Camera to operate with</param>
+    private void SetCameraMode(CameraMode mode, Camera selectableCamera)
+    {
+        currentMode = mode;
+
+        switch (mode)
         {
-            if (!isSplitScreenView)
+            case CameraMode.mainView:
+
+                mainViewImage.sprite = mainViewImageSelected;
+
+                selectableCamera.depth = zeroDepth;
+
+                var full = new Rect(0, 0, 1, 1);
+                mainCamera.rect = full;
+                mainCamera.depth = highestDepth;
+
                 splitScreenViewImage.sprite = splitScreenImageDeselected;
-            else
-            {
+                cameraViewImage.sprite = cameraViewImageDeselected;
+                break;
+
+            case CameraMode.splitScreenView:
+
                 splitScreenViewImage.sprite = splitScreenImageSelected;
 
-                ballCamera.rect = new Rect(0.5f, 0, 0.5f, 1);
-                ballCamera.depth = 1;
+                var mainHalf = new Rect(0, 0, 0.5f, 1);
+                mainCamera.rect = mainHalf;
 
-                mainCamera.rect = new Rect(0, 0, 0.5f, 1);
-            }
-        }
-    }
+                var splitHalf = new Rect(0.5f, 0, 0.5f, 1);
+                selectableCamera.rect = splitHalf;
+                selectableCamera.depth = lowestDepth;
 
-    /// <summary>
-    /// Enables fullscreen ball camera view,
-    /// hides main camera view
-    /// </summary>
-    /// <param name="isCameraView">Changes sprite of toggle</param>
-    public void SetCameraView(bool isCameraView)
-    {
-        if (ballCamera != null)
-        {
-            if (!isCameraView)
+                mainViewImage.sprite = mainViewImageDeselected;
                 cameraViewImage.sprite = cameraViewImageDeselected;
-            else
-            {
+                break;
+
+            case CameraMode.cameraView:
+
                 cameraViewImage.sprite = cameraViewImageSelected;
 
-                ballCamera.rect = new Rect(0, 0, 1, 1);
-                ballCamera.depth = 2;
+                var selectableFull = new Rect(0, 0, 1, 1);
+                selectableCamera.rect = selectableFull;
+                selectableCamera.depth = middleDepth;
 
-                mainCamera.depth = 0;
-            }
+                mainCamera.depth = zeroDepth;
+
+                mainViewImage.sprite = mainViewImageDeselected;
+                splitScreenViewImage.sprite = splitScreenImageDeselected;
+                break;
+
+            default: break;
         }
     }
 }

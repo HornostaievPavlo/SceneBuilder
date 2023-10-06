@@ -5,11 +5,11 @@ public class LabelRowInitializer : MonoBehaviour
 {
     private LabelEditor labelEditor;
 
-    private void Start()
+    private void Awake()
     {
         labelEditor = GetComponentInParent<LabelEditor>();
 
-        Toggle toggle = gameObject.GetComponentInChildren<Toggle>(true);
-        toggle.onValueChanged.AddListener(delegate { labelEditor.EditLabel(toggle.isOn); });
+        Toggle editModeToggle = gameObject.GetComponentInChildren<Toggle>(true);
+        editModeToggle.onValueChanged.AddListener(delegate { labelEditor.SetLabelEditMode(editModeToggle.isOn); });
     }
 }

@@ -1,121 +1,245 @@
+using System;
+using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 
+[RequireComponent(typeof(Camera))]
 public class OrbitCameraSystem : MonoBehaviour
 {
-    [SerializeField] private Slider rotationSlider;
-    [SerializeField] private Slider zoomSlider;
-    [SerializeField] private Slider movementSlider;
+    [SerializeField] private InputSystem inputSystem;
 
-    private float rotationSensitivity;
-    private float zoomSensitivity;
-    private float movingSensitivity;
+    [SerializeField] private float minPitchAngle = -90f;
+    [SerializeField] private float maxPitchAngle = 90f;
 
-    private Transform currentSelection;
+    private Camera mainCamera;
+    private Quaternion defaultCameraRotation;
 
-    private Transform mainCamera;
+    private GameObject currentSelection;
 
-    private float _yRotation;
-    private float _xRotation;
+    private Vector3 focusPosition;
+    /// <summary>
+    /// Focus point of camera orbit.
+    /// </summary>
+    public Vector3 FocusPosition
+    {
+        get { return focusPosition; }
+        set
+        {
+            focusPosition = value;
+            cameraPosition = GetCameraPosition(focusPosition, rotation, zoomAmount);
+            UpdateTransform();
+        }
+    }
+
+    private Vector2 pan;
+    /// <summary>
+    /// Position offset on a plane flush with the camera.
+    /// </summary>
+    public Vector2 Pan
+    {
+        get { return pan; }
+        set
+        {
+            pan = value;
+            cameraPosition = GetCameraPosition(focusPosition, rotation, zoomAmount);
+            UpdateTransform();
+        }
+    }
+
+    private Quaternion rotation;
+    /// <summary>
+    /// Camera rotation around focus point.
+    /// </summary>
+    public Quaternion Rotation
+    {
+        get { return rotation; }
+        set
+        {
+            rotation = value;
+            cameraPosition = GetCameraPosition(focusPosition, rotation, zoomAmount);
+            UpdateTransform();
+        }
+    }
+
+    private float zoomAmount;
+    /// <summary>
+    /// Camera distance from focus point.
+    /// </summary>
+    public float ZoomAmount
+    {
+        get { return zoomAmount; }
+        set
+        {
+            zoomAmount = value;
+            cameraPosition = GetCameraPosition(focusPosition, rotation, zoomAmount);
+            UpdateTransform();
+        }
+    }
+
+    private Vector3 cameraPosition;
+    /// <summary>
+    /// World space camera position. 
+    /// </summary>
+    public Vector3 CameraPosition
+    {
+        get { return cameraPosition; }
+        set
+        {
+            cameraPosition = value;
+            GetOrbitValues(focusPosition, cameraPosition, transform.up, out rotation, out zoomAmount);
+            UpdateTransform();
+        }
+    }
+
+    private void UpdateTransform()
+    {
+        transform.SetPositionAndRotation(cameraPosition + rotation * pan, rotation);
+    }
 
     private void Awake()
     {
-        mainCamera = GetComponentInChildren<Camera>().transform;
+        mainCamera = GetComponent<Camera>();
 
-        InitializeSensitivity();
+        CameraPosition = transform.position;
+        defaultCameraRotation = Rotation;
     }
-
-    private void InitializeSensitivity()
-    {
-        rotationSensitivity = rotationSlider.value;
-        rotationSlider.onValueChanged.AddListener(OnRotationValueChanged);
-
-        zoomSensitivity = zoomSlider.value;
-        zoomSlider.onValueChanged.AddListener(OnZoomValueChanged);
-
-        movingSensitivity = movementSlider.value;
-        movementSlider.onValueChanged.AddListener(OnMovementValueChanged);
-    }
-
-    private void OnRotationValueChanged(float value) => rotationSensitivity = value;
-
-    private void OnZoomValueChanged(float value) => zoomSensitivity = value;
-
-    private void OnMovementValueChanged(float value) => movingSensitivity = value;
 
     private void OnEnable()
     {
         SelectionSystem.OnObjectSelected += OnObjectSelected;
         SelectionSystem.OnObjectDeselected += OnObjectDeselected;
+        inputSystem.SecondaryDragAction += Move;
+        inputSystem.PrimaryDragAction += Rotate;
+        inputSystem.ZoomAction += Zoom;
     }
-
-    private void OnObjectSelected(SelectableObject selectable) => currentSelection = selectable.transform;
-
-    private void OnObjectDeselected() => currentSelection = null;
 
     private void OnDisable()
     {
         SelectionSystem.OnObjectSelected -= OnObjectSelected;
         SelectionSystem.OnObjectDeselected -= OnObjectDeselected;
+        inputSystem.SecondaryDragAction -= Move;
+        inputSystem.PrimaryDragAction -= Rotate;
+        inputSystem.ZoomAction -= Zoom;
     }
 
-    private void Update()
+    private void OnObjectSelected(SelectableObject selectable)
     {
-        if (Input.GetMouseButton(1))
-            RotateCamera();
+        currentSelection = selectable.gameObject;
+    }
 
-        if (Input.GetAxis("Mouse ScrollWheel") != 0)
-            ZoomCamera();
+    private void OnObjectDeselected() => currentSelection = null;
 
-        if (Input.GetMouseButton(0) && Input.GetKey(KeyCode.LeftControl))
-            MoveFocalPoint();
+    /// <summary>
+    /// Returns world space camera position from orbit values.
+    /// </summary>
+    public static Vector3 GetCameraPosition(Vector3 focusPosition, Quaternion rotation, float zoom)
+    {
+        return focusPosition + rotation * Vector3.back * zoom;
     }
 
     /// <summary>
-    /// Rotates camera around focal point
+    /// Returns orbit camera values from focus position and camera position.
     /// </summary>
-    private void RotateCamera()
+    public static void GetOrbitValues(Vector3 focusPosition, Vector3 cameraPosition, Vector3 up, out Quaternion rotation, out float zoom)
     {
-        float mousePositionX = Input.GetAxis("Mouse X") * rotationSensitivity * Time.deltaTime;
-        float mousePositionY = Input.GetAxis("Mouse Y") * rotationSensitivity * Time.deltaTime;
-
-        _yRotation += mousePositionX;
-        _xRotation -= mousePositionY;
-
-        transform.rotation = Quaternion.Euler(_xRotation, _yRotation, 0);
+        Vector3 lookVector = focusPosition - cameraPosition;
+        rotation = Quaternion.LookRotation(lookVector);
+        zoom = lookVector.magnitude;
     }
 
     /// <summary>
-    /// Zooms camera is side of focal point
+    /// Applies panning from view space motion vector.
     /// </summary>
-    private void ZoomCamera()
+    /// <param name="delta">position delta</param>
+    public void Move(Vector2 delta)
     {
-        float mouseWheel = Input.GetAxis("Mouse ScrollWheel") * zoomSensitivity * Time.deltaTime;
-        mainCamera.Translate(Vector3.forward * mouseWheel);
-
-        float scrollingDownDivisor = 5f;
-        mainCamera.Translate((Vector3.down * mouseWheel) / scrollingDownDivisor);
+        delta *= zoomAmount;
+        Pan = new Vector2(Pan.x - delta.x, Pan.y - delta.y);
     }
 
     /// <summary>
-    /// Moves camera focal point according to direction of mouse movement
-    /// Works on both LCTRL and LMB are pressed
+    /// Applies rotation from view space motion vector.
     /// </summary>
-    private void MoveFocalPoint()
+    /// <param name="delta">position delta</param>
+    public void Rotate(Vector2 delta)
     {
-        float mousePositionX = Input.GetAxis("Mouse X") * movingSensitivity * Time.deltaTime;
-        float mousePositionY = Input.GetAxis("Mouse Y") * movingSensitivity * Time.deltaTime;
+        Quaternion r = Rotation;
 
-        Vector3 movingVector = new Vector3(-mousePositionX, -mousePositionY, 0);
+        // Rotate around Y axis first
+        r = Quaternion.AngleAxis(delta.x, Vector3.up) * r;
 
-        transform.Translate(movingVector * movingSensitivity * Time.deltaTime);
+        // Get local rotated unit vectors
+        Vector3 up = r * Vector3.up;
+        Vector3 right = r * Vector3.right;
+
+        // Get current pitch
+        float pitch = Vector3.SignedAngle(Vector3.up, up, right);
+        float pitchDelta = Mathf.Clamp(pitch - delta.y, minPitchAngle, maxPitchAngle) - pitch;
+
+        // Change pitch
+        r = Quaternion.AngleAxis(pitchDelta, right) * r;
+
+        Rotation = r;
     }
 
     /// <summary>
-    /// Aligns camera focal point to currently selected object
+    /// Applies zoom from delta value.
     /// </summary>
-    public void AlignCameraWithSelection()
+    /// <param name="delta">positive for zoom in, negative for zoom out</param>
+    public void Zoom(float delta)
     {
-        if (currentSelection) transform.position = currentSelection.position;
+        float zoom = 1f - delta;
+        zoom = ZoomAmount * zoom;
+        if (zoom < 0.05f) zoom = 0.05f;
+        ZoomAmount = zoom;
     }
+
+    /// <summary>
+    /// Focuses camera on target object. Sets new default camera position.
+    /// </summary>
+    public void FocusCamera(GameObject target)
+    {
+        Bounds b = GetBounds(target, 2f);
+
+        float radius = b.extents.magnitude;
+        radius *= 1.1f;
+
+        float distance = radius / Mathf.Sin(mainCamera.fieldOfView * Mathf.Deg2Rad * 0.5f);
+        FocusPosition = b.center;
+
+        CameraPosition = GetCameraPosition(FocusPosition, defaultCameraRotation, distance);
+        Pan = Vector2.zero;
+    }
+
+    /// <summary>
+    /// Iterates through all Renderers on the GameObject and returns their combined Bounds.
+    /// </summary>
+    /// <param name="maxDeviation">standard deviation of outliers to discard</param>
+    public static Bounds GetBounds(GameObject root, float maxDeviation = 0f)
+    {
+        var allBounds = root.GetComponentsInChildren<Renderer>(false).Select(r => r.bounds);
+        int count = allBounds.Count();
+
+        if (maxDeviation > 0f && count > 0)
+        {
+            var meanPosition = allBounds.Select(b => b.center).Aggregate((a, b) => a + b) / count;
+            var boundsMagnitudes = allBounds.Select(bounds => Tuple.Create((bounds.center - meanPosition).magnitude, bounds));
+            var meanMagnitude = boundsMagnitudes.Select(b => b.Item1).Aggregate((a, b) => a + b) / count;
+
+            allBounds = boundsMagnitudes.Where(b =>
+            {
+                var v = b.Item1 - meanMagnitude;
+                return Mathf.Sqrt(v * v) <= maxDeviation;
+            }).Select(b => b.Item2);
+        }
+        if (!allBounds.Any()) return new Bounds();
+
+        var bounds = allBounds.First();
+        foreach (var b in allBounds)
+        {
+            bounds.Encapsulate(b);
+        }
+        return bounds;
+    }
+
+    public void AlignCameraWithSelection() => FocusCamera(currentSelection);
 }
