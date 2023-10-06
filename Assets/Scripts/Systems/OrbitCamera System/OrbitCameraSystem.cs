@@ -6,16 +6,16 @@ using UnityEngine;
 public class OrbitCameraSystem : MonoBehaviour
 {
     [SerializeField] private InputSystem inputSystem;
+
     [SerializeField] private float minPitchAngle = -90f;
     [SerializeField] private float maxPitchAngle = 90f;
 
-    private Vector3 defaultCameraPosition;
-    private Quaternion defaultCameraRotation;
     private Camera mainCamera;
+    private Quaternion defaultCameraRotation;
 
     private GameObject currentSelection;
 
-    Vector3 focusPosition;
+    private Vector3 focusPosition;
     /// <summary>
     /// Focus point of camera orbit.
     /// </summary>
@@ -29,7 +29,8 @@ public class OrbitCameraSystem : MonoBehaviour
             UpdateTransform();
         }
     }
-    Vector2 pan;
+
+    private Vector2 pan;
     /// <summary>
     /// Position offset on a plane flush with the camera.
     /// </summary>
@@ -43,7 +44,8 @@ public class OrbitCameraSystem : MonoBehaviour
             UpdateTransform();
         }
     }
-    Quaternion rotation;
+
+    private Quaternion rotation;
     /// <summary>
     /// Camera rotation around focus point.
     /// </summary>
@@ -57,7 +59,8 @@ public class OrbitCameraSystem : MonoBehaviour
             UpdateTransform();
         }
     }
-    float zoomAmount;
+
+    private float zoomAmount;
     /// <summary>
     /// Camera distance from focus point.
     /// </summary>
@@ -71,7 +74,8 @@ public class OrbitCameraSystem : MonoBehaviour
             UpdateTransform();
         }
     }
-    Vector3 cameraPosition;
+
+    private Vector3 cameraPosition;
     /// <summary>
     /// World space camera position. 
     /// </summary>
@@ -86,21 +90,20 @@ public class OrbitCameraSystem : MonoBehaviour
         }
     }
 
-    void UpdateTransform()
+    private void UpdateTransform()
     {
         transform.SetPositionAndRotation(cameraPosition + rotation * pan, rotation);
     }
 
-    void Awake()
+    private void Awake()
     {
         mainCamera = GetComponent<Camera>();
 
         CameraPosition = transform.position;
-        defaultCameraPosition = CameraPosition;
         defaultCameraRotation = Rotation;
     }
 
-    void OnEnable()
+    private void OnEnable()
     {
         SelectionSystem.OnObjectSelected += OnObjectSelected;
         SelectionSystem.OnObjectDeselected += OnObjectDeselected;
@@ -109,7 +112,7 @@ public class OrbitCameraSystem : MonoBehaviour
         inputSystem.ZoomAction += Zoom;
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
         SelectionSystem.OnObjectSelected -= OnObjectSelected;
         SelectionSystem.OnObjectDeselected -= OnObjectDeselected;
@@ -170,8 +173,6 @@ public class OrbitCameraSystem : MonoBehaviour
 
         // Get current pitch
         float pitch = Vector3.SignedAngle(Vector3.up, up, right);
-
-        // Limit pitch change
         float pitchDelta = Mathf.Clamp(pitch - delta.y, minPitchAngle, maxPitchAngle) - pitch;
 
         // Change pitch
@@ -198,12 +199,14 @@ public class OrbitCameraSystem : MonoBehaviour
     public void FocusCamera(GameObject target)
     {
         Bounds b = GetBounds(target, 2f);
+
         float radius = b.extents.magnitude;
-        radius *= 1.1f; // 10% zoom out
+        radius *= 1.1f;
+
         float distance = radius / Mathf.Sin(mainCamera.fieldOfView * Mathf.Deg2Rad * 0.5f);
         FocusPosition = b.center;
+
         CameraPosition = GetCameraPosition(FocusPosition, defaultCameraRotation, distance);
-        defaultCameraPosition = CameraPosition;
         Pan = Vector2.zero;
     }
 
@@ -215,11 +218,13 @@ public class OrbitCameraSystem : MonoBehaviour
     {
         var allBounds = root.GetComponentsInChildren<Renderer>(false).Select(r => r.bounds);
         int count = allBounds.Count();
+
         if (maxDeviation > 0f && count > 0)
         {
             var meanPosition = allBounds.Select(b => b.center).Aggregate((a, b) => a + b) / count;
             var boundsMagnitudes = allBounds.Select(bounds => Tuple.Create((bounds.center - meanPosition).magnitude, bounds));
             var meanMagnitude = boundsMagnitudes.Select(b => b.Item1).Aggregate((a, b) => a + b) / count;
+
             allBounds = boundsMagnitudes.Where(b =>
             {
                 var v = b.Item1 - meanMagnitude;
@@ -227,6 +232,7 @@ public class OrbitCameraSystem : MonoBehaviour
             }).Select(b => b.Item2);
         }
         if (!allBounds.Any()) return new Bounds();
+
         var bounds = allBounds.First();
         foreach (var b in allBounds)
         {
@@ -235,22 +241,5 @@ public class OrbitCameraSystem : MonoBehaviour
         return bounds;
     }
 
-    /// <summary>
-    /// Resets pan, rotation, zoom and camera parameters to default values.
-    /// </summary>
-    public void Reset()
-    {
-        CameraPosition = defaultCameraPosition;
-        Pan = Vector2.zero;
-    }
-
-    /// <summary>
-    /// Aligns camera focal point to currently selected object
-    /// </summary>
-    public void AlignCameraWithSelection()
-    {
-        //mainCamera.transform.position = currentSelection.position;
-
-        FocusCamera(currentSelection.gameObject);
-    }
+    public void AlignCameraWithSelection() => FocusCamera(currentSelection);
 }
