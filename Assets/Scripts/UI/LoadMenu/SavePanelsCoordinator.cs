@@ -77,8 +77,8 @@ public class SavePanelsCoordinator : MonoBehaviour
             panel.currentNumber.ToString() +
             IOUtility.previewFile;
 
-        Texture loadedPreview = IOUtility.OpenDirectoryAndLoadTexture(pathToPreviewTexture);
-        panel.preview.texture = loadedPreview;
+        //Texture loadedPreview = IOUtility.OpenDirectoryAndLoadTexture(pathToPreviewTexture);
+        //panel.preview.texture = loadedPreview;
     }
 
     private void DeleteSaveFile(SavePanel panel)
@@ -88,14 +88,16 @@ public class SavePanelsCoordinator : MonoBehaviour
         panels.Remove(panel);
 
         string directoryPath = IOUtility.scenePath + panel.currentNumber.ToString();
-        Directory.Delete(directoryPath, true);
+        //Directory.Delete(directoryPath, true);
 
-        RearrangeSaveFiles();
+        // Removing save file from storage - DELETE"{Id}" + rearrange
+
+        // RearrangeSaveFiles(); Rearrange through api
 
         Destroy(panel.gameObject);
     }
 
-    private void RearrangeSaveFiles()
+    private void RearrangeSaveFiles() // Move to api from here
     {
         string[] directories = Directory.GetDirectories(IOUtility.savesPath);
 

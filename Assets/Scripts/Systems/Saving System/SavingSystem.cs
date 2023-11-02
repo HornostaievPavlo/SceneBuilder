@@ -58,7 +58,11 @@ public class SavingSystem : MonoBehaviour
         export.AddScene(models);
 
         string filePath = scenePath + IOUtility.sceneFile;
-        bool success = await export.SaveToFileAndDispose(filePath);
+        bool success = false;
+        
+        // await export.SaveToFileAndDispose(filePath);
+
+        // Try to get bytes from models in the scene and POST to api
 
         return success;
     }
@@ -83,7 +87,7 @@ public class SavingSystem : MonoBehaviour
 
                 string filePath = directoryPath + IOUtility.textureFile;
 
-                IOUtility.CreateDirectoryAndSaveTexture(texture, directoryPath, filePath);
+                //IOUtility.CreateDirectoryAndSaveTexture(texture, directoryPath, filePath);
             }
         }
     }

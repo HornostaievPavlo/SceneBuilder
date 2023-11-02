@@ -261,7 +261,7 @@ public class LoadingSystem : MonoBehaviour
                     string currentAssetPath = $"/Asset{i + 1}" + IOUtility.textureFile;
                     string fullPath = IOUtility.scenePath + sceneNumber + currentAssetPath;
 
-                    material.mainTexture = IOUtility.OpenDirectoryAndLoadTexture(fullPath);
+                    //material.mainTexture = IOUtility.OpenDirectoryAndLoadTexture(fullPath);
                 }
             }
         }

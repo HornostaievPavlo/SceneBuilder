@@ -63,7 +63,9 @@ public class IOUtility : MonoBehaviour
         var folder = Directory.CreateDirectory(directory);
         var fullPath = Path.Combine(folder.FullName, file);
 
-        File.WriteAllBytes(fullPath, textureBytes);
+        //File.WriteAllBytes(fullPath, textureBytes);
+
+        // Send bytes by POST to server  
     }
 
     /// <summary>
@@ -73,10 +75,12 @@ public class IOUtility : MonoBehaviour
     /// <returns></returns>
     public static Texture OpenDirectoryAndLoadTexture(string path)
     {
-        byte[] loadedBytes = File.ReadAllBytes(path);
+        //byte[] loadedBytes = File.ReadAllBytes(path);
+
+        // Get bytes from Get request
 
         Texture2D textureFromBytes = new Texture2D(2, 2);
-        textureFromBytes.LoadImage(loadedBytes);
+        //textureFromBytes.LoadImage(loadedBytes);
 
         return textureFromBytes;
     }

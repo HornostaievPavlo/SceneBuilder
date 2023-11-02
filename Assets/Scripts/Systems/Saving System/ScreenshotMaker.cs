@@ -34,7 +34,9 @@ public class ScreenshotMaker : MonoBehaviour
 
         string directoryPath = IOUtility.scenePath + sceneNumber;
         string screenshotPath = directoryPath + IOUtility.previewFile;
-        IOUtility.CreateDirectoryAndSaveTexture
-            (screenshot, directoryPath, screenshotPath);
+        //IOUtility.CreateDirectoryAndSaveTexture
+        //(screenshot, directoryPath, screenshotPath);
+
+        // Give a screenshot to api by POST - texture2d is not working
     }
 }
