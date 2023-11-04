@@ -36,7 +36,7 @@ public class SavingSystem : MonoBehaviour
         int number = SavePanelsCoordinator.panelsCounter;
         number++;
 
-        screenshotMaker.MakePreviewScreenshot(number);
+        //screenshotMaker.MakePreviewScreenshot(number);
 
         return IOUtility.scenePath + number;
     }

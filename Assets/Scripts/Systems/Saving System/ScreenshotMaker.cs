@@ -6,7 +6,7 @@ public class ScreenshotMaker : MonoBehaviour
 
     private void Awake() => mainCamera = GetComponent<Camera>();
 
-    private Texture2D CaptureCameraView()
+    public Texture2D CaptureCameraView()
     {
         var width = Screen.width;
         var height = Screen.height;
@@ -28,12 +28,12 @@ public class ScreenshotMaker : MonoBehaviour
         return photo;
     }
 
-    public void MakePreviewScreenshot(int sceneNumber)
+    public void MakePreviewScreenshot()
     {
         Texture2D screenshot = CaptureCameraView();
 
-        string directoryPath = IOUtility.scenePath + sceneNumber;
-        string screenshotPath = directoryPath + IOUtility.previewFile;
+        //string directoryPath = IOUtility.scenePath + sceneNumber;
+        //string screenshotPath = directoryPath + IOUtility.previewFile;
         //IOUtility.CreateDirectoryAndSaveTexture
         //(screenshot, directoryPath, screenshotPath);
 

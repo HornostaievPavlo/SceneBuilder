@@ -1,4 +1,3 @@
-using System.IO;
 using UnityEngine;
 
 public class IOUtility : MonoBehaviour
@@ -56,12 +55,12 @@ public class IOUtility : MonoBehaviour
     /// <param name="texture">File to save</param>
     /// <param name="directory">Path to directory</param>
     /// <param name="file">Path to file</param>
-    public static void CreateDirectoryAndSaveTexture(Texture2D texture, string directory, string file)
+    public static void CreateDirectoryAndSaveTexture(Texture2D texture)
     {
         byte[] textureBytes = texture.EncodeToPNG();
 
-        var folder = Directory.CreateDirectory(directory);
-        var fullPath = Path.Combine(folder.FullName, file);
+        //var folder = Directory.CreateDirectory(directory);
+        //var fullPath = Path.Combine(folder.FullName, file);
 
         //File.WriteAllBytes(fullPath, textureBytes);
 

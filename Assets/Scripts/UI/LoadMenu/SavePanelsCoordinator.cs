@@ -30,7 +30,9 @@ public class SavePanelsCoordinator : MonoBehaviour
 
     private void CreateRowsForExistingSaveFiles()
     {
-        directories = new List<string>(Directory.EnumerateDirectories(IOUtility.savesPath));
+        //directories = new List<string>(Directory.EnumerateDirectories(IOUtility.savesPath));
+
+        // replace with GETAMOUNT request
 
         foreach (var dir in directories)
         {
