@@ -13,13 +13,12 @@ public class WebClient : MonoBehaviour
 {
     public ScreenshotMaker ScreenshotMaker;
 
-    public Button postButton;
     public Button getAmountButton;
     public Button postPreviewButton;
 
     public TMP_Text outputField;
 
-    readonly string saveFileUrl = "http://localhost:3090/Webserver/SaveFileRequest";
+    readonly string saveFileUrl = "http://localhost:3090/Webserver/SaveFile";
     readonly string storageUrl = "http://localhost:3090/Webserver/Storage";
 
     private JsonSerializerSettings serializerSettings = new JsonSerializerSettings();
@@ -45,8 +44,8 @@ public class WebClient : MonoBehaviour
             }
             else
             {
-                Debug.Log("GET request successful!");
-                Debug.Log("Response: " + www.downloadHandler.text);
+                //Debug.Log("GET request successful!");
+                //Debug.Log("Response: " + www.downloadHandler.text);
 
                 // You can parse the response here if needed.
                 int numberOfSaves = int.Parse(www.downloadHandler.text);
@@ -56,7 +55,7 @@ public class WebClient : MonoBehaviour
         }
     }
 
-    private async Task<SaveFileResponse> SendPost(SaveFileRequest request)
+    private async Task SendPost(SaveFileRequest request)
     {
         string httpContentStr = JsonConvert.SerializeObject(request, serializerSettings);
 
@@ -69,14 +68,6 @@ public class WebClient : MonoBehaviour
         {
             throw new Exception(httpResponseMessage.StatusCode.ToString());
         }
-
-        string str = await httpResponseMessage.Content.ReadAsStringAsync();
-
-        var response = JsonConvert.DeserializeObject<SaveFileResponse>(str);
-
-        outputField.text = response.IsSaved.ToString();
-
-        return response;
     }
 
     public void StartGetAmountRequest()
@@ -84,14 +75,17 @@ public class WebClient : MonoBehaviour
         StartCoroutine(SendGetRequest());
     }
 
+    int test = 0;
     private async void StartPostPreviewRequest()
     {
+        test++;
+
         var tex = ScreenshotMaker.CaptureCameraView();
         byte[] dataToSend = tex.EncodeToPNG();
 
         SaveFileRequest request = new SaveFileRequest
         {
-            Id = 1,
+            Id = test,
             PreviewData = dataToSend
         };
 
