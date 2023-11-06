@@ -19,8 +19,6 @@ public class SavePanelsCoordinator : MonoBehaviour
 
     public List<SavePanel> panels = new List<SavePanel>();
 
-    List<string> directories;
-
     private void Start()
     {
         loadingSystem = GetComponent<LoadingSystem>();
@@ -28,9 +26,13 @@ public class SavePanelsCoordinator : MonoBehaviour
         CreateRowsForExistingSaveFiles();
     }
 
+    /// <summary>
+    /// Looks into directory with save files
+    /// Creates UI row for each of them
+    /// </summary>
     private void CreateRowsForExistingSaveFiles()
     {
-        directories = new List<string>(Directory.EnumerateDirectories(IOUtility.savesPath));
+        var directories = new List<string>(Directory.EnumerateDirectories(IOUtility.savesPath));
 
         foreach (var dir in directories)
         {
@@ -38,6 +40,9 @@ public class SavePanelsCoordinator : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Creates UI row on runtime saving
+    /// </summary>
     public void CreateRowForNewSaveFile()
     {
         panelsCounter++;
@@ -52,6 +57,10 @@ public class SavePanelsCoordinator : MonoBehaviour
         AddSaveFilePreview(panel);
     }
 
+    /// <summary>
+    /// Sets buttons events for new UI row
+    /// </summary>
+    /// <param name="panel">Target panel</param>
     private void AddRowButtonsListeners(SavePanel panel)
     {
         panel.loadButton.onClick.AddListener(() => loadingSystem.LoadAssetsFromSaveFile(panel.currentNumber));
@@ -60,6 +69,10 @@ public class SavePanelsCoordinator : MonoBehaviour
         panel.deleteButton.onClick.AddListener(() => DeleteSaveFile(panel));
     }
 
+    /// <summary>
+    /// Sets scene index for panel loading button
+    /// </summary>
+    /// <param name="panel">Target panel</param>
     private void UpdateLoadingButtonIndex(SavePanel panel)
     {
         panel.loadButton.onClick.RemoveAllListeners();
@@ -70,6 +83,11 @@ public class SavePanelsCoordinator : MonoBehaviour
         panel.deleteButton.onClick.AddListener(() => DeleteSaveFile(panel));
     }
 
+    /// <summary>
+    /// Loads texture from directory
+    /// Sets it to preview field of UI row
+    /// </summary>
+    /// <param name="panel">Target panel</param>
     public void AddSaveFilePreview(SavePanel panel)
     {
         string pathToPreviewTexture =
@@ -81,6 +99,10 @@ public class SavePanelsCoordinator : MonoBehaviour
         panel.preview.texture = loadedPreview;
     }
 
+    /// <summary>
+    /// Removes panel and save file directory
+    /// </summary>
+    /// <param name="panel">Panel to remove</param>
     private void DeleteSaveFile(SavePanel panel)
     {
         panelsCounter--;
@@ -95,6 +117,10 @@ public class SavePanelsCoordinator : MonoBehaviour
         Destroy(panel.gameObject);
     }
 
+    /// <summary>
+    /// Changes save folders names
+    /// According to order in directory
+    /// </summary>
     private void RearrangeSaveFiles()
     {
         string[] directories = Directory.GetDirectories(IOUtility.savesPath);
