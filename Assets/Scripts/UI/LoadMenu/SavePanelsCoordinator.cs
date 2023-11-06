@@ -129,13 +129,12 @@ public class SavePanelsCoordinator : MonoBehaviour
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(directories[i]);
 
-            string currentName = IOUtility.savesPath + @"\" + directoryInfo.Name;
-            Debug.Log("Current name" + currentName);
+            string currentName = IOUtility.savesPath + @"/" + directoryInfo.Name;
 
             string targetName = IOUtility.scenePath + (i + 1);
-            Debug.Log("Target name" + targetName);
 
-            Directory.Move(currentName, targetName);
+            if (currentName != targetName)
+                Directory.Move(currentName, targetName);
 
             panels[i].currentNumber = i + 1;
             UpdateLoadingButtonIndex(panels[i]);
