@@ -15,11 +15,15 @@ public class SavingSystem : MonoBehaviour
 
     private string scenePath;
 
-    public async void SaveNewScene()
+    /// <summary>
+    /// Saves all scene assets 
+    /// Creates save file row in UI
+    /// </summary>
+    public async void SaveCurrentScene()
     {
         savePopUp.SetActive(true);
 
-        scenePath = CreateNewSceneDirectory();
+        scenePath = CreateNewSaveDirectory();
 
         var saveTargets = IOUtility.CollectSelectableObjects();
 
@@ -31,7 +35,12 @@ public class SavingSystem : MonoBehaviour
         rowsCoordinator.CreateRowForNewSaveFile();
     }
 
-    public string CreateNewSceneDirectory()
+    /// <summary>
+    /// Creates directory for save file
+    /// Adds preview screenshot
+    /// </summary>
+    /// <returns>Path to created directory</returns>
+    private string CreateNewSaveDirectory()
     {
         int number = SavePanelsCoordinator.panelsCounter;
         number++;
