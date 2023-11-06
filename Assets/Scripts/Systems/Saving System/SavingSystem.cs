@@ -16,8 +16,8 @@ public class SavingSystem : MonoBehaviour
     private string scenePath;
 
     /// <summary>
-    /// Saves all scene assets 
-    /// Creates save file row in UI
+    /// Saves all scene assets, 
+    /// creates save file row in UI
     /// </summary>
     public async void SaveCurrentScene()
     {
@@ -36,8 +36,8 @@ public class SavingSystem : MonoBehaviour
     }
 
     /// <summary>
-    /// Creates directory for save file
-    /// Adds preview screenshot
+    /// Creates directory for save file,
+    /// adds preview screenshot
     /// </summary>
     /// <returns>Path to created directory</returns>
     private string CreateNewSaveDirectory()
@@ -51,7 +51,7 @@ public class SavingSystem : MonoBehaviour
     }
 
     /// <summary>
-    /// Saves all Selectables to file
+    /// Saves all Models to file
     /// </summary>
     /// <param name="targets">Array of objects to save</param>
     private async Task<bool> SaveModels(SelectableObject[] targets)
@@ -73,7 +73,7 @@ public class SavingSystem : MonoBehaviour
     }
 
     /// <summary>
-    /// Saves textures from all Selectables
+    /// Saves textures of all Models in the scene
     /// </summary>
     /// <param name="targets">Array of objects with textures</param>
     private void SaveTextures(SelectableObject[] targets)
@@ -81,7 +81,6 @@ public class SavingSystem : MonoBehaviour
         for (int i = 0; i < targets.Length; i++)
         {
             Renderer renderer = targets[i].GetComponentInChildren<Renderer>();
-
             Material material = renderer.sharedMaterial;
 
             if (material.mainTexture != null)
@@ -89,7 +88,6 @@ public class SavingSystem : MonoBehaviour
                 Texture2D texture = IOUtility.DuplicateTexture((Texture2D)material.mainTexture);
 
                 string directoryPath = scenePath + $"/Asset{i + 1}";
-
                 string filePath = directoryPath + IOUtility.textureFile;
 
                 IOUtility.CreateDirectoryAndSaveTexture(texture, directoryPath, filePath);

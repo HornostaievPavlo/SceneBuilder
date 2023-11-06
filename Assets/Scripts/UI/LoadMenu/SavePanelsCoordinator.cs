@@ -17,6 +17,7 @@ public class SavePanelsCoordinator : MonoBehaviour
 
     public static int panelsCounter = 0;
 
+    [HideInInspector]
     public List<SavePanel> panels = new List<SavePanel>();
 
     private void Start()
@@ -28,7 +29,7 @@ public class SavePanelsCoordinator : MonoBehaviour
 
     /// <summary>
     /// Looks into directory with save files
-    /// Creates UI row for each of them
+    /// and creates UI row for each of them
     /// </summary>
     private void CreateRowsForExistingSaveFiles()
     {
@@ -84,8 +85,8 @@ public class SavePanelsCoordinator : MonoBehaviour
     }
 
     /// <summary>
-    /// Loads texture from directory
-    /// Sets it to preview field of UI row
+    /// Loads texture from directory and
+    /// sets it to preview field of UI row
     /// </summary>
     /// <param name="panel">Target panel</param>
     public void AddSaveFilePreview(SavePanel panel)
@@ -119,7 +120,7 @@ public class SavePanelsCoordinator : MonoBehaviour
 
     /// <summary>
     /// Changes save folders names
-    /// According to order in directory
+    /// according to order in directory
     /// </summary>
     private void RearrangeSaveFiles()
     {
