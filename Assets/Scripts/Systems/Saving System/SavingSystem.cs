@@ -55,12 +55,20 @@ public class SavingSystem : MonoBehaviour
         }
 
         var export = new GameObjectExport();
+
+        
+
         export.AddScene(models);
 
         string filePath = scenePath + IOUtility.sceneFile;
         bool success = false;
         
-        // await export.SaveToFileAndDispose(filePath);
+        await export.SaveToFileAndDispose(filePath);
+
+        
+
+
+        
 
         // Try to get bytes from models in the scene and POST to api
 

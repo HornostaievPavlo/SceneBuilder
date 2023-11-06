@@ -57,7 +57,7 @@ public class WebClient : MonoBehaviour
 
     private async Task SendPost(SaveFileRequest request)
     {
-        string httpContentStr = JsonConvert.SerializeObject(request, serializerSettings);
+        string httpContentStr = JsonConvert.SerializeObject(request);
 
         var httpClient = new HttpClient();
 
