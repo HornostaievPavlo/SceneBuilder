@@ -23,55 +23,40 @@ public class LoadingSystem : MonoBehaviour
 
     private List<Transform> modelsFromSingleSaveFile = new List<Transform>();
 
-    private void OnEnable()
-    {
-        ModelUploadingSystem.OnModelUploaded += OnModelUploaded;
-    }
-
-    private void OnDisable()
-    {
-        ModelUploadingSystem.OnModelUploaded -= OnModelUploaded;
-    }
-
-    private void OnModelUploaded(byte[] data)
-    {
-        LoadAssetFromBytes(data);
-    }
-
     /// <summary>
     /// Handles loading of model from byte array 
     /// </summary>
     /// <param name="bytes">Bytes to load into scene</param>
-    public async void LoadAssetFromBytes(byte[] bytes)
-    {
-        loadPopUp.SetActive(true);
+    //public async void LoadAssetFromBytes(byte[] bytes)
+    //{
+    //    loadPopUp.SetActive(true);
 
-        assetsInScene.Clear();
+    //    assetsInScene.Clear();
 
-        var asset = CreateAsset(AssetType.Model);
+    //    var asset = CreateAsset(AssetType.Model);
 
-        var gltf = new GltfImport();
+    //    var gltf = new GltfImport();
 
-        bool success = await gltf.LoadGltfBinary(bytes);
+    //    bool success = await gltf.LoadGltfBinary(bytes);
 
-        if (success)
-        {
-            await gltf.InstantiateMainSceneAsync(asset.transform);
+    //    if (success)
+    //    {
+    //        await gltf.InstantiateMainSceneAsync(asset.transform);
 
-            List<Transform> assets = new List<Transform>();
+    //        List<Transform> assets = new List<Transform>();
 
-            SelectableObject[] loadedSelectables = IOUtility.assetsParent.GetComponentsInChildren<SelectableObject>();
+    //        SelectableObject[] loadedSelectables = IOUtility.assetsParent.GetComponentsInChildren<SelectableObject>();
 
-            foreach (var selectable in loadedSelectables)
-            {
-                assets.Add(selectable.gameObject.transform);
-            }
+    //        foreach (var selectable in loadedSelectables)
+    //        {
+    //            assets.Add(selectable.gameObject.transform);
+    //        }
 
-            AddCollidersToAssets(assets);
+    //        AddCollidersToAssets(assets);
 
-            loadPopUp.SetActive(false);
-        }
-    }
+    //        loadPopUp.SetActive(false);
+    //    }
+    //}
 
     /// <summary>
     /// Handles loading assets from local path
