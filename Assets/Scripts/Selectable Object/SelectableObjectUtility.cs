@@ -22,13 +22,12 @@ public class SelectableObjectUtility : MonoBehaviour
         copy.gameObject.name = selectable.gameObject.name;
         copy.gameObject.GetComponentInChildren<MeshFilter>().mesh = meshCopy;
         copy.gameObject.GetComponentInChildren<MeshRenderer>().material.mainTexture = textureCopy;
-        //copy.gameObject.GetComponentInChildren<MeshCollider>().sharedMesh = colliderCopy.sharedMesh;
         copy.gameObject.GetComponentInChildren<MeshCollider>().sharedMesh = meshCopy;
     }
 
     public static void DeleteSelectableObject(SelectableObject selectable)
     {
-        if(selectable == null) return;
+        if (selectable == null) return;
 
         TransformHandleSystem handle = FindObjectOfType<TransformHandleSystem>();
         handle.OnObjectDeselected();
