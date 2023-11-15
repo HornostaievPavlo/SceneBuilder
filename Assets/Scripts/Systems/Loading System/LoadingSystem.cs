@@ -1,14 +1,9 @@
 using GLTFast;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using TMPro;
 using UnityEngine;
 
 public class LoadingSystem : MonoBehaviour
 {
-    [SerializeField]
-    private TMP_InputField inputField;
-
     [SerializeField]
     private GameObject cameraAssetPrefab;
 
@@ -32,8 +27,6 @@ public class LoadingSystem : MonoBehaviour
     }
 
     private void OnModelUploaded(byte[] data) => LoadAssetFromBytes(data);
-
-    public async void LoadAssetsFromDirectory() => await LoadModelsFromPath(inputField.text);
 
     public void LoadCameraAsset() => CreateAsset(AssetType.Camera);
 
@@ -70,39 +63,6 @@ public class LoadingSystem : MonoBehaviour
 
             loadPopUp.SetActive(false);
         }
-    }
-
-    /// <summary>
-    /// General model loading procedure 
-    /// Handles adding of colliders to models
-    /// </summary>
-    /// <param name="modelPath">Local storage or save file</param>
-    /// <returns>Success of loading</returns>
-    private async Task<bool> LoadModelsFromPath(string modelPath)
-    {
-        loadPopUp.SetActive(true);
-
-        var asset = CreateAsset(AssetType.Model).GetComponent<GltfAsset>();
-
-        var success = await asset.Load(modelPath);
-
-        if (success)
-        {
-            List<Transform> assets = new List<Transform>();
-
-            SelectableObject[] loadedAssets = assetsParent.GetComponentsInChildren<SelectableObject>();
-
-            foreach (var selectable in loadedAssets)
-            {
-                assets.Add(selectable.gameObject.transform);
-            }
-
-            AddCollidersToAssets(assets);
-
-            loadPopUp.SetActive(false);
-        }
-
-        return success;
     }
 
     /// <summary>
