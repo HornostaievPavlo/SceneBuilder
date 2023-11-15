@@ -11,7 +11,6 @@ public class SelectableObjectUtility : MonoBehaviour
         var meshCopy = new Mesh();
         meshCopy.Clear();
         meshCopy = selectableTr.GetComponentInChildren<MeshFilter>().mesh;
-        meshCopy.name = "test";
 
         Material materialCopy = selectableTr.GetComponentInChildren<MeshRenderer>().material;
         Texture2D textureCopy = DuplicateTexture((Texture2D)materialCopy.mainTexture);

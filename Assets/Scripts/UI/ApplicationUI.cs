@@ -11,6 +11,9 @@ public class ApplicationUI : MonoBehaviour
     [SerializeField]
     private Transform uiStateToggle;
 
+    [SerializeField]
+    private GameObject deleteButtonHover;
+
     private SelectableObject currentSelection;
 
     private void OnEnable()
@@ -41,19 +44,14 @@ public class ApplicationUI : MonoBehaviour
 
     public void CopySelectedObject()
     {
-        if (currentSelection != null)
-        {
-            SelectableObjectUtility.CopySelectableObject(currentSelection);
-        }
+        SelectableObjectUtility.CopySelectableObject(currentSelection);
     }
 
     public void DeleteSelectedObject()
     {
-        if (currentSelection != null)
-        {
-            SelectableObjectUtility.DeleteSelectableObject(currentSelection);
-            this.OnObjectDeselected();
-        }
+        SelectableObjectUtility.DeleteSelectableObject(currentSelection);
+        deleteButtonHover.SetActive(false);
+        this.OnObjectDeselected();
     }
 
     public void SetUIActive(bool isActive)
@@ -62,6 +60,4 @@ public class ApplicationUI : MonoBehaviour
 
         uiStateToggle.eulerAngles = new Vector3(0, 0, isActive ? 0 : 180);
     }
-
-    public void QuitApplication() => Application.Quit();
 }
