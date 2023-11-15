@@ -23,58 +23,12 @@ public class LoadingSystem : MonoBehaviour
 
     private List<Transform> modelsFromSingleSaveFile = new List<Transform>();
 
-    private void OnEnable()
-    {
-        ModelUploadingSystem.OnModelUploaded += OnModelUploaded;
-    }
-
-    private void OnDisable()
-    {
-        ModelUploadingSystem.OnModelUploaded -= OnModelUploaded;
-    }
-
-    private void OnModelUploaded(byte[] data)
-    {
-        LoadAssetFromBytes(data);
-    }
-
-    /// <summary>
-    /// Handles loading of model from byte array 
-    /// </summary>
-    /// <param name="bytes">Bytes to load into scene</param>
-    public async void LoadAssetFromBytes(byte[] bytes)
-    {
-        loadPopUp.SetActive(true);
-
-        assetsInScene.Clear();
-
-        var asset = CreateAsset(AssetType.Model);
-
-        var gltf = new GltfImport();
-
-        bool success = await gltf.LoadGltfBinary(bytes);
-
-        if (success)
-        {
-            await gltf.InstantiateMainSceneAsync(asset.transform);
-
-            List<Transform> assets = new List<Transform>();
-
-            SelectableObject[] loadedSelectables = IOUtility.assetsParent.GetComponentsInChildren<SelectableObject>();
-
-            foreach (var selectable in loadedSelectables)
-            {
-                assets.Add(selectable.gameObject.transform);
-            }
-
-            AddCollidersToAssets(assets);
-
-            loadPopUp.SetActive(false);
-        }
-    }
+    [HideInInspector]
+    public Transform[] children;
 
     /// <summary>
     /// Handles loading assets from local path
+    /// provided in input field
     /// </summary>
     public async void LoadAssetsFromDirectory()
     {
@@ -94,21 +48,21 @@ public class LoadingSystem : MonoBehaviour
         if (success) AssignTextures(sceneNumber);
     }
 
-    public void LoadCameraAsset()
-    {
-        CreateAsset(AssetType.Camera);
-    }
-
-    public void LoadLabelAsset()
-    {
-        CreateAsset(AssetType.Label);
-    }
+    /// <summary>
+    /// Adds camera asset to a scene
+    /// </summary>
+    public void LoadCameraAsset() => CreateAsset(AssetType.Camera);
 
     /// <summary>
-    /// General model loading procedure 
+    /// Adds label asset to a scene
+    /// </summary>
+    public void LoadLabelAsset() => CreateAsset(AssetType.Label);
+
+    /// <summary>
+    /// General model loading procedure. 
     /// Handles adding of colliders to models
     /// </summary>
-    /// <param name="modelPath">Local storage or save file</param>
+    /// <param name="modelPath">Path to .glb file in local storage</param>
     /// <returns>Success of loading</returns>
     private async Task<bool> LoadModelsFromPath(string modelPath)
     {
@@ -122,7 +76,7 @@ public class LoadingSystem : MonoBehaviour
 
         if (success)
         {
-            if (modelPath.Contains(IOUtility.savesPath))
+            if (modelPath.Contains(IOUtility.dataPath))
             {
                 var assets = InitializeImportedAssets();
                 AddCollidersToAssets(assets);
@@ -138,27 +92,24 @@ public class LoadingSystem : MonoBehaviour
 
                 AddCollidersToAssets(assetsInScene);
             }
+
             loadPopUp.SetActive(false);
         }
-
         return success;
     }
 
     /// <summary>
-    /// Creates new Selectable asset of specified type
+    /// Creates new selectable asset of specified type
     /// </summary>
     /// <param name="type">Specifies AssetType of created object</param>
-    /// <returns>Asset instance</returns>
+    /// <returns>Created instance</returns>
     private GameObject CreateAsset(AssetType type)
     {
         switch (type)
         {
             case AssetType.Model:
 
-                GameObject asset = new GameObject
-                {
-                    name = "Asset"
-                };
+                GameObject asset = new GameObject { name = "Asset" };
 
                 asset.transform.SetParent(IOUtility.assetsParent);
 
@@ -190,7 +141,10 @@ public class LoadingSystem : MonoBehaviour
         }
     }
 
-    public Transform[] children;
+    /// <summary>
+    /// Rearranges imported assets in proper hierarchy 
+    /// </summary>
+    /// <returns>Collection of assets in scene</returns>
     private List<Transform> InitializeImportedAssets()
     {
         modelsFromSingleSaveFile.Clear();

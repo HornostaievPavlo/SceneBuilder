@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class IOUtility : MonoBehaviour
 {
-    public static readonly string savesPath = "D:/_GLTF/Saves";
-    public static readonly string scenePath = "D:/_GLTF/Saves/Scene";
+    public static string dataPath;
+    public static string scenePath;
 
     public static readonly string sceneFile = "/Asset.gltf";
     public static readonly string textureFile = "/Texture.png";
@@ -17,6 +17,9 @@ public class IOUtility : MonoBehaviour
 
     private void Start()
     {
+        dataPath = Application.persistentDataPath;
+        scenePath = dataPath + "/Scene";
+
         assetsParent = GameObject.Find("Assets Placeholder").transform;
     }
 
