@@ -33,7 +33,7 @@ public class SavePanelsCoordinator : MonoBehaviour
     /// </summary>
     private void CreateRowsForExistingSaveFiles()
     {
-        var directories = new List<string>(Directory.EnumerateDirectories(IOUtility.savesPath));
+        var directories = new List<string>(Directory.EnumerateDirectories(IOUtility.dataPath));
 
         foreach (var dir in directories)
         {
@@ -124,13 +124,13 @@ public class SavePanelsCoordinator : MonoBehaviour
     /// </summary>
     private void RearrangeSaveFiles()
     {
-        string[] directories = Directory.GetDirectories(IOUtility.savesPath);
+        string[] directories = Directory.GetDirectories(IOUtility.dataPath);
 
         for (int i = 0; i < directories.Length; i++)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(directories[i]);
 
-            string currentName = IOUtility.savesPath + @"/" + directoryInfo.Name;
+            string currentName = IOUtility.dataPath + @"/" + directoryInfo.Name;
 
             string targetName = IOUtility.scenePath + (i + 1);
 

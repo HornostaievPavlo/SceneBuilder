@@ -76,7 +76,7 @@ public class LoadingSystem : MonoBehaviour
 
         if (success)
         {
-            if (modelPath.Contains(IOUtility.savesPath))
+            if (modelPath.Contains(IOUtility.dataPath))
             {
                 var assets = InitializeImportedAssets();
                 AddCollidersToAssets(assets);

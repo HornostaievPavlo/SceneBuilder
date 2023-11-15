@@ -9,6 +9,9 @@ public class ApplicationUI : MonoBehaviour
     private GameObject rightMenu;
 
     [SerializeField]
+    private GameObject deleteButtonHover;
+
+    [SerializeField]
     private Transform uiStateToggle;
 
     private SelectableObject currentSelection;
@@ -41,19 +44,14 @@ public class ApplicationUI : MonoBehaviour
 
     public void CopySelectedObject()
     {
-        if (currentSelection != null)
-        {
-            SelectableObjectUtility.CopySelectableObject(currentSelection);
-        }
+        SelectableObjectUtility.CopySelectableObject(currentSelection);
     }
 
     public void DeleteSelectedObject()
     {
-        if (currentSelection != null)
-        {
-            SelectableObjectUtility.DeleteSelectableObject(currentSelection);
-            this.OnObjectDeselected();
-        }
+        SelectableObjectUtility.DeleteSelectableObject(currentSelection);
+        deleteButtonHover.gameObject.SetActive(false);
+        this.OnObjectDeselected();
     }
 
     public void SetUIActive(bool isActive)

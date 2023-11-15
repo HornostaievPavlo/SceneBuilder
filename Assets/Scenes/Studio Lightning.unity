@@ -3684,6 +3684,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Toolbox: {fileID: 1099585251}
   rightMenu: {fileID: 1806678657975304366}
+  deleteButtonHover: {fileID: 467543022}
   uiStateToggle: {fileID: 809214185}
 --- !u!1 &1187537599
 GameObject:
