@@ -1,6 +1,6 @@
-# SceneBuilder
+# SceneBuilderWeb
 
-This application empowers you to create scenes using a collection of loaded 3D models of .glTF type. 
+This application empowers you to easily load and inspect your 3D models of .glTF type. 
 
 Dive into the world of 3D content directly from your web browser. No heavy installations or downloads required - simply follow this [link](https://pavlohornostaiev.itch.io/scenebuilder) to SceneBuilder hosted on [Itch.io](https://itch.io/) to start building your scenes.
 
