@@ -5,6 +5,9 @@ using UnityEngine;
 public class LoadingSystem : MonoBehaviour
 {
     [SerializeField]
+    private Transform assetsParent;
+
+    [SerializeField]
     private GameObject cameraAssetPrefab;
 
     [SerializeField]
@@ -13,8 +16,29 @@ public class LoadingSystem : MonoBehaviour
     [SerializeField]
     private GameObject loadPopUp;
 
-    [SerializeField]
-    private Transform assetsParent;
+    private void Start() => LoadDuck();
+
+    private async void LoadDuck()
+    {
+        loadPopUp.SetActive(true);
+
+        var asset = CreateAsset(AssetType.Model).GetComponent<GltfAsset>();
+
+        string duckPath =
+            "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF/Duck.gltf";
+        var success = await asset.Load(duckPath);
+
+        if (success)
+        {
+            var duckRenderer = asset.GetComponentInChildren<MeshRenderer>();
+
+            var duckCollider = duckRenderer.gameObject.AddComponent<MeshCollider>();
+
+            duckCollider.convex = true;
+
+            loadPopUp.SetActive(false);
+        }
+    }
 
     private void OnEnable()
     {
