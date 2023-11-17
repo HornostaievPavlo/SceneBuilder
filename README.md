@@ -2,6 +2,8 @@
 
 This application empowers you to create scenes using a collection of loaded 3D models of .glTF type. Whether you're a 3D artist, game developer, or simply someone who loves exploring 3D worlds, SceneBuilder is designed to spark your creativity.
 
+Playable demo version of [SceneBuilderWeb](https://github.com/HornostaievPavlo/SceneBuilder/tree/WebGL_Version) is available on Itch.io by this [link](https://pavlohornostaiev.itch.io/scenebuilder).
+
 ## About the Project
 
 - **General purpose:** SceneBuilder serves as a versatile tool for constructing scenes from imported 3D models. Application allows arranging them in desired layout, and even customizing their appearances to bring certain vision to life.
