@@ -32,7 +32,10 @@ public class LoadingSystem : MonoBehaviour
     /// </summary>
     public async void LoadAssetsFromDirectory()
     {
-        await LoadModelsFromPath(inputField.text);
+        var input = inputField.text;
+        if (input == string.Empty) return;
+
+        await LoadModelsFromPath(input);
     }
 
     /// <summary>
