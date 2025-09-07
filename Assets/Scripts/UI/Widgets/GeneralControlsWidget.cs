@@ -3,44 +3,41 @@ using UnityEngine.UI;
 
 public class GeneralControlsWidget : MonoBehaviour
 {
-    [SerializeField] private Button saveButton;
+    [Header("Buttons")]
     [SerializeField] private Button loadButton;
-    [SerializeField] private Button quitButton;
     [SerializeField] private Button infoButton;
+    [SerializeField] private Button quitButton;
+
+    [Header("Widgets")]
+    [SerializeField] private SavesWidget savesWidget;
+    [SerializeField] private InfoWidget infoWidget;
 
     private void OnEnable()
     {
-        saveButton.onClick.AddListener(OnSaveButtonClicked);
         loadButton.onClick.AddListener(OnLoadButtonClicked);
-        quitButton.onClick.AddListener(OnQuitButtonClicked);
         infoButton.onClick.AddListener(OnInfoButtonClicked);
+        quitButton.onClick.AddListener(OnQuitButtonClicked);
     }
 
     private void OnDisable()
     {
-        saveButton.onClick.RemoveListener(OnSaveButtonClicked);
         loadButton.onClick.RemoveListener(OnLoadButtonClicked);
-        quitButton.onClick.RemoveListener(OnQuitButtonClicked);
         infoButton.onClick.RemoveListener(OnInfoButtonClicked);
-    }
-
-    private void OnSaveButtonClicked()
-    {
-        
+        quitButton.onClick.RemoveListener(OnQuitButtonClicked);
     }
 
     private void OnLoadButtonClicked()
     {
-        
+        savesWidget.gameObject.SetActive(true);
+    }    
+
+    private void OnInfoButtonClicked()
+    {
+        infoWidget.gameObject.SetActive(true);
     }
 
     private void OnQuitButtonClicked()
     {
-
-    }
-
-    private void OnInfoButtonClicked()
-    {
-
+        Application.Quit();
     }
 }

@@ -58,6 +58,4 @@ public class Window : MonoBehaviour
         content.SetActive(value);
         contentToggle.transform.eulerAngles = new Vector3(0, 0, value ? 0 : 180);
     }
-
-    public void QuitApplication() => Application.Quit();
 }
