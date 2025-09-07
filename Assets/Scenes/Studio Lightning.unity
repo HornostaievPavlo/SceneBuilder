@@ -320,7 +320,7 @@ GameObject:
   - component: {fileID: 217610276}
   - component: {fileID: 217610278}
   m_Layer: 5
-  m_Name: Load Scene Button
+  m_Name: SavesButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -392,9 +392,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 217610273}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -424,25 +424,9 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 217610276}
-  toggleTransition: 1
-  graphic: {fileID: 0}
-  m_Group: {fileID: 0}
-  onValueChanged:
+  m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 260263516}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  m_IsOn: 0
+      m_Calls: []
 --- !u!1 &260263516
 GameObject:
   m_ObjectHideFlags: 0
@@ -453,7 +437,7 @@ GameObject:
   m_Component:
   - component: {fileID: 260263517}
   m_Layer: 5
-  m_Name: Load Menu
+  m_Name: SavesWidget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -693,7 +677,7 @@ GameObject:
   - component: {fileID: 370322110}
   - component: {fileID: 370322109}
   m_Layer: 5
-  m_Name: 'Path InputField '
+  m_Name: 'ModelLinkInputField '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1002,7 +986,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_ActiveFontFeatures: 00000000
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -1337,7 +1321,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -4.4000244, y: 0}
+  m_AnchoredPosition: {x: -4.4002686, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &634473427
@@ -1759,7 +1743,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -80.400024, y: 76}
+  m_AnchoredPosition: {x: -80.40015, y: 76}
   m_SizeDelta: {x: 72, y: 72}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &809214187
@@ -3587,7 +3571,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 4.4000244, y: 0}
+  m_AnchoredPosition: {x: 4.4001465, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1170225654
@@ -3607,6 +3591,7 @@ MonoBehaviour:
   deleteButtonHover: {fileID: 467543022}
   contentToggle: {fileID: 809214187}
   content: {fileID: 2131068940}
+  currentSelection: {fileID: 0}
 --- !u!1 &1187537599
 GameObject:
   m_ObjectHideFlags: 0
@@ -3898,8 +3883,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1214858429}
+  - component: {fileID: 1214858430}
   m_Layer: 5
-  m_Name: AppControls
+  m_Name: GeneralControlsWidget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3929,6 +3915,22 @@ RectTransform:
   m_AnchoredPosition: {x: -166, y: -121}
   m_SizeDelta: {x: 252, y: 162}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1214858430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1214858428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53cded210aab6a8439209506ed405471, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Main::GeneralControlsWidget
+  saveButton: {fileID: 217610278}
+  loadButton: {fileID: 0}
+  quitButton: {fileID: 0}
+  infoButton: {fileID: 0}
 --- !u!1 &1251436806
 GameObject:
   m_ObjectHideFlags: 0
@@ -4519,7 +4521,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1439486001}
   m_Layer: 0
-  m_Name: User Interface
+  m_Name: UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5546,19 +5548,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1579313640}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1170225654}
-        m_TargetAssemblyTypeName: GeneralUI, Assembly-CSharp
-        m_MethodName: QuitApplication
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1579313640
 MonoBehaviour:
   m_ObjectHideFlags: 0
