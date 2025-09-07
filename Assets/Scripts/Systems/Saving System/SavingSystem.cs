@@ -10,27 +10,19 @@ public class SavingSystem : MonoBehaviour
     [SerializeField]
     private ScreenshotMaker screenshotMaker;
 
-    [SerializeField]
-    private GameObject savePopUp;
-
     private string scenePath;
 
     /// <summary>
     /// Saves all scene assets, 
     /// creates save file row in UI
     /// </summary>
-    public async void SaveCurrentScene()
+    public async Task SaveCurrentScene()
     {
-        savePopUp.SetActive(true);
-
         scenePath = CreateNewSaveDirectory();
-
         var saveTargets = IOUtility.CollectSelectableObjects();
 
         SaveTextures(saveTargets);
         await SaveModels(saveTargets);
-
-        savePopUp.SetActive(false);
 
         rowsCoordinator.CreateRowForNewSaveFile();
     }
