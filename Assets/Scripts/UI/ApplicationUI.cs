@@ -1,18 +1,13 @@
 using UnityEngine;
+using UnityEngine.UI;
 
-public class ApplicationUI : MonoBehaviour
+public class Window : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject Toolbox;
-
-    [SerializeField]
-    private GameObject rightMenu;
-
-    [SerializeField]
-    private GameObject deleteButtonHover;
-
-    [SerializeField]
-    private Transform uiStateToggle;
+    [SerializeField] private GameObject Toolbox;
+    [SerializeField] private GameObject rightMenu;
+    [SerializeField] private GameObject deleteButtonHover;
+    [SerializeField] private Toggle contentToggle;
+    [SerializeField] private GameObject content;
 
     private SelectableObject currentSelection;
 
@@ -20,12 +15,16 @@ public class ApplicationUI : MonoBehaviour
     {
         SelectionSystem.OnObjectSelected += OnObjectSelected;
         SelectionSystem.OnObjectDeselected += OnObjectDeselected;
+
+        contentToggle.onValueChanged.AddListener(ToggleContent);
     }
 
     private void OnDisable()
     {
         SelectionSystem.OnObjectSelected -= OnObjectSelected;
         SelectionSystem.OnObjectDeselected -= OnObjectDeselected;
+
+        contentToggle.onValueChanged.RemoveListener(ToggleContent);
     }
 
     private void OnObjectSelected(SelectableObject selectable)
@@ -42,23 +41,22 @@ public class ApplicationUI : MonoBehaviour
         currentSelection = null;
     }
 
-    public void CopySelectedObject()
-    {
-        SelectableObjectUtility.CopySelectableObject(currentSelection);
-    }
+    // public void CopySelectedObject()
+    // {
+    //     SelectableObjectUtility.CopySelectableObject(currentSelection);
+    // }
 
-    public void DeleteSelectedObject()
-    {
-        SelectableObjectUtility.DeleteSelectableObject(currentSelection);
-        deleteButtonHover.gameObject.SetActive(false);
-        this.OnObjectDeselected();
-    }
+    // public void DeleteSelectedObject()
+    // {
+    //     SelectableObjectUtility.DeleteSelectableObject(currentSelection);
+    //     deleteButtonHover.gameObject.SetActive(false);
+    //     this.OnObjectDeselected();
+    // }
 
-    public void SetUIActive(bool isActive)
+    public void ToggleContent(bool value)
     {
-        gameObject.SetActive(isActive);
-
-        uiStateToggle.eulerAngles = new Vector3(0, 0, isActive ? 0 : 180);
+        content.SetActive(value);
+        contentToggle.transform.eulerAngles = new Vector3(0, 0, value ? 0 : 180);
     }
 
     public void QuitApplication() => Application.Quit();
