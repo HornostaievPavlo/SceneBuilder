@@ -186,11 +186,10 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 268448743}
   - {fileID: 7581173863589386692}
   - {fileID: 5972484268573814788}
-  - {fileID: 347734250}
   - {fileID: 2736428699864131903}
+  - {fileID: 268448743}
   m_Father: {fileID: 1619059934042241981}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
@@ -745,7 +744,7 @@ GameObject:
   - component: {fileID: 347734253}
   - component: {fileID: 347734251}
   m_Layer: 5
-  m_Name: CameraModesButtons
+  m_Name: CameraModesWidget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -766,11 +765,11 @@ RectTransform:
   - {fileID: 1267235864}
   - {fileID: 863094087}
   - {fileID: 582707112}
-  m_Father: {fileID: 110410504}
+  m_Father: {fileID: 2131068941}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 550, y: 146.5003}
+  m_AnchoredPosition: {x: -155, y: -75.99963}
   m_SizeDelta: {x: 526.745, y: 72.005}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &347734251
@@ -1638,7 +1637,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &582707112
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2489,7 +2488,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &863094084
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4570,7 +4569,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1267235861
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8319,6 +8318,8 @@ RectTransform:
   - {fileID: 370322108}
   - {fileID: 1214858429}
   - {fileID: 1099585252}
+  - {fileID: 347734250}
+  - {fileID: 3410716000327059864}
   - {fileID: 1619059934042241981}
   - {fileID: 260263517}
   - {fileID: 558865330779573684}
@@ -9284,7 +9285,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: a750f09ba4e40534fb18c011ee35fede, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -9293,7 +9294,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 3
 --- !u!224 &686568726689740172
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9370,30 +9371,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &775861750001197635
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7278076009659774977}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 20
-    m_Bottom: 0
-  m_ChildAlignment: 0
-  m_StartCorner: 0
-  m_StartAxis: 0
-  m_CellSize: {x: 430, y: 68}
-  m_Spacing: {x: 0, y: 34}
-  m_Constraint: 0
-  m_ConstraintCount: 2
 --- !u!224 &831219230311807171
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9408,10 +9385,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 3986034543643079888}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: -270}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: -215, y: -0.0009765625}
+  m_SizeDelta: {x: 430, y: -670.36523}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &867620689145287187
 RectTransform:
@@ -10279,7 +10256,7 @@ GameObject:
   - component: {fileID: 679773608906008724}
   - component: {fileID: 4766807569226307732}
   m_Layer: 5
-  m_Name: Cameras Viewport
+  m_Name: Viewport
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10711,7 +10688,6 @@ RectTransform:
   - {fileID: 2465634889044400464}
   - {fileID: 180372655405036818}
   - {fileID: 110410504}
-  - {fileID: 3410716000327059864}
   m_Father: {fileID: 2131068941}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
@@ -11152,10 +11128,10 @@ RectTransform:
   - {fileID: 3986034543643079888}
   m_Father: {fileID: 2736428699864131903}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 177.25977}
-  m_SizeDelta: {x: 0, y: -548}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -48.37}
+  m_SizeDelta: {x: 430, y: -96.74}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2277079766005549781
 GameObject:
@@ -11769,10 +11745,10 @@ RectTransform:
   - {fileID: 8355030823647940347}
   m_Father: {fileID: 110410504}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.23999023}
-  m_SizeDelta: {x: 0, y: -0.47998047}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: 25}
+  m_SizeDelta: {x: 430, y: -50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2757898199808197881
 MonoBehaviour:
@@ -12253,7 +12229,7 @@ GameObject:
   - component: {fileID: 1619059934042241981}
   - component: {fileID: 3143734842116482462}
   m_Layer: 5
-  m_Name: SceneObjectsControlsWidget
+  m_Name: SceneObjectsWidget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12340,10 +12316,10 @@ RectTransform:
   - {fileID: 7727337104072056544}
   m_Father: {fileID: 5972484268573814788}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 177.0152}
-  m_SizeDelta: {x: 0, y: -546}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -47.992}
+  m_SizeDelta: {x: 430, y: -95.985}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3222508923306609837
 MonoBehaviour:
@@ -12374,10 +12350,10 @@ RectTransform:
   - {fileID: 5485916678076305785}
   m_Father: {fileID: 7581173863589386692}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 430, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &3228062847281691930
 RectTransform:
@@ -12737,11 +12713,11 @@ RectTransform:
   - {fileID: 969125361890244012}
   - {fileID: 5684729312924224540}
   - {fileID: 7333914301606157498}
-  m_Father: {fileID: 1619059934042241981}
+  m_Father: {fileID: 2131068941}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 705, y: -398}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 87}
   m_SizeDelta: {x: 182, y: 93}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3481909870064214020
@@ -13121,7 +13097,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &3753348764622374258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14629,7 +14605,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &5372297679209305570
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15025,7 +15001,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: -215, y: -0.00048828125}
-  m_SizeDelta: {x: 430, y: 0}
+  m_SizeDelta: {x: 430, y: -817}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &5711481429805568750
 CanvasRenderer:
@@ -15307,30 +15283,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &5963383928361466857
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6692926796550666144}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
-  m_ChildAlignment: 0
-  m_StartCorner: 0
-  m_StartAxis: 0
-  m_CellSize: {x: 430, y: 68}
-  m_Spacing: {x: 0, y: 0}
-  m_Constraint: 0
-  m_ConstraintCount: 2
 --- !u!224 &5972484268573814788
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15348,10 +15300,10 @@ RectTransform:
   - {fileID: 3185488816385157757}
   m_Father: {fileID: 110410504}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: 25}
+  m_SizeDelta: {x: 430, y: -50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5977869389601579731
 MonoBehaviour:
@@ -15755,7 +15707,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3410716000327059864}
   m_Layer: 5
-  m_Name: OnScreenLabel
+  m_Name: OnScreenLabelWidget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16197,8 +16149,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: -271}
+  m_AnchoredPosition: {x: 0, y: -0.00018310547}
+  m_SizeDelta: {x: 0, y: -671.015}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &6656950819378053434
 GameObject:
@@ -16279,7 +16231,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6653091563819209852}
-  - component: {fileID: 5963383928361466857}
+  - component: {fileID: 6692926796550666145}
   - component: {fileID: 2685098924505000185}
   m_Layer: 5
   m_Name: Content
@@ -16288,6 +16240,32 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &6692926796550666145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6692926796550666144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.VerticalLayoutGroup
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 4
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!114 &6697107822820095749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17175,7 +17153,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 831219230311807171}
-  - component: {fileID: 775861750001197635}
+  - component: {fileID: 7278076009659774978}
   - component: {fileID: 1468474172581614976}
   m_Layer: 5
   m_Name: Content
@@ -17184,6 +17162,32 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &7278076009659774978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7278076009659774977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.VerticalLayoutGroup
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 4
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!114 &7290889705284135269
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17482,8 +17486,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 430, y: 0}
+  m_AnchoredPosition: {x: 0, y: 25}
+  m_SizeDelta: {x: 430, y: -50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &7582196652034617736
 GameObject:
