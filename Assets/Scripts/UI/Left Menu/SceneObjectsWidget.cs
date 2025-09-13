@@ -3,12 +3,19 @@ using UnityEngine.UI;
 
 public class SceneObjectsWidget : MonoBehaviour
 {
+    [Header("Content")]
     [SerializeField] private Toggle openToggle;
     [SerializeField] private Toggle expandToggle;
     [SerializeField] private RectTransform content;
     
+    [Header("Tabs")]
     [SerializeField] private ToggleGroup tabsToggleGroup;
     [SerializeField] private GameObject lineSeparator;
+
+    [Header("Header")]
+    [SerializeField] private Image headerImage;
+    [SerializeField] private Sprite collapsedSprite;
+    [SerializeField] private Sprite openedSprite;
 
     private Toggle[] tabsToggles;
     
@@ -42,14 +49,8 @@ public class SceneObjectsWidget : MonoBehaviour
 
     private void HandleOpenToggleValueChanged(bool value)
     {
-        if (value == false)
-        {
-            expandToggle.SetIsOnWithoutNotify(false);
-            expandToggle.transform.eulerAngles = Vector3.zero;
-            expandToggle.gameObject.SetActive(false);
-            
-           tabsToggleGroup.SetAllTogglesOff();
-        }
+        if (value == false) 
+            HandleCollapsed();
         
         float targetHeight = value 
             ? backgroundHeight / 2 
@@ -60,6 +61,10 @@ public class SceneObjectsWidget : MonoBehaviour
         openToggle.transform.eulerAngles = new Vector3(0, 0, value ? 180 : 0);
         expandToggle.gameObject.SetActive(value);
         lineSeparator.SetActive(value);
+        
+        headerImage.sprite = value 
+            ? openedSprite 
+            : collapsedSprite;
 
         foreach (Toggle toggle in tabsToggles)
         {
@@ -75,5 +80,14 @@ public class SceneObjectsWidget : MonoBehaviour
 
         content.sizeDelta = new Vector2(backgroundWidth, targetHeight);
         expandToggle.transform.eulerAngles = new Vector3(0, 0, value ? 180 : 0);
+    }
+
+    private void HandleCollapsed()
+    {
+        expandToggle.SetIsOnWithoutNotify(false);
+        expandToggle.transform.eulerAngles = Vector3.zero;
+        expandToggle.gameObject.SetActive(false);
+            
+        tabsToggleGroup.SetAllTogglesOff();
     }
 }
