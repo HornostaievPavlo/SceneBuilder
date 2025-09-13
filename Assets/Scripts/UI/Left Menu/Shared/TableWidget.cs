@@ -3,17 +3,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-
-public class Table : MonoBehaviour
+public class TableWidget : MonoBehaviour
 {
-    [SerializeField]
-    private Row rowPrefab;
+    [SerializeField] private Row rowPrefab;
+    [SerializeField] private Transform rowParent;
 
-    [SerializeField]
-    private Transform rowParent;
-
-    [SerializeField]
-    private List<Row> rows = new List<Row>();
+    private List<Row> rows = new();
 
     private Color32 selectedRowColor = new Color32(63, 106, 204, 255);
     private Color32 unselectedRowColor = new Color32(221, 223, 229, 255);

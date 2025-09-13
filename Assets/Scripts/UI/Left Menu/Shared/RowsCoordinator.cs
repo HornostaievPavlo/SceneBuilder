@@ -4,21 +4,21 @@ using UnityEngine;
 public class RowsCoordinator : MonoBehaviour
 {
     [SerializeField]
-    private Table modelsTable;
+    private TableWidget modelsTableWidget;
 
     [SerializeField]
-    private Table camerasTable;
+    private TableWidget camerasTableWidget;
 
     [SerializeField]
-    private Table labelsTable;
+    private TableWidget labelsTableWidget;
 
-    public Dictionary<AssetType, Table> table = new Dictionary<AssetType, Table>();
+    public Dictionary<AssetType, TableWidget> table = new Dictionary<AssetType, TableWidget>();
 
     private void Start()
     {
-        table[AssetType.Model] = modelsTable;
-        table[AssetType.Camera] = camerasTable;
-        table[AssetType.Label] = labelsTable;
+        table[AssetType.Model] = modelsTableWidget;
+        table[AssetType.Camera] = camerasTableWidget;
+        table[AssetType.Label] = labelsTableWidget;
     }
 
     public Row AssignRow(SelectableObject selectable)
