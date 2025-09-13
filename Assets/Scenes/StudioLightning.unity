@@ -1826,7 +1826,7 @@ GameObject:
   - component: {fileID: 634473428}
   - component: {fileID: 634473427}
   m_Layer: 5
-  m_Name: Loading Progress Popup
+  m_Name: LoadingPopup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8316,14 +8316,14 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 370322108}
-  - {fileID: 1214858429}
-  - {fileID: 1099585252}
+  - {fileID: 1619059934042241981}
   - {fileID: 347734250}
   - {fileID: 3410716000327059864}
-  - {fileID: 1619059934042241981}
   - {fileID: 260263517}
+  - {fileID: 1099585252}
   - {fileID: 558865330779573684}
   - {fileID: 1492293203}
+  - {fileID: 1214858429}
   - {fileID: 634473426}
   m_Father: {fileID: 1170225651}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
