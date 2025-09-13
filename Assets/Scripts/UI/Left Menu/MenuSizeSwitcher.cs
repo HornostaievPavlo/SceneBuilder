@@ -11,8 +11,7 @@ public class MenuSizeSwitcher : MonoBehaviour
     [SerializeField]
     private RectTransform expandToggle;
 
-    [SerializeField]
-    private GameObject tabsToggleGroup;
+    
 
     [Space]
     [Header("Viewports")]

@@ -3,10 +3,16 @@ using UnityEngine.UI;
 
 public class SceneObjectsControlsWidget : MonoBehaviour
 {
+    [Header("Background")]
     [SerializeField] private Toggle openToggle;
     [SerializeField] private Toggle expandToggle;
     
     [SerializeField] private RectTransform background;
+    
+    [Header("Tabs")]
+    [SerializeField] private ToggleGroup tabsToggleGroup;
+
+    private Toggle[] tabsToggles;
     
     private float backgroundWidth;
     
@@ -18,6 +24,9 @@ public class SceneObjectsControlsWidget : MonoBehaviour
     {
         backgroundWidth = background.sizeDelta.x;
         expandToggle.gameObject.SetActive(false);
+        background.sizeDelta = new Vector2(backgroundWidth, CollapsedBackgroundHeight);
+        
+        tabsToggles = tabsToggleGroup.gameObject.GetComponentsInChildren<Toggle>(true);
     }
 
     private void OnEnable()
@@ -36,9 +45,16 @@ public class SceneObjectsControlsWidget : MonoBehaviour
     {
         if (value == false)
         {
-            expandToggle.isOn = false;
+            expandToggle.SetIsOnWithoutNotify(false);
             expandToggle.transform.eulerAngles = Vector3.zero;
             expandToggle.gameObject.SetActive(false);
+            
+            foreach (Toggle item in tabsToggles)
+            {
+                item.isOn = false;
+            }
+            
+            tabsToggleGroup.SetAllTogglesOff();
         }
         
         float targetHeight = value 
@@ -49,21 +65,11 @@ public class SceneObjectsControlsWidget : MonoBehaviour
         
         openToggle.transform.eulerAngles = new Vector3(0, 0, value ? 180 : 0);
         expandToggle.gameObject.SetActive(value);
-        
-       // Toggle[] toggles = tabsToggleGroup.GetComponentsInChildren<Toggle>();
 
-        // foreach (Toggle item in toggles)
-        // {
-        //     item.interactable = isClosed;
-        // }
-
-        // if (!isClosed)
-        // {
-        //     foreach (Toggle item in toggles)
-        //     {
-        //         item.isOn = false;
-        //     }
-        // }
+        foreach (Toggle item in tabsToggles)
+        {
+            item.interactable = value;
+        }
     }
 
     private void HandleExpandToggleValueChanged(bool value)
