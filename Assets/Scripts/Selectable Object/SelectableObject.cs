@@ -1,8 +1,9 @@
+using Enums;
 using UnityEngine;
 
 public class SelectableObject : MonoBehaviour
 {
-    public AssetType type;
+    public AssetTypeId TypeId;
 
     private RowsCoordinator rowsCoordinator;
     private Row menuRow;

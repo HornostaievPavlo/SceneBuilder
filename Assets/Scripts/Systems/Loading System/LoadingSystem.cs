@@ -2,41 +2,19 @@ using GLTFast;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Enums;
 using TMPro;
 using UnityEngine;
 
 public class LoadingSystem : MonoBehaviour
 {
-    [SerializeField]
-    private TMP_InputField inputField;
+    [SerializeField] private GameObject cameraAssetPrefab;
+    [SerializeField] private GameObject labelAssetPrefab;
 
-    [SerializeField]
-    private GameObject cameraAssetPrefab;
+    private List<Transform> assetsInScene = new();
+    private List<Transform> modelsFromSingleSaveFile = new();
 
-    [SerializeField]
-    private GameObject labelAssetPrefab;
-
-    [SerializeField]
-    private GameObject loadPopUp;
-
-    private List<Transform> assetsInScene = new List<Transform>();
-
-    private List<Transform> modelsFromSingleSaveFile = new List<Transform>();
-
-    [HideInInspector]
-    public Transform[] children;
-
-    /// <summary>
-    /// Handles loading assets from local path
-    /// provided in input field
-    /// </summary>
-    public async void LoadAssetsFromDirectory()
-    {
-        var input = inputField.text;
-        if (input == string.Empty) return;
-
-        await LoadModelsFromPath(input);
-    }
+    [HideInInspector] public Transform[] children;
 
     /// <summary>
     /// Handles loading assets from local save file
@@ -47,19 +25,19 @@ public class LoadingSystem : MonoBehaviour
         string saveFilePath =
             IOUtility.scenePath + sceneNumber.ToString() + IOUtility.sceneFile;
 
-        bool success = await LoadModelsFromPath(saveFilePath);
+        bool success = await LoadModel(saveFilePath);
         if (success) AssignTextures(sceneNumber);
     }
 
     /// <summary>
     /// Adds camera asset to a scene
     /// </summary>
-    public void LoadCameraAsset() => CreateAsset(AssetType.Camera);
+    public void LoadCameraAsset() => CreateAsset(AssetTypeId.Camera);
 
     /// <summary>
     /// Adds label asset to a scene
     /// </summary>
-    public void LoadLabelAsset() => CreateAsset(AssetType.Label);
+    public void LoadLabelAsset() => CreateAsset(AssetTypeId.Label);
 
     /// <summary>
     /// General model loading procedure. 
@@ -67,13 +45,11 @@ public class LoadingSystem : MonoBehaviour
     /// </summary>
     /// <param name="modelPath">Path to .glb file in local storage</param>
     /// <returns>Success of loading</returns>
-    private async Task<bool> LoadModelsFromPath(string modelPath)
+    public async Task<bool> LoadModel(string modelPath)
     {
-        loadPopUp.SetActive(true);
-
         assetsInScene.Clear();
 
-        var asset = CreateAsset(AssetType.Model).GetComponent<GltfAsset>();
+        var asset = CreateAsset(AssetTypeId.Model).GetComponent<GltfAsset>();
 
         var success = await asset.Load(modelPath);
 
@@ -95,49 +71,48 @@ public class LoadingSystem : MonoBehaviour
 
                 AddCollidersToAssets(assetsInScene);
             }
-
-            loadPopUp.SetActive(false);
         }
+        
         return success;
     }
 
     /// <summary>
     /// Creates new selectable asset of specified type
     /// </summary>
-    /// <param name="type">Specifies AssetType of created object</param>
+    /// <param name="typeId">Specifies AssetType of created object</param>
     /// <returns>Created instance</returns>
-    private GameObject CreateAsset(AssetType type)
+    private GameObject CreateAsset(AssetTypeId typeId)
     {
-        switch (type)
+        switch (typeId)
         {
-            case AssetType.Model:
+            case AssetTypeId.Model:
 
                 GameObject asset = new GameObject { name = "Asset" };
 
                 asset.transform.SetParent(IOUtility.assetsParent);
 
                 SelectableObject modelSelectable = asset.AddComponent<SelectableObject>();
-                modelSelectable.type = type;
+                modelSelectable.TypeId = typeId;
 
                 asset.AddComponent<GltfAsset>();
                 return asset;
 
-            case AssetType.Camera:
+            case AssetTypeId.Camera:
 
                 var camera = Instantiate(cameraAssetPrefab, IOUtility.assetsParent);
                 camera.name = "Asset";
 
                 SelectableObject cameraSelectable = camera.AddComponent<SelectableObject>();
-                cameraSelectable.type = type;
+                cameraSelectable.TypeId = typeId;
                 return camera;
 
-            case AssetType.Label:
+            case AssetTypeId.Label:
 
                 var label = Instantiate(labelAssetPrefab, IOUtility.assetsParent);
                 label.name = "Asset";
 
                 SelectableObject labelSelectable = label.AddComponent<SelectableObject>();
-                labelSelectable.type = type;
+                labelSelectable.TypeId = typeId;
                 return label;
 
             default: return null;
@@ -189,7 +164,7 @@ public class LoadingSystem : MonoBehaviour
             if (!hasSelectable)
             {
                 var selectable = asset.gameObject.AddComponent<SelectableObject>();
-                selectable.type = AssetType.Model;
+                selectable.TypeId = AssetTypeId.Model;
 
                 modelsFromSingleSaveFile.Add(asset.transform);
             }

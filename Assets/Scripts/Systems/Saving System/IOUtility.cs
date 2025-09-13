@@ -20,7 +20,7 @@ public class IOUtility : MonoBehaviour
         dataPath = Application.persistentDataPath;
         scenePath = dataPath + "/Scene";
 
-        assetsParent = GameObject.Find("Assets Placeholder").transform;
+        assetsParent = GameObject.Find("AssetsHolder").transform;
     }
 
     public static SelectableObject[] CollectSelectableObjects()
