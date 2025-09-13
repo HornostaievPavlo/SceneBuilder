@@ -5,7 +5,7 @@ public class SceneObjectsWidget : MonoBehaviour
 {
     [SerializeField] private Toggle openToggle;
     [SerializeField] private Toggle expandToggle;
-    [SerializeField] private RectTransform background;
+    [SerializeField] private RectTransform content;
     
     [SerializeField] private ToggleGroup tabsToggleGroup;
     [SerializeField] private GameObject lineSeparator;
@@ -13,15 +13,14 @@ public class SceneObjectsWidget : MonoBehaviour
     private Toggle[] tabsToggles;
     
     private float backgroundWidth;
+    private float backgroundHeight;
     
-    private const float CollapsedBackgroundHeight = 72f;
-    private const float OpenedBackgroundHeight = 400f;
-    private const float ExpandedBackgroundHeight = 890f;
-
     private void Awake()
     {
-        backgroundWidth = background.sizeDelta.x;
-        background.sizeDelta = new Vector2(backgroundWidth, CollapsedBackgroundHeight);
+        backgroundWidth = content.sizeDelta.x;
+        backgroundHeight = content.sizeDelta.y;
+        
+        content.sizeDelta = new Vector2(backgroundWidth, 0f);
         
         expandToggle.gameObject.SetActive(false);
         lineSeparator.SetActive(false);
@@ -53,10 +52,10 @@ public class SceneObjectsWidget : MonoBehaviour
         }
         
         float targetHeight = value 
-            ? OpenedBackgroundHeight 
-            : CollapsedBackgroundHeight;
+            ? backgroundHeight / 2 
+            : 0f;
 
-        background.sizeDelta = new Vector2(backgroundWidth, targetHeight);
+        content.sizeDelta = new Vector2(backgroundWidth, targetHeight);
         
         openToggle.transform.eulerAngles = new Vector3(0, 0, value ? 180 : 0);
         expandToggle.gameObject.SetActive(value);
@@ -71,10 +70,10 @@ public class SceneObjectsWidget : MonoBehaviour
     private void HandleExpandToggleValueChanged(bool value)
     {
         float targetHeight = value 
-            ? ExpandedBackgroundHeight 
-            : OpenedBackgroundHeight;
+            ? backgroundHeight 
+            : backgroundHeight / 2;
 
-        background.sizeDelta = new Vector2(backgroundWidth, targetHeight);
+        content.sizeDelta = new Vector2(backgroundWidth, targetHeight);
         expandToggle.transform.eulerAngles = new Vector3(0, 0, value ? 180 : 0);
     }
 }
