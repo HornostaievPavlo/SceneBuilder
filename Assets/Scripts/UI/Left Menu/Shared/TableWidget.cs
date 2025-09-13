@@ -48,7 +48,9 @@ public class TableWidget : MonoBehaviour
     public void DeleteRowItem(Row row)
     {
         rows.Remove(row);
-        Destroy(row.gameObject);
+        
+        if (row != null)
+            Destroy(row.gameObject);
 
         AssignRowsNumbers(rows);
     }
