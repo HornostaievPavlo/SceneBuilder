@@ -1,16 +1,14 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SceneObjectsControlsWidget : MonoBehaviour
+public class SceneObjectsWidget : MonoBehaviour
 {
-    [Header("Background")]
     [SerializeField] private Toggle openToggle;
     [SerializeField] private Toggle expandToggle;
-    
     [SerializeField] private RectTransform background;
     
-    [Header("Tabs")]
     [SerializeField] private ToggleGroup tabsToggleGroup;
+    [SerializeField] private GameObject lineSeparator;
 
     private Toggle[] tabsToggles;
     
@@ -23,9 +21,11 @@ public class SceneObjectsControlsWidget : MonoBehaviour
     private void Awake()
     {
         backgroundWidth = background.sizeDelta.x;
-        expandToggle.gameObject.SetActive(false);
         background.sizeDelta = new Vector2(backgroundWidth, CollapsedBackgroundHeight);
         
+        expandToggle.gameObject.SetActive(false);
+        lineSeparator.SetActive(false);
+
         tabsToggles = tabsToggleGroup.gameObject.GetComponentsInChildren<Toggle>(true);
     }
 
@@ -49,12 +49,7 @@ public class SceneObjectsControlsWidget : MonoBehaviour
             expandToggle.transform.eulerAngles = Vector3.zero;
             expandToggle.gameObject.SetActive(false);
             
-            foreach (Toggle item in tabsToggles)
-            {
-                item.isOn = false;
-            }
-            
-            tabsToggleGroup.SetAllTogglesOff();
+           tabsToggleGroup.SetAllTogglesOff();
         }
         
         float targetHeight = value 
@@ -65,10 +60,11 @@ public class SceneObjectsControlsWidget : MonoBehaviour
         
         openToggle.transform.eulerAngles = new Vector3(0, 0, value ? 180 : 0);
         expandToggle.gameObject.SetActive(value);
+        lineSeparator.SetActive(value);
 
-        foreach (Toggle item in tabsToggles)
+        foreach (Toggle toggle in tabsToggles)
         {
-            item.interactable = value;
+            toggle.interactable = value;
         }
     }
 
