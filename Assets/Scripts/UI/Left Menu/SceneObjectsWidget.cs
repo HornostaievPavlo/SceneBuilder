@@ -19,15 +19,15 @@ public class SceneObjectsWidget : MonoBehaviour
 
     private Toggle[] tabsToggles;
     
-    private float backgroundWidth;
-    private float backgroundHeight;
+    private float initialBackgroundWidth;
+    private float expandedBackgroundHeight;
     
     private void Awake()
     {
-        backgroundWidth = content.sizeDelta.x;
-        backgroundHeight = content.sizeDelta.y;
+        initialBackgroundWidth = content.sizeDelta.x;
+        expandedBackgroundHeight = content.sizeDelta.y;
         
-        content.sizeDelta = new Vector2(backgroundWidth, 0f);
+        content.sizeDelta = new Vector2(initialBackgroundWidth, 0f);
         
         expandToggle.gameObject.SetActive(false);
         lineSeparator.SetActive(false);
@@ -53,10 +53,10 @@ public class SceneObjectsWidget : MonoBehaviour
             HandleCollapsed();
         
         float targetHeight = value 
-            ? backgroundHeight / 2 
+            ? expandedBackgroundHeight / 2 
             : 0f;
 
-        content.sizeDelta = new Vector2(backgroundWidth, targetHeight);
+        content.sizeDelta = new Vector2(initialBackgroundWidth, targetHeight);
         
         openToggle.transform.eulerAngles = new Vector3(0, 0, value ? 180 : 0);
         expandToggle.gameObject.SetActive(value);
@@ -75,10 +75,10 @@ public class SceneObjectsWidget : MonoBehaviour
     private void HandleExpandToggleValueChanged(bool value)
     {
         float targetHeight = value 
-            ? backgroundHeight 
-            : backgroundHeight / 2;
+            ? expandedBackgroundHeight 
+            : expandedBackgroundHeight / 2;
 
-        content.sizeDelta = new Vector2(backgroundWidth, targetHeight);
+        content.sizeDelta = new Vector2(initialBackgroundWidth, targetHeight);
         expandToggle.transform.eulerAngles = new Vector3(0, 0, value ? 180 : 0);
     }
 
