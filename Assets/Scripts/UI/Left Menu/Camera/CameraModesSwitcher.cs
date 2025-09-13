@@ -1,3 +1,4 @@
+using Enums;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,14 +26,7 @@ public class CameraModesSwitcher : MonoBehaviour
     private const int middleDepth = 2;
     private const int highestDepth = 3;
 
-    private enum CameraMode
-    {
-        mainView,
-        splitScreenView,
-        cameraView
-    }
-
-    private CameraMode currentMode;
+    private CameraModeTypeId currentMode;
 
     private void Start()
     {
@@ -40,7 +34,7 @@ public class CameraModesSwitcher : MonoBehaviour
 
         modesButtons = this.GetComponentsInChildren<Button>(true);
 
-        currentMode = CameraMode.mainView;
+        currentMode = CameraModeTypeId.MainView;
     }
 
     private void OnEnable()
@@ -57,7 +51,7 @@ public class CameraModesSwitcher : MonoBehaviour
 
     private void OnObjectSelected(SelectableObject selectable)
     {
-        if (selectable.type != AssetType.Camera)
+        if (selectable.TypeId != AssetTypeId.Camera)
             return;
 
         ShowButtons(true);
@@ -73,9 +67,9 @@ public class CameraModesSwitcher : MonoBehaviour
     {
         ShowButtons(false);
 
-        if (currentMode == CameraMode.cameraView)
+        if (currentMode == CameraModeTypeId.CameraView)
         {
-            SetCameraMode(CameraMode.mainView, selectableCamera);
+            SetCameraMode(CameraModeTypeId.MainView, selectableCamera);
         }
     }
 
@@ -93,9 +87,9 @@ public class CameraModesSwitcher : MonoBehaviour
     /// <param name="selectableCamera">Currently selected Camera</param>
     private void UpdateModesButtonsEvents(Camera selectableCamera)
     {
-        modesButtons[0].onClick.AddListener(() => SetCameraMode(CameraMode.mainView, selectableCamera));
-        modesButtons[1].onClick.AddListener(() => SetCameraMode(CameraMode.splitScreenView, selectableCamera));
-        modesButtons[2].onClick.AddListener(() => SetCameraMode(CameraMode.cameraView, selectableCamera));
+        modesButtons[0].onClick.AddListener(() => SetCameraMode(CameraModeTypeId.MainView, selectableCamera));
+        modesButtons[1].onClick.AddListener(() => SetCameraMode(CameraModeTypeId.SplitScreenView, selectableCamera));
+        modesButtons[2].onClick.AddListener(() => SetCameraMode(CameraModeTypeId.CameraView, selectableCamera));
     }
 
     /// <summary>
@@ -103,13 +97,13 @@ public class CameraModesSwitcher : MonoBehaviour
     /// </summary>
     /// <param name="mode">Defines changes to be made</param>
     /// <param name="selectableCamera">Camera to operate with</param>
-    private void SetCameraMode(CameraMode mode, Camera selectableCamera)
+    private void SetCameraMode(CameraModeTypeId mode, Camera selectableCamera)
     {
         currentMode = mode;
 
         switch (mode)
         {
-            case CameraMode.mainView:
+            case CameraModeTypeId.MainView:
 
                 mainViewImage.sprite = mainViewImageSelected;
 
@@ -123,7 +117,7 @@ public class CameraModesSwitcher : MonoBehaviour
                 cameraViewImage.sprite = cameraViewImageDeselected;
                 break;
 
-            case CameraMode.splitScreenView:
+            case CameraModeTypeId.SplitScreenView:
 
                 splitScreenViewImage.sprite = splitScreenImageSelected;
 
@@ -138,7 +132,7 @@ public class CameraModesSwitcher : MonoBehaviour
                 cameraViewImage.sprite = cameraViewImageDeselected;
                 break;
 
-            case CameraMode.cameraView:
+            case CameraModeTypeId.CameraView:
 
                 cameraViewImage.sprite = cameraViewImageSelected;
 

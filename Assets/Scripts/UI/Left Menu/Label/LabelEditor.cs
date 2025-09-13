@@ -1,3 +1,4 @@
+using Enums;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -44,7 +45,7 @@ public class LabelEditor : MonoBehaviour
 
     private void OnObjectSelected(SelectableObject selectable)
     {
-        if (selectable.type != AssetType.Label)
+        if (selectable.TypeId != AssetTypeId.Label)
             return;
 
         currentSelectable = selectable.transform;

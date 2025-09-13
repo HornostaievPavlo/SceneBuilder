@@ -2,6 +2,7 @@ using GLTFast;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Enums;
 using TMPro;
 using UnityEngine;
 
@@ -31,12 +32,12 @@ public class LoadingSystem : MonoBehaviour
     /// <summary>
     /// Adds camera asset to a scene
     /// </summary>
-    public void LoadCameraAsset() => CreateAsset(AssetType.Camera);
+    public void LoadCameraAsset() => CreateAsset(AssetTypeId.Camera);
 
     /// <summary>
     /// Adds label asset to a scene
     /// </summary>
-    public void LoadLabelAsset() => CreateAsset(AssetType.Label);
+    public void LoadLabelAsset() => CreateAsset(AssetTypeId.Label);
 
     /// <summary>
     /// General model loading procedure. 
@@ -48,7 +49,7 @@ public class LoadingSystem : MonoBehaviour
     {
         assetsInScene.Clear();
 
-        var asset = CreateAsset(AssetType.Model).GetComponent<GltfAsset>();
+        var asset = CreateAsset(AssetTypeId.Model).GetComponent<GltfAsset>();
 
         var success = await asset.Load(modelPath);
 
@@ -78,40 +79,40 @@ public class LoadingSystem : MonoBehaviour
     /// <summary>
     /// Creates new selectable asset of specified type
     /// </summary>
-    /// <param name="type">Specifies AssetType of created object</param>
+    /// <param name="typeId">Specifies AssetType of created object</param>
     /// <returns>Created instance</returns>
-    private GameObject CreateAsset(AssetType type)
+    private GameObject CreateAsset(AssetTypeId typeId)
     {
-        switch (type)
+        switch (typeId)
         {
-            case AssetType.Model:
+            case AssetTypeId.Model:
 
                 GameObject asset = new GameObject { name = "Asset" };
 
                 asset.transform.SetParent(IOUtility.assetsParent);
 
                 SelectableObject modelSelectable = asset.AddComponent<SelectableObject>();
-                modelSelectable.type = type;
+                modelSelectable.TypeId = typeId;
 
                 asset.AddComponent<GltfAsset>();
                 return asset;
 
-            case AssetType.Camera:
+            case AssetTypeId.Camera:
 
                 var camera = Instantiate(cameraAssetPrefab, IOUtility.assetsParent);
                 camera.name = "Asset";
 
                 SelectableObject cameraSelectable = camera.AddComponent<SelectableObject>();
-                cameraSelectable.type = type;
+                cameraSelectable.TypeId = typeId;
                 return camera;
 
-            case AssetType.Label:
+            case AssetTypeId.Label:
 
                 var label = Instantiate(labelAssetPrefab, IOUtility.assetsParent);
                 label.name = "Asset";
 
                 SelectableObject labelSelectable = label.AddComponent<SelectableObject>();
-                labelSelectable.type = type;
+                labelSelectable.TypeId = typeId;
                 return label;
 
             default: return null;
@@ -163,7 +164,7 @@ public class LoadingSystem : MonoBehaviour
             if (!hasSelectable)
             {
                 var selectable = asset.gameObject.AddComponent<SelectableObject>();
-                selectable.type = AssetType.Model;
+                selectable.TypeId = AssetTypeId.Model;
 
                 modelsFromSingleSaveFile.Add(asset.transform);
             }

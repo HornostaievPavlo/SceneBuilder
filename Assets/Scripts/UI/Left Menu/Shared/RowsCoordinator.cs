@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Enums;
 using UnityEngine;
 
 public class RowsCoordinator : MonoBehaviour
@@ -12,22 +13,22 @@ public class RowsCoordinator : MonoBehaviour
     [SerializeField]
     private TableWidget labelsTableWidget;
 
-    public Dictionary<AssetType, TableWidget> table = new Dictionary<AssetType, TableWidget>();
+    public Dictionary<AssetTypeId, TableWidget> table = new Dictionary<AssetTypeId, TableWidget>();
 
     private void Start()
     {
-        table[AssetType.Model] = modelsTableWidget;
-        table[AssetType.Camera] = camerasTableWidget;
-        table[AssetType.Label] = labelsTableWidget;
+        table[AssetTypeId.Model] = modelsTableWidget;
+        table[AssetTypeId.Camera] = camerasTableWidget;
+        table[AssetTypeId.Label] = labelsTableWidget;
     }
 
     public Row AssignRow(SelectableObject selectable)
     {
-        return table[selectable.type].CreateRowForSelectable();
+        return table[selectable.TypeId].CreateRowForSelectable();
     }
 
     public void RemoveRow(SelectableObject selectable)
     {
-        table[selectable.type].DeleteRowItem(selectable.MenuRow);
+        table[selectable.TypeId].DeleteRowItem(selectable.MenuRow);
     }
 }
