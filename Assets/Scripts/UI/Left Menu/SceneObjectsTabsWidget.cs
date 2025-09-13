@@ -18,6 +18,10 @@ namespace UI.Left_Menu
             modelsTabToggle.onValueChanged.AddListener(HandleModelsTabToggleValueChanged);
             camerasTabToggle.onValueChanged.AddListener(HandleCamerasTabToggleValueChanged);
             labelsTabToggle.onValueChanged.AddListener(HandleLabelsTabToggleValueChanged);
+            
+            modelsTabParent.gameObject.SetActive(false);
+            camerasTabParent.gameObject.SetActive(false);
+            labelsTabParent.gameObject.SetActive(false);
         }
 
         private void OnDisable()
