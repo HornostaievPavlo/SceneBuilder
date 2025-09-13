@@ -2,7 +2,7 @@ using Enums;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CameraModesSwitcher : MonoBehaviour
+public class CameraModesWidget : MonoBehaviour
 {
     [SerializeField] private Image mainViewImage;
     [SerializeField] private Sprite mainViewImageSelected;
