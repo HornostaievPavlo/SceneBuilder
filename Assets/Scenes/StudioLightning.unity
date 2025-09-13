@@ -904,6 +904,7 @@ GameObject:
   m_Component:
   - component: {fileID: 370322108}
   - component: {fileID: 370322111}
+  - component: {fileID: 370322112}
   - component: {fileID: 370322110}
   - component: {fileID: 370322109}
   m_Layer: 5
@@ -1073,6 +1074,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 370322107}
   m_CullTransparentMesh: 1
+--- !u!114 &370322112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 370322107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39fe2fa9e5224155950eb44ffb4900e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Main::UI.Widgets.ModelLoadingWidget
+  inputField: {fileID: 370322109}
+  loadButton: {fileID: 1201872536}
+  processingPopup: {fileID: 634473425}
+  loadingSystem: {fileID: 2093245011}
 --- !u!1 &392509657
 GameObject:
   m_ObjectHideFlags: 0
@@ -1826,7 +1843,7 @@ GameObject:
   - component: {fileID: 634473428}
   - component: {fileID: 634473427}
   m_Layer: 5
-  m_Name: LoadingPopup
+  m_Name: ProcessingPopup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8266,10 +8283,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 669d8e739767b784c9704a82c2538441, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputField: {fileID: 370322109}
   cameraAssetPrefab: {fileID: 9026659014749283204, guid: 71e37b998ef1e0a49a8ab1a998fe49f5, type: 3}
   labelAssetPrefab: {fileID: 6184655565258954210, guid: e78cfb66fb3ed8d4ca93aa5512fabb13, type: 3}
-  loadPopUp: {fileID: 634473425}
   children: []
 --- !u!114 &2093245012
 MonoBehaviour:

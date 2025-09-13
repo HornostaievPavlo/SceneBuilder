@@ -7,36 +7,13 @@ using UnityEngine;
 
 public class LoadingSystem : MonoBehaviour
 {
-    [SerializeField]
-    private TMP_InputField inputField;
+    [SerializeField] private GameObject cameraAssetPrefab;
+    [SerializeField] private GameObject labelAssetPrefab;
 
-    [SerializeField]
-    private GameObject cameraAssetPrefab;
+    private List<Transform> assetsInScene = new();
+    private List<Transform> modelsFromSingleSaveFile = new();
 
-    [SerializeField]
-    private GameObject labelAssetPrefab;
-
-    [SerializeField]
-    private GameObject loadPopUp;
-
-    private List<Transform> assetsInScene = new List<Transform>();
-
-    private List<Transform> modelsFromSingleSaveFile = new List<Transform>();
-
-    [HideInInspector]
-    public Transform[] children;
-
-    /// <summary>
-    /// Handles loading assets from local path
-    /// provided in input field
-    /// </summary>
-    public async void LoadAssetsFromDirectory()
-    {
-        var input = inputField.text;
-        if (input == string.Empty) return;
-
-        await LoadModelsFromPath(input);
-    }
+    [HideInInspector] public Transform[] children;
 
     /// <summary>
     /// Handles loading assets from local save file
@@ -47,7 +24,7 @@ public class LoadingSystem : MonoBehaviour
         string saveFilePath =
             IOUtility.scenePath + sceneNumber.ToString() + IOUtility.sceneFile;
 
-        bool success = await LoadModelsFromPath(saveFilePath);
+        bool success = await LoadModel(saveFilePath);
         if (success) AssignTextures(sceneNumber);
     }
 
@@ -67,10 +44,8 @@ public class LoadingSystem : MonoBehaviour
     /// </summary>
     /// <param name="modelPath">Path to .glb file in local storage</param>
     /// <returns>Success of loading</returns>
-    private async Task<bool> LoadModelsFromPath(string modelPath)
+    public async Task<bool> LoadModel(string modelPath)
     {
-        loadPopUp.SetActive(true);
-
         assetsInScene.Clear();
 
         var asset = CreateAsset(AssetType.Model).GetComponent<GltfAsset>();
@@ -95,9 +70,8 @@ public class LoadingSystem : MonoBehaviour
 
                 AddCollidersToAssets(assetsInScene);
             }
-
-            loadPopUp.SetActive(false);
         }
+        
         return success;
     }
 
