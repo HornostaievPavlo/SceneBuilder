@@ -8350,6 +8350,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 669d8e739767b784c9704a82c2538441, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  modelAssetHolderPrefab: {fileID: 2722499254834551569, guid: d3fe40f63095eda41b4fb89649a6a0cf, type: 3}
   cameraAssetPrefab: {fileID: 9026659014749283204, guid: 71e37b998ef1e0a49a8ab1a998fe49f5, type: 3}
   labelAssetPrefab: {fileID: 6184655565258954210, guid: e78cfb66fb3ed8d4ca93aa5512fabb13, type: 3}
   children: []
