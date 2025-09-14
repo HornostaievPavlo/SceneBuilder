@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Gameplay;
 using UnityEngine;
 
 [RequireComponent(typeof(Camera))]
@@ -121,9 +122,9 @@ public class OrbitCameraSystem : MonoBehaviour
         inputSystem.ZoomAction -= Zoom;
     }
 
-    private void OnObjectSelected(SelectableObject selectable)
+    private void OnObjectSelected(SceneObject scene)
     {
-        currentSelection = selectable.gameObject;
+        currentSelection = scene.gameObject;
     }
 
     private void OnObjectDeselected() => currentSelection = null;

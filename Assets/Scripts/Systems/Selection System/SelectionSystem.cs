@@ -1,11 +1,12 @@
 using System;
+using Gameplay;
 using UnityEngine;
 
 public class SelectionSystem : MonoBehaviour
 {
     [SerializeField] private InputSystem inputSystem;
 
-    public static event Action<SelectableObject> OnObjectSelected;
+    public static event Action<SceneObject> OnObjectSelected;
     public static event Action OnObjectDeselected;
 
     private void OnEnable()
@@ -22,7 +23,7 @@ public class SelectionSystem : MonoBehaviour
 
     private void OnRayHit(RaycastHit hit)
     {
-        var selected = hit.transform.gameObject.GetComponentInParent<SelectableObject>();
+        var selected = hit.transform.gameObject.GetComponentInParent<SceneObject>();
 
         if (selected != null)
             OnObjectSelected(selected);

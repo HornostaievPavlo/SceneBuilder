@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Enums;
+using Gameplay;
 using UnityEngine;
 
 public class RowsCoordinator : MonoBehaviour
@@ -22,13 +23,13 @@ public class RowsCoordinator : MonoBehaviour
         table[AssetTypeId.Label] = labelsTableWidget;
     }
 
-    public Row AssignRow(SelectableObject selectable)
+    public Row AssignRow(SceneObject scene)
     {
-        return table[selectable.TypeId].CreateRowForSelectable();
+        return table[scene.AssetTypeId].CreateRowForSelectable();
     }
 
-    public void RemoveRow(SelectableObject selectable)
+    public void RemoveRow(SceneObject scene)
     {
-        table[selectable.TypeId].DeleteRowItem(selectable.MenuRow);
+        // table[scene.AssetTypeId].DeleteRowItem(scene.MenuRow);
     }
 }

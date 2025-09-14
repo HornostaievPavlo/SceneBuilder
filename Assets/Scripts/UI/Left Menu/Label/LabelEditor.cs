@@ -1,4 +1,5 @@
 using Enums;
+using Gameplay;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -43,20 +44,20 @@ public class LabelEditor : MonoBehaviour
         SelectionSystem.OnObjectDeselected -= OnObjectDeselected;
     }
 
-    private void OnObjectSelected(SelectableObject selectable)
+    private void OnObjectSelected(SceneObject scene)
     {
-        if (selectable.TypeId != AssetTypeId.Label)
+        if (scene.AssetTypeId != AssetTypeId.Label)
             return;
 
-        currentSelectable = selectable.transform;
-
-        editLabelToggle = selectable.MenuRow.gameObject.GetComponentInChildren<Toggle>(true);
-        editLabelToggle.gameObject.SetActive(true);
-
-        TMP_Text[] labelTexts = selectable.MenuRow.gameObject.GetComponentsInChildren<TMP_Text>();
-
-        currentTitle = labelTexts[1];
-        currentDescription = labelTexts[2];
+        // currentSelectable = scene.transform;
+        //
+        // editLabelToggle = scene.MenuRow.gameObject.GetComponentInChildren<Toggle>(true);
+        // editLabelToggle.gameObject.SetActive(true);
+        //
+        // TMP_Text[] labelTexts = scene.MenuRow.gameObject.GetComponentsInChildren<TMP_Text>();
+        //
+        // currentTitle = labelTexts[1];
+        // currentDescription = labelTexts[2];
     }
 
     private void OnObjectDeselected()

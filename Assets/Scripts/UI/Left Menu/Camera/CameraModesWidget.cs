@@ -1,4 +1,5 @@
 using Enums;
+using Gameplay;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -49,14 +50,14 @@ public class CameraModesWidget : MonoBehaviour
         SelectionSystem.OnObjectDeselected -= OnObjectDeselected;
     }
 
-    private void OnObjectSelected(SelectableObject selectable)
+    private void OnObjectSelected(SceneObject scene)
     {
-        if (selectable.TypeId != AssetTypeId.Camera)
+        if (scene.AssetTypeId != AssetTypeId.Camera)
             return;
 
         ShowButtons(true);
 
-        selectableCamera = selectable.GetComponentInChildren<Camera>();
+        selectableCamera = scene.GetComponentInChildren<Camera>();
 
         UpdateModesButtonsEvents(selectableCamera);
 

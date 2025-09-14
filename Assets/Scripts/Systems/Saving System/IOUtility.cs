@@ -1,4 +1,5 @@
 using System.IO;
+using Gameplay;
 using UnityEngine;
 
 public class IOUtility : MonoBehaviour
@@ -23,9 +24,9 @@ public class IOUtility : MonoBehaviour
         assetsParent = GameObject.Find("AssetsHolder").transform;
     }
 
-    public static SelectableObject[] CollectSelectableObjects()
+    public static SceneObject[] CollectSelectableObjects()
     {
-        return assetsParent.GetComponentsInChildren<SelectableObject>();
+        return assetsParent.GetComponentsInChildren<SceneObject>();
     }
 
     /// <summary>

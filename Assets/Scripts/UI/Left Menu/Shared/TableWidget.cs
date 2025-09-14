@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Gameplay;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,9 +26,9 @@ public class TableWidget : MonoBehaviour
         SelectionSystem.OnObjectDeselected -= OnObjectDeselected;
     }
 
-    private void OnObjectSelected(SelectableObject selectable)
+    private void OnObjectSelected(SceneObject scene)
     {
-        HighlightRow(selectable.MenuRow, true);
+        // HighlightRow(scene.MenuRow, true);
     }
 
     private void OnObjectDeselected()

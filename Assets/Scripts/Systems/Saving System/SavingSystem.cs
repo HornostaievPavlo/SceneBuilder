@@ -1,5 +1,6 @@
 using GLTFast.Export;
 using System.Threading.Tasks;
+using Gameplay;
 using UnityEngine;
 
 public class SavingSystem : MonoBehaviour
@@ -46,7 +47,7 @@ public class SavingSystem : MonoBehaviour
     /// Saves all Models to file
     /// </summary>
     /// <param name="targets">Array of objects to save</param>
-    private async Task<bool> SaveModels(SelectableObject[] targets)
+    private async Task<bool> SaveModels(SceneObject[] targets)
     {
         GameObject[] models = new GameObject[targets.Length];
 
@@ -68,7 +69,7 @@ public class SavingSystem : MonoBehaviour
     /// Saves textures of all Models in the scene
     /// </summary>
     /// <param name="targets">Array of objects with textures</param>
-    private void SaveTextures(SelectableObject[] targets)
+    private void SaveTextures(SceneObject[] targets)
     {
         for (int i = 0; i < targets.Length; i++)
         {

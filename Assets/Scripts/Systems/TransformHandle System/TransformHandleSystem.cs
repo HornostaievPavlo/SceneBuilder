@@ -1,5 +1,6 @@
 using RuntimeHandle;
 using System.Collections;
+using Gameplay;
 using UnityEngine;
 
 public class TransformHandleSystem : MonoBehaviour
@@ -27,10 +28,10 @@ public class TransformHandleSystem : MonoBehaviour
         SelectionSystem.OnObjectDeselected -= OnObjectDeselected;
     }
 
-    private void OnObjectSelected(SelectableObject selectable)
+    private void OnObjectSelected(SceneObject scene)
     {
         handle.gameObject.SetActive(true);
-        handle.target = selectable.transform;
+        handle.target = scene.transform;
 
         StartCoroutine(SetLayerOfGizmoChildren());
     }

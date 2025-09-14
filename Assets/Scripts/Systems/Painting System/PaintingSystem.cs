@@ -1,3 +1,4 @@
+using Gameplay;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,9 +32,9 @@ public class PaintingSystem : MonoBehaviour
         SelectionSystem.OnObjectDeselected -= OnObjectDeselected;
     }
 
-    private void OnObjectSelected(SelectableObject selectable)
+    private void OnObjectSelected(SceneObject scene)
     {
-        surfacePainter.GetAllModelMaterials(selectable.transform.gameObject, true);
+        surfacePainter.GetAllModelMaterials(scene.transform.gameObject, true);
     }
 
     private void OnObjectDeselected()

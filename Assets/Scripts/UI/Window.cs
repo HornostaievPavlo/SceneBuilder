@@ -1,3 +1,4 @@
+using Gameplay;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,7 +10,7 @@ public class Window : MonoBehaviour
     [SerializeField] private Toggle contentToggle;
     [SerializeField] private GameObject content;
 
-    private SelectableObject currentSelection;
+    private SceneObject currentSelection;
 
     private void OnEnable()
     {
@@ -27,10 +28,10 @@ public class Window : MonoBehaviour
         contentToggle.onValueChanged.RemoveListener(ToggleContent);
     }
 
-    private void OnObjectSelected(SelectableObject selectable)
+    private void OnObjectSelected(SceneObject scene)
     {
         Toolbox.SetActive(true);
-        currentSelection = selectable;
+        currentSelection = scene;
     }
 
     private void OnObjectDeselected()
