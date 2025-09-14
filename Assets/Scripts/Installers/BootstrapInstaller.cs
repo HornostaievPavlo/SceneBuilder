@@ -1,4 +1,3 @@
-﻿using Zenject;
 ﻿using Services.Instantiation;
 using Services.SceneObjectsRegistry;
 using Zenject;
@@ -10,6 +9,7 @@ namespace Installers
 		public override void InstallBindings()
 		{
 			Container.BindInterfacesAndSelfTo<InstantiateService>().AsSingle();
+			Container.BindInterfacesAndSelfTo<SceneObjectsRegistry>().AsSingle();
 		}
 	}
 }
