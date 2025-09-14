@@ -1,33 +1,34 @@
 using System.Collections.Generic;
+using Enums;
 using UnityEngine;
 
 public class RowsCoordinator : MonoBehaviour
 {
     [SerializeField]
-    private Table modelsTable;
+    private TableWidget modelsTableWidget;
 
     [SerializeField]
-    private Table camerasTable;
+    private TableWidget camerasTableWidget;
 
     [SerializeField]
-    private Table labelsTable;
+    private TableWidget labelsTableWidget;
 
-    public Dictionary<AssetType, Table> table = new Dictionary<AssetType, Table>();
+    public Dictionary<AssetTypeId, TableWidget> table = new Dictionary<AssetTypeId, TableWidget>();
 
     private void Start()
     {
-        table[AssetType.Model] = modelsTable;
-        table[AssetType.Camera] = camerasTable;
-        table[AssetType.Label] = labelsTable;
+        table[AssetTypeId.Model] = modelsTableWidget;
+        table[AssetTypeId.Camera] = camerasTableWidget;
+        table[AssetTypeId.Label] = labelsTableWidget;
     }
 
     public Row AssignRow(SelectableObject selectable)
     {
-        return table[selectable.type].CreateRowForSelectable();
+        return table[selectable.TypeId].CreateRowForSelectable();
     }
 
     public void RemoveRow(SelectableObject selectable)
     {
-        table[selectable.type].DeleteRowItem(selectable.MenuRow);
+        table[selectable.TypeId].DeleteRowItem(selectable.MenuRow);
     }
 }
