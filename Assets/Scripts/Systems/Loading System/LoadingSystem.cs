@@ -3,11 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Enums;
-using TMPro;
+using Gameplay;
+using Services.Instantiation;
 using UnityEngine;
+using Zenject;
 
 public class LoadingSystem : MonoBehaviour
 {
+    [SerializeField] private GameObject modelAssetHolderPrefab;
     [SerializeField] private GameObject cameraAssetPrefab;
     [SerializeField] private GameObject labelAssetPrefab;
 
@@ -15,6 +18,14 @@ public class LoadingSystem : MonoBehaviour
     private List<Transform> modelsFromSingleSaveFile = new();
 
     [HideInInspector] public Transform[] children;
+    
+    private IInstantiateService _instantiateService;
+
+    [Inject]
+    private void Construct(IInstantiateService instantiateService)
+    {
+        _instantiateService = instantiateService;
+    }
 
     /// <summary>
     /// Handles loading assets from local save file
@@ -49,31 +60,32 @@ public class LoadingSystem : MonoBehaviour
     {
         assetsInScene.Clear();
 
-        var asset = CreateAsset(AssetTypeId.Model).GetComponent<GltfAsset>();
+        GameObject modelAsset = CreateAsset(AssetTypeId.Model);
+        var gltfAsset = modelAsset.AddComponent<GltfAsset>();
 
-        var success = await asset.Load(modelPath);
+        bool isSuccess = await gltfAsset.Load(modelPath);
 
-        if (success)
-        {
-            if (modelPath.Contains(IOUtility.dataPath))
-            {
-                var assets = InitializeImportedAssets();
-                AddCollidersToAssets(assets);
-            }
-            else
-            {
-                Transform[] children = IOUtility.assetsParent.gameObject.GetComponentsInChildren<Transform>();
-
-                for (int i = 0; i < children.Length; i++)
-                {
-                    if (children[i].gameObject.name == "Asset") assetsInScene.Add(children[i]);
-                }
-
-                AddCollidersToAssets(assetsInScene);
-            }
-        }
+        if (isSuccess == false) 
+            return false;
         
-        return success;
+        if (modelPath.Contains(IOUtility.dataPath))
+        {
+            List<Transform> assets = InitializeImportedAssets();
+            AddCollidersToAssets(assets);
+        }
+        else
+        {
+            Transform[] children = IOUtility.assetsParent.gameObject.GetComponentsInChildren<Transform>();
+
+            for (int i = 0; i < children.Length; i++)
+            {
+                if (children[i].gameObject.name == "Asset") assetsInScene.Add(children[i]);
+            }
+
+            AddCollidersToAssets(assetsInScene);
+        }
+
+        return isSuccess;
     }
 
     /// <summary>
@@ -87,32 +99,27 @@ public class LoadingSystem : MonoBehaviour
         {
             case AssetTypeId.Model:
 
-                GameObject asset = new GameObject { name = "Asset" };
-
-                asset.transform.SetParent(IOUtility.assetsParent);
-
-                SelectableObject modelSelectable = asset.AddComponent<SelectableObject>();
-                modelSelectable.TypeId = typeId;
-
-                asset.AddComponent<GltfAsset>();
-                return asset;
+                var model = _instantiateService.Instantiate<SceneObject>(modelAssetHolderPrefab);
+                model.SetAssetType(AssetTypeId.Model);
+                
+                return model.gameObject;
 
             case AssetTypeId.Camera:
 
-                var camera = Instantiate(cameraAssetPrefab, IOUtility.assetsParent);
+                GameObject camera = Instantiate(cameraAssetPrefab, IOUtility.assetsParent);
                 camera.name = "Asset";
 
-                SelectableObject cameraSelectable = camera.AddComponent<SelectableObject>();
-                cameraSelectable.TypeId = typeId;
+                var cameraScene = camera.AddComponent<SceneObject>();
+                cameraScene.SetAssetType(typeId);
                 return camera;
 
             case AssetTypeId.Label:
 
-                var label = Instantiate(labelAssetPrefab, IOUtility.assetsParent);
+                GameObject label = Instantiate(labelAssetPrefab, IOUtility.assetsParent);
                 label.name = "Asset";
 
-                SelectableObject labelSelectable = label.AddComponent<SelectableObject>();
-                labelSelectable.TypeId = typeId;
+                var labelScene = label.AddComponent<SceneObject>();
+                labelScene.SetAssetType(typeId);
                 return label;
 
             default: return null;
@@ -137,13 +144,13 @@ public class LoadingSystem : MonoBehaviour
         }
 
         var spawner = IOUtility.assetsParent.gameObject.GetComponentInChildren<GltfAsset>();
-        Destroy(spawner.gameObject.GetComponent<SelectableObject>());
+        Destroy(spawner.gameObject.GetComponent<SceneObject>());
         spawner.gameObject.name = "glTF Asset";
 
         GltfAsset[] spawners = IOUtility.assetsParent.gameObject.GetComponentsInChildren<GltfAsset>();
         foreach (GltfAsset item in spawners)
         {
-            Destroy(item.gameObject.GetComponent<SelectableObject>());
+            Destroy(item.gameObject.GetComponent<SceneObject>());
             item.gameObject.name = "glTF Asset";
         }
 
@@ -159,12 +166,12 @@ public class LoadingSystem : MonoBehaviour
         {
             asset.SetParent(IOUtility.assetsParent);
 
-            bool hasSelectable = asset.GetComponentInChildren<SelectableObject>() != null;
+            bool hasSelectable = asset.GetComponentInChildren<SceneObject>() != null;
 
             if (!hasSelectable)
             {
-                var selectable = asset.gameObject.AddComponent<SelectableObject>();
-                selectable.TypeId = AssetTypeId.Model;
+                var selectable = asset.gameObject.AddComponent<SceneObject>();
+                selectable.SetAssetType(AssetTypeId.Model);
 
                 modelsFromSingleSaveFile.Add(asset.transform);
             }
