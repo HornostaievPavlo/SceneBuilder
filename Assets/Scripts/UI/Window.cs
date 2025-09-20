@@ -14,26 +14,28 @@ public class Window : MonoBehaviour
 
     private void OnEnable()
     {
-        SelectionSystem.OnObjectSelected += OnObjectSelected;
-        SelectionSystem.OnObjectDeselected += OnObjectDeselected;
+        // SelectionSystem.OnObjectSelected += OnObjectSelected;
+        // SelectionSystem.OnObjectDeselected += OnObjectDeselected;
 
         contentToggle.onValueChanged.AddListener(ToggleContent);
     }
 
     private void OnDisable()
     {
-        SelectionSystem.OnObjectSelected -= OnObjectSelected;
-        SelectionSystem.OnObjectDeselected -= OnObjectDeselected;
+        // SelectionSystem.OnObjectSelected -= OnObjectSelected;
+        // SelectionSystem.OnObjectDeselected -= OnObjectDeselected;
 
         contentToggle.onValueChanged.RemoveListener(ToggleContent);
     }
 
+    // move to new widget
     private void OnObjectSelected(SceneObject scene)
     {
         Toolbox.SetActive(true);
         currentSelection = scene;
     }
-
+    
+    // move to new widget
     private void OnObjectDeselected()
     {
         Toolbox.SetActive(false);

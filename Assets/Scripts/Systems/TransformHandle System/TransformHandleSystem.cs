@@ -1,13 +1,23 @@
 using RuntimeHandle;
 using System.Collections;
 using Gameplay;
+using Services.SceneObjectSelectionService;
 using UnityEngine;
+using Zenject;
 
 public class TransformHandleSystem : MonoBehaviour
 {
     private RuntimeTransformHandle handle;
 
     private int cameraIgnoringLayer;
+    
+    private ISceneObjectSelectionService _sceneObjectSelectionService;
+
+    [Inject]
+    private void Construct(ISceneObjectSelectionService sceneObjectSelectionService)
+    {
+        _sceneObjectSelectionService = sceneObjectSelectionService;
+    }
 
     private void Awake()
     {
@@ -18,17 +28,17 @@ public class TransformHandleSystem : MonoBehaviour
 
     private void OnEnable()
     {
-        SelectionSystem.OnObjectSelected += OnObjectSelected;
-        SelectionSystem.OnObjectDeselected += OnObjectDeselected;
+        _sceneObjectSelectionService.OnObjectSelected += HandleObjectSelected;
+        _sceneObjectSelectionService.OnObjectDeselected += HandleObjectDeselected;
     }
 
     private void OnDisable()
     {
-        SelectionSystem.OnObjectSelected -= OnObjectSelected;
-        SelectionSystem.OnObjectDeselected -= OnObjectDeselected;
+        _sceneObjectSelectionService.OnObjectSelected -= HandleObjectSelected;
+        _sceneObjectSelectionService.OnObjectDeselected -= HandleObjectDeselected;
     }
 
-    private void OnObjectSelected(SceneObject scene)
+    private void HandleObjectSelected(SceneObject scene)
     {
         handle.gameObject.SetActive(true);
         handle.target = scene.transform;
@@ -36,7 +46,7 @@ public class TransformHandleSystem : MonoBehaviour
         StartCoroutine(SetLayerOfGizmoChildren());
     }
 
-    public void OnObjectDeselected()
+    public void HandleObjectDeselected()
     {
         handle.gameObject.SetActive(false);
         handle.target = null;

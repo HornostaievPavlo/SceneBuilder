@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using Gameplay;
+using Services.SceneObjectSelectionService;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 public class TableWidget : MonoBehaviour
 {
@@ -13,17 +15,25 @@ public class TableWidget : MonoBehaviour
 
     private Color32 selectedRowColor = new Color32(63, 106, 204, 255);
     private Color32 unselectedRowColor = new Color32(221, 223, 229, 255);
+    
+    private ISceneObjectSelectionService _sceneObjectSelectionService;
+
+    [Inject]
+    private void Construct(ISceneObjectSelectionService sceneObjectSelectionService)
+    {
+        _sceneObjectSelectionService = sceneObjectSelectionService;
+    }
 
     private void OnEnable()
     {
-        SelectionSystem.OnObjectSelected += OnObjectSelected;
-        SelectionSystem.OnObjectDeselected += OnObjectDeselected;
+        _sceneObjectSelectionService.OnObjectSelected += OnObjectSelected;
+        _sceneObjectSelectionService.OnObjectDeselected += OnObjectDeselected;
     }
 
     private void OnDisable()
     {
-        SelectionSystem.OnObjectSelected -= OnObjectSelected;
-        SelectionSystem.OnObjectDeselected -= OnObjectDeselected;
+        _sceneObjectSelectionService.OnObjectSelected -= OnObjectSelected;
+        _sceneObjectSelectionService.OnObjectDeselected -= OnObjectDeselected;
     }
 
     private void OnObjectSelected(SceneObject scene)

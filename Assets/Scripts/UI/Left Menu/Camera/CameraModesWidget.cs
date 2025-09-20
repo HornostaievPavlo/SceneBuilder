@@ -1,7 +1,9 @@
 using Enums;
 using Gameplay;
+using Services.SceneObjectSelectionService;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 public class CameraModesWidget : MonoBehaviour
 {
@@ -28,6 +30,14 @@ public class CameraModesWidget : MonoBehaviour
     private const int highestDepth = 3;
 
     private CameraModeTypeId currentMode;
+    
+    private ISceneObjectSelectionService _sceneObjectSelectionService;
+
+    [Inject]
+    private void Construct(ISceneObjectSelectionService sceneObjectSelectionService)
+    {
+        _sceneObjectSelectionService = sceneObjectSelectionService;
+    }
 
     private void Start()
     {
@@ -40,14 +50,14 @@ public class CameraModesWidget : MonoBehaviour
 
     private void OnEnable()
     {
-        SelectionSystem.OnObjectSelected += OnObjectSelected;
-        SelectionSystem.OnObjectDeselected += OnObjectDeselected;
+        _sceneObjectSelectionService.OnObjectSelected += OnObjectSelected;
+        _sceneObjectSelectionService.OnObjectDeselected += OnObjectDeselected;
     }
 
     private void OnDisable()
     {
-        SelectionSystem.OnObjectSelected -= OnObjectSelected;
-        SelectionSystem.OnObjectDeselected -= OnObjectDeselected;
+        _sceneObjectSelectionService.OnObjectSelected -= OnObjectSelected;
+        _sceneObjectSelectionService.OnObjectDeselected -= OnObjectDeselected;
     }
 
     private void OnObjectSelected(SceneObject scene)

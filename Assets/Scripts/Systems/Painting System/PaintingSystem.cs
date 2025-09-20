@@ -22,14 +22,14 @@ public class PaintingSystem : MonoBehaviour
 
     private void OnEnable()
     {
-        SelectionSystem.OnObjectSelected += OnObjectSelected;
-        SelectionSystem.OnObjectDeselected += OnObjectDeselected;
+        // SelectionSystem.OnObjectSelected += OnObjectSelected;
+        // SelectionSystem.OnObjectDeselected += OnObjectDeselected;
     }
 
     private void OnDisable()
     {
-        SelectionSystem.OnObjectSelected -= OnObjectSelected;
-        SelectionSystem.OnObjectDeselected -= OnObjectDeselected;
+        // SelectionSystem.OnObjectSelected -= OnObjectSelected;
+        // SelectionSystem.OnObjectDeselected -= OnObjectDeselected;
     }
 
     private void OnObjectSelected(SceneObject scene)

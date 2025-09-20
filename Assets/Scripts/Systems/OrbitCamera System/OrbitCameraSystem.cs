@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Gameplay;
 using Services.InputService;
+using Services.SceneObjectSelectionService;
 using UnityEngine;
 using Zenject;
 
@@ -13,8 +14,6 @@ public class OrbitCameraSystem : MonoBehaviour
 
     private Camera mainCamera;
     private Quaternion defaultCameraRotation;
-
-    private GameObject currentSelection;
 
     private Vector3 focusPosition;
     /// <summary>
@@ -98,10 +97,12 @@ public class OrbitCameraSystem : MonoBehaviour
     }
     
     private IInputService _inputService;
-    
+    private ISceneObjectSelectionService _sceneObjectSelectionService;
+
     [Inject]
-    private void Construct(IInputService inputService)
+    private void Construct(IInputService inputService, ISceneObjectSelectionService sceneObjectSelectionService)
     {
+        _sceneObjectSelectionService = sceneObjectSelectionService;
         _inputService = inputService;
     }
 
@@ -115,30 +116,22 @@ public class OrbitCameraSystem : MonoBehaviour
 
     private void OnEnable()
     {
-        SelectionSystem.OnObjectSelected += OnObjectSelected;
-        SelectionSystem.OnObjectDeselected += OnObjectDeselected;
-        
-        _inputService.SecondaryDragAction += Move;
-        _inputService.PrimaryDragAction += Rotate;
-        _inputService.ZoomAction += Zoom;
+        _inputService.OnSecondaryDrag += Move;
+        _inputService.OnPrimaryDrag += Rotate;
+        _inputService.OnZoom += Zoom;
     }
 
     private void OnDisable()
     {
-        SelectionSystem.OnObjectSelected -= OnObjectSelected;
-        SelectionSystem.OnObjectDeselected -= OnObjectDeselected;
-        
-        _inputService.SecondaryDragAction -= Move;
-        _inputService.PrimaryDragAction -= Rotate;
-        _inputService.ZoomAction -= Zoom;
+        _inputService.OnSecondaryDrag -= Move;
+        _inputService.OnPrimaryDrag -= Rotate;
+        _inputService.OnZoom -= Zoom;
     }
-
-    private void OnObjectSelected(SceneObject scene)
+    
+    public void FocusOnSelectedObject()
     {
-        currentSelection = scene.gameObject;
+        FocusCamera(_sceneObjectSelectionService.SelectedObject);
     }
-
-    private void OnObjectDeselected() => currentSelection = null;
 
     /// <summary>
     /// Returns world space camera position from orbit values.
@@ -208,9 +201,12 @@ public class OrbitCameraSystem : MonoBehaviour
     /// <summary>
     /// Focuses camera on target object. Sets new default camera position.
     /// </summary>
-    public void FocusCamera(GameObject target)
+    public void FocusCamera(SceneObject target)
     {
-        Bounds b = GetBounds(target, 2f);
+        if (target == null) 
+            return;
+        
+        Bounds b = GetBounds(target.gameObject, 2f);
 
         float radius = b.extents.magnitude;
         radius *= 1.1f;
@@ -226,7 +222,7 @@ public class OrbitCameraSystem : MonoBehaviour
     /// Iterates through all Renderers on the GameObject and returns their combined Bounds.
     /// </summary>
     /// <param name="maxDeviation">standard deviation of outliers to discard</param>
-    public static Bounds GetBounds(GameObject root, float maxDeviation = 0f)
+    private static Bounds GetBounds(GameObject root, float maxDeviation = 0f)
     {
         var allBounds = root.GetComponentsInChildren<Renderer>(false).Select(r => r.bounds);
         int count = allBounds.Count();
@@ -252,6 +248,4 @@ public class OrbitCameraSystem : MonoBehaviour
         }
         return bounds;
     }
-
-    public void AlignCameraWithSelection() => FocusCamera(currentSelection);
 }

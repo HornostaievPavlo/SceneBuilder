@@ -1,8 +1,10 @@
 using Enums;
 using Gameplay;
+using Services.SceneObjectSelectionService;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 public class LabelEditor : MonoBehaviour
 {
@@ -20,9 +22,17 @@ public class LabelEditor : MonoBehaviour
 
     private TMP_Text currentTitle;
     private TMP_Text currentDescription;
+    
+    private ISceneObjectSelectionService _sceneObjectSelectionService;
 
     private string InputTitle => titleInput.text.ToString();
     private string InputDescription => descriptionInput.text.ToString();
+
+    [Inject]
+    private void Construct(ISceneObjectSelectionService sceneObjectSelectionService)
+    {
+        _sceneObjectSelectionService = sceneObjectSelectionService;
+    }
 
     private void Awake()
     {
@@ -34,14 +44,14 @@ public class LabelEditor : MonoBehaviour
 
     private void OnEnable()
     {
-        SelectionSystem.OnObjectSelected += OnObjectSelected;
-        SelectionSystem.OnObjectDeselected += OnObjectDeselected;
+        _sceneObjectSelectionService.OnObjectSelected += OnObjectSelected;
+        _sceneObjectSelectionService.OnObjectDeselected += OnObjectDeselected;
     }
 
     private void OnDisable()
     {
-        SelectionSystem.OnObjectSelected -= OnObjectSelected;
-        SelectionSystem.OnObjectDeselected -= OnObjectDeselected;
+        _sceneObjectSelectionService.OnObjectSelected -= OnObjectSelected;
+        _sceneObjectSelectionService.OnObjectDeselected -= OnObjectDeselected;
     }
 
     private void OnObjectSelected(SceneObject scene)
