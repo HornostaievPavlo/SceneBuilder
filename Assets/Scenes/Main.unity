@@ -3281,55 +3281,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1081070596}
   m_CullTransparentMesh: 1
---- !u!1 &1096536734
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1096536736}
-  - component: {fileID: 1096536735}
-  m_Layer: 0
-  m_Name: Input System
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1096536735
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1096536734}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ee4ac5b45829be4482e1d1426d2d54f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  axisPanRate: 1
-  axisRotRate: 100
-  mousePanRate: 1
-  mouseRotRate: 100
-  mouseZoomRate: 0.05
---- !u!4 &1096536736
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1096536734}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1627617347}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1099585251
 GameObject:
   m_ObjectHideFlags: 0
@@ -5040,7 +4991,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3fb3fd9628bfd04d99467e8c02cebac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputSystem: {fileID: 1096536735}
 --- !u!114 &1335881328
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6465,7 +6415,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1096536736}
   - {fileID: 672740411}
   - {fileID: 1335881326}
   - {fileID: 1787243082}
@@ -6741,7 +6690,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71266420625bfd14b8246d085f8c08e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputSystem: {fileID: 1096536735}
   minPitchAngle: -90
   maxPitchAngle: 90
 --- !u!1 &1697327446
@@ -6933,7 +6881,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1736767951}
   m_Layer: 0
-  m_Name: Scene
+  m_Name: SceneSetup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
