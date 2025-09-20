@@ -12,7 +12,7 @@ namespace Services.SceneObjectsRegistry
 		{
 			if (_sceneObjects.ContainsKey(sceneObject.Id))
 			{
-				Debug.LogError($"Trying to register a SceneObject which is already registered: {sceneObject.Id}");
+				Debug.LogError($"Trying to register a SceneObject which is already registered: {sceneObject.name}");
 				return;
 			}
 			
@@ -23,7 +23,7 @@ namespace Services.SceneObjectsRegistry
 		{
 			if (_sceneObjects.ContainsKey(sceneObject.Id) == false)
 			{
-				Debug.LogError($"Trying to unregister a SceneObject that is not registered: {sceneObject.Id}");
+				Debug.LogError($"Trying to unregister a SceneObject that is not registered: {sceneObject.name}");
 				return;
 			}
 			
