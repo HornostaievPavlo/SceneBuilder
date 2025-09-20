@@ -30,9 +30,6 @@ namespace Gameplay
 
 		private void OnDestroy()
 		{
-			if (_sceneObjectsRegistry == null)
-				return;
-			
 			_sceneObjectsRegistry.Unregister(this);
 		}
 
