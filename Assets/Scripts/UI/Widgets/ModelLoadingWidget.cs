@@ -30,9 +30,6 @@ namespace UI.Widgets
 		{
 			string input = inputField.text;
 			
-			if (input == string.Empty) 
-				return;
-			
 			processingPopup.SetActive(true);
 			await loadingSystem.LoadModel(input);
 			processingPopup.SetActive(false);
