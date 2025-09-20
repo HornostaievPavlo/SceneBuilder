@@ -5,12 +5,12 @@ namespace Services.InputService
 {
 	public interface IInputService
 	{
-		event Action TouchBeginAction;
-		event Action TouchReleaseAction;
-		event Action<Vector2> SecondaryDragAction;
-		event Action<Vector2> PrimaryDragAction;
-		event Action<float> ZoomAction;
-		event Action<RaycastHit> RayHit;
-		event Action RayMiss;
+		event Action OnTouchBegin;
+		event Action OnTouchEnd;
+		event Action<Vector2> OnPrimaryDrag;
+		event Action<Vector2> OnSecondaryDrag;
+		event Action<float> OnZoom;
+		event Action<RaycastHit> OnRayHit;
+		event Action OnRayMiss;
 	}
 }

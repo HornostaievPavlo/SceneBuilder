@@ -7,135 +7,106 @@ namespace Services.InputService
 {
 	public class InputService : IInputService, IInitializable, ITickable
 	{
-		private const float AxisRotationRate = 100f;
-		private const float AxisPanRate = 1f;
-		
+		private bool _hadFocus;
+		private bool _hasTouch;
+
+		private Vector3 _previousMousePosition;
+		private Camera _mainCamera;
+
 		private const float MouseRotationRate = 100f;
 		private const float MousePanRate = 1f;
 		private const float MouseZoomRate = 0.05f;
 
-		public event Action TouchBeginAction = delegate { };
-		public event Action TouchReleaseAction = delegate { };
+		public event Action OnTouchBegin;
+		public event Action OnTouchEnd;
+		public event Action<Vector2> OnPrimaryDrag;
+		public event Action<Vector2> OnSecondaryDrag;
+		public event Action<float> OnZoom;
+		public event Action<RaycastHit> OnRayHit;
+		public event Action OnRayMiss;
 
-		public event Action<Vector2> SecondaryDragAction = delegate { };
-		public event Action<Vector2> PrimaryDragAction = delegate { };
-		public event Action<float> ZoomAction = delegate { };
-
-		public event Action<RaycastHit> RayHit;
-		public event Action RayMiss;
-
-		public Vector2 InputScreenSpacePosition { get; private set; }
-
-		private bool hadFocus;
-		private bool hasTouch;
-		private Vector3 previousMousePosition;
-		private Camera mainCamera;
-		
 		public void Initialize()
 		{
-			mainCamera = Camera.main;
+			_mainCamera = Camera.main;
 		}
 
 		public void Tick()
 		{
 			PollMouse();
 
-			previousMousePosition = Input.mousePosition;
-			hadFocus = Application.isFocused;
+			_previousMousePosition = Input.mousePosition;
+			_hadFocus = Application.isFocused;
 		}
 
-		/// <summary>
-		/// Process mouse input.
-		/// </summary>
 		private void PollMouse()
 		{
-			InputScreenSpacePosition = Input.mousePosition;
 			Vector2 delta = Vector2.zero;
 
-			// If window was just refocused, previous mouse position will be invalid
-			// so keep delta 0 unless we had focus for at least 1 frame
-			if (hadFocus)
-				delta = NormalizeScreenVector(Input.mousePosition - previousMousePosition);
+			if (_hadFocus)
+			{
+				delta = NormalizeScreenVector(Input.mousePosition - _previousMousePosition);
+			}
 
 			if (Input.GetMouseButtonDown(0) && EventSystem.current.IsPointerOverGameObject() == false)
+			{
 				Raycast(Input.mousePosition);
+			}
 
-			if (!Input.GetMouseButton(0))
+			if (Input.GetMouseButton(0) == false)
+			{
 				EndTouch();
+			}
 
 			if (Input.GetMouseButton(1))
 			{
 				BeginTouch();
-				PrimaryDragAction(delta * MouseRotationRate);
+				OnPrimaryDrag?.Invoke(delta * MouseRotationRate);
 			}
-
 			else if (Input.GetMouseButton(2))
-				SecondaryDragAction(delta * MousePanRate);
+			{
+				OnSecondaryDrag?.Invoke(delta * MousePanRate);
+			}
 			else if (Input.mouseScrollDelta.y != 0f)
-				ZoomAction(Input.mouseScrollDelta.y * MouseZoomRate);
+			{
+				OnZoom?.Invoke(Input.mouseScrollDelta.y * MouseZoomRate);
+			}
 		}
 
-		private void BeginTouch()
+		private Vector2 NormalizeScreenVector(Vector2 vector)
 		{
-			if (hasTouch) return;
+			return vector / Screen.currentResolution.height;
+		}
 
-			hasTouch = true;
-			TouchBeginAction();
+		private void Raycast(Vector2 screenPosition)
+		{
+			Ray ray = _mainCamera.ScreenPointToRay(screenPosition);
+
+			if (Physics.Raycast(ray, out RaycastHit hit, _mainCamera.farClipPlane))
+			{
+				OnRayHit?.Invoke(hit);
+			}
+			else
+			{
+				OnRayMiss?.Invoke();
+			}
 		}
 
 		private void EndTouch()
 		{
-			if (!hasTouch) return;
-
-			hasTouch = false;
-			TouchReleaseAction();
-		}
-
-		/// <summary>
-		/// Normalize a screen space vector by dividing it by native screen height.
-		/// </summary>
-		private Vector2 NormalizeScreenVector(Vector2 v)
-		{
-			int height = Screen.currentResolution.height;
-			return v / height;
-		}
-
-		/// <summary>
-		/// Applies panning from axis values.
-		/// </summary>
-		private void AxisPan(float horizontal, float vertical)
-		{
-			var delta = new Vector2(horizontal * Time.deltaTime, vertical * Time.deltaTime);
-			delta *= AxisPanRate;
-
-			SecondaryDragAction(delta);
-		}
-
-		/// <summary>
-		/// Applies rotation from axis values.
-		/// </summary>
-		private void AxisRotate(float horizontal, float vertical)
-		{
-			var delta = new Vector2(horizontal * Time.deltaTime, vertical * Time.deltaTime);
-			delta *= AxisRotationRate;
-
-			PrimaryDragAction(delta);
-		}
-
-		/// <summary>
-		/// Performs a raycast from screenPosition. Fires RayHit
-		/// </summary>
-		private void Raycast(Vector2 screenPosition)
-		{
-			if (RayHit == null) 
+			if (_hasTouch == false)
 				return;
 
-			Ray ray = mainCamera.ScreenPointToRay(screenPosition);
+			_hasTouch = false;
+			OnTouchEnd?.Invoke();
+		}
 
-			if (Physics.Raycast(ray, out RaycastHit hit, mainCamera.farClipPlane))
-				RayHit(hit);
-			else
-				RayMiss();
+		private void BeginTouch()
+		{
+			if (_hasTouch)
+				return;
+
+			_hasTouch = true;
+			OnTouchBegin?.Invoke();
 		}
 	}
 }
