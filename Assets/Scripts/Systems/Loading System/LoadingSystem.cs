@@ -1,6 +1,7 @@
 using GLTFast;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Enums;
 using Gameplay;
@@ -14,7 +15,6 @@ public class LoadingSystem : MonoBehaviour
     [SerializeField] private GameObject cameraAssetPrefab;
     [SerializeField] private GameObject labelAssetPrefab;
 
-    private List<Transform> assetsInScene = new();
     private List<Transform> modelsFromSingleSaveFile = new();
 
     [HideInInspector] public Transform[] children;
@@ -58,7 +58,12 @@ public class LoadingSystem : MonoBehaviour
     /// <returns>Success of loading</returns>
     public async Task<bool> LoadModel(string modelPath)
     {
-        assetsInScene.Clear();
+        if (string.IsNullOrEmpty(modelPath))
+        {
+            // Debug.LogError($"Trying to load model from empty path");
+            // return false;
+            modelPath = IOUtility.duckModelPath;
+        }
 
         GameObject modelAsset = CreateAsset(AssetTypeId.Model);
         var gltfAsset = modelAsset.AddComponent<GltfAsset>();
@@ -67,25 +72,37 @@ public class LoadingSystem : MonoBehaviour
 
         if (isSuccess == false) 
             return false;
+
+        List<Transform> assets;
         
         if (modelPath.Contains(IOUtility.dataPath))
         {
-            List<Transform> assets = InitializeImportedAssets();
-            AddCollidersToAssets(assets);
+            // check if it is needed on save/load refactor
+            // assets = InitializeImportedAssets();
         }
         else
         {
-            Transform[] children = IOUtility.assetsParent.gameObject.GetComponentsInChildren<Transform>();
+            // List<Transform> assets = new();
+            // Transform[] children = IOUtility.assetsParent.gameObject.GetComponentsInChildren<Transform>();
+            //
+            // for (int i = 0; i < children.Length; i++)
+            // {
+            //     if (children[i].gameObject.name == "Asset")
+            //     {
+            //         assets.Add(children[i]);
+            //     }
+            // }
 
-            for (int i = 0; i < children.Length; i++)
-            {
-                if (children[i].gameObject.name == "Asset") assetsInScene.Add(children[i]);
-            }
-
-            AddCollidersToAssets(assetsInScene);
+            modelAsset.transform.SetParent(IOUtility.assetsParent);
+            AddColliders(modelAsset);
+            
+            // assets = modelAsset.GetComponentsInChildren<Transform>().ToList();
         }
+        
+        // check if it is needed on save/load refactor
+        // AddCollidersToAssets(assets);
 
-        return isSuccess;
+        return true;
     }
 
     /// <summary>
@@ -132,6 +149,8 @@ public class LoadingSystem : MonoBehaviour
     /// <returns>Collection of assets in scene</returns>
     private List<Transform> InitializeImportedAssets()
     {
+        List<Transform> resultList = new();
+        
         modelsFromSingleSaveFile.Clear();
 
         bool isSingleAsset = GameObject.Find("Scene") == null;
@@ -159,10 +178,10 @@ public class LoadingSystem : MonoBehaviour
 
         for (int i = 0; i < children.Length; i++)
         {
-            if (children[i].gameObject.name == "Asset") assetsInScene.Add(children[i]);
+            if (children[i].gameObject.name == "Asset") resultList.Add(children[i]);
         }
 
-        foreach (var asset in assetsInScene)
+        foreach (var asset in resultList)
         {
             asset.SetParent(IOUtility.assetsParent);
 
@@ -179,7 +198,7 @@ public class LoadingSystem : MonoBehaviour
 
         if (sceneObj) Destroy(sceneObj.gameObject);
 
-        return assetsInScene;
+        return resultList;
     }
 
     /// <summary>
@@ -218,11 +237,22 @@ public class LoadingSystem : MonoBehaviour
         {
             MeshRenderer[] meshRenderers = asset.gameObject.GetComponentsInChildren<MeshRenderer>();
 
-            foreach (MeshRenderer renderer in meshRenderers)
+            foreach (MeshRenderer meshRenderer in meshRenderers)
             {
-                var itemCollider = renderer.gameObject.AddComponent<MeshCollider>();
-                itemCollider.convex = true;
+                var meshCollider = meshRenderer.gameObject.AddComponent<MeshCollider>();
+                meshCollider.convex = true;
             }
+        }
+    }
+
+    private void AddColliders(GameObject asset)
+    {
+        MeshRenderer[] meshRenderers = asset.GetComponentsInChildren<MeshRenderer>();
+        
+        foreach (MeshRenderer meshRenderer in meshRenderers)
+        {
+            var meshCollider = meshRenderer.gameObject.AddComponent<MeshCollider>();
+            meshCollider.convex = true;
         }
     }
 }
