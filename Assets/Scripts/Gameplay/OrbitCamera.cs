@@ -40,7 +40,7 @@ namespace Gameplay
             _mainCamera = GetComponent<Camera>();
             
             SetCameraPosition(transform.position);
-            _defaultCameraRotation = GetRotation();
+            _defaultCameraRotation = _rotation;
         }
 
         private void OnEnable()
@@ -65,12 +65,12 @@ namespace Gameplay
         private void HandleSecondaryDrag(Vector2 delta)
         {
             delta *= _zoomAmount;
-            SetPan(new Vector2(GetPan().x - delta.x, GetPan().y - delta.y));
+            SetPan(new Vector2(_pan.x - delta.x, _pan.y - delta.y));
         }
 
         private void HandlePrimaryDrag(Vector2 delta)
         {
-            Quaternion currentRotation = GetRotation();
+            Quaternion currentRotation = _rotation;
 
             currentRotation = Quaternion.AngleAxis(delta.x, Vector3.up) * currentRotation;
 
@@ -87,7 +87,7 @@ namespace Gameplay
         private void HandleZoom(float delta)
         {
             float zoom = 1f - delta;
-            zoom = GetZoomAmount() * zoom;
+            zoom = _zoomAmount * zoom;
             
             if (zoom < 0.05f)
             {
@@ -110,13 +110,8 @@ namespace Gameplay
             float distance = radius / Mathf.Sin(_mainCamera.fieldOfView * Mathf.Deg2Rad * 0.5f);
             SetFocusPosition(bounds.center);
 
-            SetCameraPosition(GetCameraPosition(GetFocusPosition(), _defaultCameraRotation, distance));
+            SetCameraPosition(GetCameraPosition(_focusPosition, _defaultCameraRotation, distance));
             SetPan(Vector2.zero);
-        }
-
-        private Vector3 GetFocusPosition()
-        {
-            return _focusPosition;
         }
 
         private void SetFocusPosition(Vector3 value)
@@ -126,21 +121,11 @@ namespace Gameplay
             UpdateTransform();
         }
 
-        private Vector2 GetPan()
-        {
-            return _pan;
-        }
-
         private void SetPan(Vector2 value)
         {
             _pan = value;
             _cameraPosition = GetCameraPosition(_focusPosition, _rotation, _zoomAmount);
             UpdateTransform();
-        }
-
-        private Quaternion GetRotation()
-        {
-            return _rotation;
         }
 
         private void SetRotation(Quaternion value)
@@ -150,21 +135,11 @@ namespace Gameplay
             UpdateTransform();
         }
 
-        private float GetZoomAmount()
-        {
-            return _zoomAmount;
-        }
-
         private void SetZoomAmount(float value)
         {
             _zoomAmount = value;
             _cameraPosition = GetCameraPosition(_focusPosition, _rotation, _zoomAmount);
             UpdateTransform();
-        }
-
-        private Vector3 GetCameraPosition()
-        {
-            return _cameraPosition;
         }
 
         private void SetCameraPosition(Vector3 value)
