@@ -1,13 +1,13 @@
 using System;
 using System.Linq;
 using Gameplay;
+using Services.InputService;
 using UnityEngine;
+using Zenject;
 
 [RequireComponent(typeof(Camera))]
 public class OrbitCameraSystem : MonoBehaviour
 {
-    [SerializeField] private InputSystem inputSystem;
-
     [SerializeField] private float minPitchAngle = -90f;
     [SerializeField] private float maxPitchAngle = 90f;
 
@@ -77,6 +77,7 @@ public class OrbitCameraSystem : MonoBehaviour
     }
 
     private Vector3 cameraPosition;
+
     /// <summary>
     /// World space camera position. 
     /// </summary>
@@ -95,6 +96,14 @@ public class OrbitCameraSystem : MonoBehaviour
     {
         transform.SetPositionAndRotation(cameraPosition + rotation * pan, rotation);
     }
+    
+    private IInputService _inputService;
+    
+    [Inject]
+    private void Construct(IInputService inputService)
+    {
+        _inputService = inputService;
+    }
 
     private void Awake()
     {
@@ -108,18 +117,20 @@ public class OrbitCameraSystem : MonoBehaviour
     {
         SelectionSystem.OnObjectSelected += OnObjectSelected;
         SelectionSystem.OnObjectDeselected += OnObjectDeselected;
-        inputSystem.SecondaryDragAction += Move;
-        inputSystem.PrimaryDragAction += Rotate;
-        inputSystem.ZoomAction += Zoom;
+        
+        _inputService.SecondaryDragAction += Move;
+        _inputService.PrimaryDragAction += Rotate;
+        _inputService.ZoomAction += Zoom;
     }
 
     private void OnDisable()
     {
         SelectionSystem.OnObjectSelected -= OnObjectSelected;
         SelectionSystem.OnObjectDeselected -= OnObjectDeselected;
-        inputSystem.SecondaryDragAction -= Move;
-        inputSystem.PrimaryDragAction -= Rotate;
-        inputSystem.ZoomAction -= Zoom;
+        
+        _inputService.SecondaryDragAction -= Move;
+        _inputService.PrimaryDragAction -= Rotate;
+        _inputService.ZoomAction -= Zoom;
     }
 
     private void OnObjectSelected(SceneObject scene)

@@ -1,24 +1,32 @@
 using System;
 using Gameplay;
+using Services.InputService;
 using UnityEngine;
+using Zenject;
 
 public class SelectionSystem : MonoBehaviour
 {
-    [SerializeField] private InputSystem inputSystem;
-
+    private IInputService _inputService;
+    
     public static event Action<SceneObject> OnObjectSelected;
     public static event Action OnObjectDeselected;
 
+    [Inject]
+    private void Construct(IInputService inputService)
+    {
+        _inputService = inputService;
+    }
+
     private void OnEnable()
     {
-        inputSystem.RayHit += OnRayHit;
-        inputSystem.RayMiss += OnRayMiss;
+        _inputService.RayHit += OnRayHit;
+        _inputService.RayMiss += OnRayMiss;
     }
 
     private void OnDisable()
     {
-        inputSystem.RayHit -= OnRayHit;
-        inputSystem.RayMiss -= OnRayMiss;
+        _inputService.RayHit -= OnRayHit;
+        _inputService.RayMiss -= OnRayMiss;
     }
 
     private void OnRayHit(RaycastHit hit)

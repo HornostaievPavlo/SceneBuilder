@@ -1,4 +1,5 @@
-﻿using Services.Instantiation;
+﻿using Services.InputService;
+using Services.Instantiation;
 using Services.SceneObjectsRegistry;
 using Zenject;
 
@@ -10,6 +11,7 @@ namespace Installers
 		{
 			Container.BindInterfacesAndSelfTo<InstantiateService>().AsSingle();
 			Container.BindInterfacesAndSelfTo<SceneObjectsRegistry>().AsSingle();
+			Container.BindInterfacesAndSelfTo<InputService>().AsSingle();
 		}
 	}
 }
