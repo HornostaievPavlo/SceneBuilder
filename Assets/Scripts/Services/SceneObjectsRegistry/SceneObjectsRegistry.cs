@@ -37,6 +37,10 @@ namespace Services.SceneObjectsRegistry
 			_sceneObjectsById.Remove(sceneObject.Id);
 			OnObjectUnregistered?.Invoke(sceneObject);
 		}
+		
+		public List<SceneObject> GetSceneObjects(AssetTypeId assetTypeId)
+		{
+			return _sceneObjectsById.Values.Where(sceneObject => sceneObject.AssetTypeId == assetTypeId).ToList();
 		}
 	}
 }
