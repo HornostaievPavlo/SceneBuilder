@@ -2077,6 +2077,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7c7b6c359dd7d94ab5335c841fda2f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  handle: {fileID: 846435614}
+  gizmoObjectsLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &721463432
 GameObject:
   m_ObjectHideFlags: 0
@@ -6677,8 +6681,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71266420625bfd14b8246d085f8c08e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minPitchAngle: -90
-  maxPitchAngle: 90
 --- !u!1 &1697327446
 GameObject:
   m_ObjectHideFlags: 0

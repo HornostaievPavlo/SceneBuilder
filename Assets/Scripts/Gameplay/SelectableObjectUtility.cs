@@ -30,7 +30,7 @@ public class SelectableObjectUtility : MonoBehaviour
     {
         if (scene == null) return;
 
-        TransformHandleSystem handle = FindFirstObjectByType<TransformHandleSystem>();
+        TransformHandleWrapper handle = FindFirstObjectByType<TransformHandleWrapper>();
         handle.HandleObjectDeselected();
 
         Destroy(scene.gameObject);
