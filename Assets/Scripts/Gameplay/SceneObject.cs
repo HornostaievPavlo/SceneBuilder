@@ -42,13 +42,5 @@ namespace Gameplay
 		{
 			_guid = Guid.NewGuid().ToString();
 		}
-
-		private void Start()
-		{
-			// rowsCoordinator = GetComponentInParent<RowsCoordinator>();
-			// menuRow = rowsCoordinator.AssignRow(this);
-		}
-
-		// private void OnDestroy() => rowsCoordinator.RemoveRow(this);
 	}
 }
