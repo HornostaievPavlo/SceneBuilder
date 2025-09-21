@@ -304,7 +304,7 @@ GameObject:
   - component: {fileID: 2388981990835224202}
   - component: {fileID: 1779658829142917077}
   m_Layer: 5
-  m_Name: Label Row Prefab
+  m_Name: LabelInfoWidget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
