@@ -1994,7 +1994,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 653800881}
-  - component: {fileID: 653800882}
   m_Layer: 0
   m_Name: AssetsHolder
   m_TagString: Untagged
@@ -2017,21 +2016,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1736767951}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &653800882
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 653800880}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc95af325b84e514b84af8af42acfec1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  modelsTableWidget: {fileID: 7387869803011246370}
-  camerasTableWidget: {fileID: 2757898199808197881}
-  labelsTableWidget: {fileID: 5041934270192798352}
 --- !u!1 &672740410
 GameObject:
   m_ObjectHideFlags: 0
@@ -11782,8 +11766,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9254f17c8fe09254fa3cf8fc326770fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rowPrefab: {fileID: -4830769845822010318, guid: 86eda2ea53f746346b95e7118d4f3be9, type: 3}
-  rowParent: {fileID: 6653091563819209852}
+  assetTypeId: 0
+  infoWidgetPrefab: {fileID: 0}
+  infoWidgetsParent: {fileID: 0}
 --- !u!1 &2832371723906267249
 GameObject:
   m_ObjectHideFlags: 0
@@ -14257,8 +14242,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9254f17c8fe09254fa3cf8fc326770fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rowPrefab: {fileID: 2388981990835224202, guid: 1d57b30d4e8526142ba55798fac90cfc, type: 3}
-  rowParent: {fileID: 831219230311807171}
+  assetTypeId: 0
+  infoWidgetPrefab: {fileID: 0}
+  infoWidgetsParent: {fileID: 0}
 --- !u!222 &5070434365399465573
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -17333,8 +17319,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9254f17c8fe09254fa3cf8fc326770fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rowPrefab: {fileID: 576895234020867155, guid: ee2d964ec14347547b5a590d220551f6, type: 3}
-  rowParent: {fileID: 5692145538668494435}
+  assetTypeId: 0
+  infoWidgetPrefab: {fileID: 6359820779029637819, guid: ee2d964ec14347547b5a590d220551f6, type: 3}
+  infoWidgetsParent: {fileID: 5692145538668494435}
 --- !u!114 &7397467181379770250
 MonoBehaviour:
   m_ObjectHideFlags: 0
