@@ -5,6 +5,8 @@ using Enums;
 using Gameplay;
 using GLTFast;
 using Services.Instantiation;
+using Services.SceneObjectsRegistry;
+using UnityEditor;
 using UnityEngine;
 using Zenject;
 
@@ -12,21 +14,18 @@ namespace Services.Loading
 {
 	public class LoadService : ILoadService
 	{
-		// prefabs paths to constants
-		// [SerializeField] private GameObject modelAssetHolderPrefab;
-		// [SerializeField] private GameObject cameraAssetPrefab;
-		// [SerializeField] private GameObject labelAssetPrefab;
-
 		private List<Transform> modelsFromSingleSaveFile = new();
 
 		private Transform[] children;
 
 		private IInstantiateService _instantiateService;
+		private ISceneObjectsRegistry _sceneObjectsRegistry;
 
 		[Inject]
-		private void Construct(IInstantiateService instantiateService)
+		private void Construct(IInstantiateService instantiateService, ISceneObjectsRegistry sceneObjectsRegistry)
 		{
 			_instantiateService = instantiateService;
+			_sceneObjectsRegistry = sceneObjectsRegistry;
 		}
 
         /// <summary>
@@ -45,12 +44,12 @@ namespace Services.Loading
         /// <summary>
         ///     Adds camera asset to a scene
         /// </summary>
-        public void LoadCameraAsset() => CreateAsset(AssetTypeId.Camera);
+        public void LoadCameraAsset() => CreateSceneObject(AssetTypeId.Camera);
 
         /// <summary>
         ///     Adds label asset to a scene
         /// </summary>
-        public void LoadLabelAsset() => CreateAsset(AssetTypeId.Label);
+        public void LoadLabelAsset() => CreateSceneObject(AssetTypeId.Label);
 
         /// <summary>
         ///     General model loading procedure.
@@ -67,8 +66,8 @@ namespace Services.Loading
 				modelPath = Constants.DuckModelPath;
 			}
 
-			GameObject modelAsset = CreateAsset(AssetTypeId.Model);
-			var gltfAsset = modelAsset.AddComponent<GltfAsset>();
+			SceneObject modelAsset = CreateSceneObject(AssetTypeId.Model);
+			var gltfAsset = modelAsset.gameObject.AddComponent<GltfAsset>();
 
 			bool isSuccess = await gltfAsset.Load(modelPath);
 
@@ -95,7 +94,7 @@ namespace Services.Loading
 				//     }
 				// }
 
-				modelAsset.transform.SetParent(IOUtility.assetsParent);
+				modelAsset.transform.SetParent(_sceneObjectsRegistry.SceneObjectsHolder);
 				AddColliders(modelAsset);
 
 				// assets = modelAsset.GetComponentsInChildren<Transform>().ToList();
@@ -107,44 +106,45 @@ namespace Services.Loading
 			return true;
 		}
 
-        /// <summary>
-        ///     Creates new selectable asset of specified type
-        /// </summary>
-        /// <param name="typeId">Specifies AssetType of created object</param>
-        /// <returns>Created instance</returns>
-        private GameObject CreateAsset(AssetTypeId typeId)
+        private SceneObject CreateSceneObject(AssetTypeId typeId)
 		{
-			return new GameObject();
-
-			// switch (typeId)
-			// {
-			//     case AssetTypeId.Model:
-			//
-			//         var model = _instantiateService.Instantiate<SceneObject>(modelAssetHolderPrefab);
-			//         model.SetAssetType(AssetTypeId.Model);
-			//         
-			//         return model.gameObject;
-			//
-			//     case AssetTypeId.Camera:
-			//
-			//         GameObject camera = Instantiate(cameraAssetPrefab, IOUtility.assetsParent);
-			//         camera.name = "Asset";
-			//
-			//         var cameraScene = camera.AddComponent<SceneObject>();
-			//         cameraScene.SetAssetType(typeId);
-			//         return camera;
-			//
-			//     case AssetTypeId.Label:
-			//
-			//         GameObject label = Instantiate(labelAssetPrefab, IOUtility.assetsParent);
-			//         label.name = "Asset";
-			//
-			//         var labelScene = label.AddComponent<SceneObject>();
-			//         labelScene.SetAssetType(typeId);
-			//         return label;
-			//
-			//     default: return null;
-			// }
+			switch (typeId)
+			{
+			    case AssetTypeId.Model:
+			    {
+				    var modelPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(Constants.ModelAssetHolderPrefabPath);
+				    var model = _instantiateService.Instantiate<SceneObject>(modelPrefab);
+			        
+				    model.SetAssetType(AssetTypeId.Model);
+			        
+				    return model;
+			    }
+			    case AssetTypeId.Camera:
+			    {
+				    var cameraPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(Constants.CameraAssetPrefabPath);
+				    var camera = _instantiateService.Instantiate<SceneObject>(cameraPrefab, _sceneObjectsRegistry.SceneObjectsHolder);
+			        
+				    camera.name = "Asset";
+				    camera.SetAssetType(AssetTypeId.Camera);
+					
+				    return camera;
+			    }
+			    case AssetTypeId.Label:
+			    {
+				    var labelPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(Constants.LabelAssetPrefabPath);
+				    var label = _instantiateService.Instantiate<SceneObject>(labelPrefab, _sceneObjectsRegistry.SceneObjectsHolder);
+					
+				    label.name = "Asset";
+				    label.SetAssetType(AssetTypeId.Label);
+				    
+				    return label;
+			    }
+			    default:
+			    {
+				    Debug.LogError($"Trying to create scene object of unsupported type: {typeId}");
+				    return null;
+			    }
+			}
 		}
 
         /// <summary>
@@ -163,15 +163,15 @@ namespace Services.Loading
 			if (!isSingleAsset)
 			{
 				sceneObj = GameObject.Find("Scene").transform;
-				sceneObj.SetParent(IOUtility.assetsParent);
+				sceneObj.SetParent(_sceneObjectsRegistry.SceneObjectsHolder);
 			}
 
 			// some Destroy???
-			var spawner = IOUtility.assetsParent.gameObject.GetComponentInChildren<GltfAsset>();
+			var spawner = _sceneObjectsRegistry.SceneObjectsHolder.gameObject.GetComponentInChildren<GltfAsset>();
 			// Destroy(spawner.gameObject.GetComponent<SceneObject>());
 			spawner.gameObject.name = "glTF Asset";
 
-			GltfAsset[] spawners = IOUtility.assetsParent.gameObject.GetComponentsInChildren<GltfAsset>();
+			GltfAsset[] spawners = _sceneObjectsRegistry.SceneObjectsHolder.gameObject.GetComponentsInChildren<GltfAsset>();
 			foreach (GltfAsset item in spawners)
 			{
 				// Destroy(item.gameObject.GetComponent<SceneObject>());
@@ -179,7 +179,7 @@ namespace Services.Loading
 			}
 
 			Array.Clear(children, 0, children.Length);
-			children = IOUtility.assetsParent.gameObject.GetComponentsInChildren<Transform>();
+			children = _sceneObjectsRegistry.SceneObjectsHolder.gameObject.GetComponentsInChildren<Transform>();
 
 			for (int i = 0; i < children.Length; i++)
 			{
@@ -188,7 +188,7 @@ namespace Services.Loading
 
 			foreach (var asset in resultList)
 			{
-				asset.SetParent(IOUtility.assetsParent);
+				asset.SetParent(_sceneObjectsRegistry.SceneObjectsHolder);
 
 				bool hasSelectable = asset.GetComponentInChildren<SceneObject>() != null;
 
@@ -254,9 +254,9 @@ namespace Services.Loading
 			}
 		}
 
-		private void AddColliders(GameObject asset)
+		private void AddColliders(SceneObject sceneObject)
 		{
-			MeshRenderer[] meshRenderers = asset.GetComponentsInChildren<MeshRenderer>();
+			MeshRenderer[] meshRenderers = sceneObject.gameObject.GetComponentsInChildren<MeshRenderer>();
 
 			foreach (MeshRenderer meshRenderer in meshRenderers)
 			{
