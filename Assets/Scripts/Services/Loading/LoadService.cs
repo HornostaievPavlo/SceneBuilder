@@ -28,45 +28,17 @@ namespace Services.Loading
 			_sceneObjectsRegistry = sceneObjectsRegistry;
 		}
 
-        /// <summary>
-        ///     Handles loading assets from local save file
-        /// </summary>
-        /// <param name="sceneNumber">Index of save file</param>
-        public async void LoadAssetsFromSaveFile(int sceneNumber)
-		{
-			string saveFilePath =
-				IOUtility.scenePath + sceneNumber + Constants.SceneFile;
-
-			bool success = await LoadModel(saveFilePath);
-			if (success) AssignTextures(sceneNumber);
-		}
-
-        /// <summary>
-        ///     Adds camera asset to a scene
-        /// </summary>
-        public void LoadCameraAsset() => CreateSceneObject(AssetTypeId.Camera);
-
-        /// <summary>
-        ///     Adds label asset to a scene
-        /// </summary>
-        public void LoadLabelAsset() => CreateSceneObject(AssetTypeId.Label);
-
-        /// <summary>
-        ///     General model loading procedure.
-        ///     Handles adding of colliders to models
-        /// </summary>
-        /// <param name="modelPath">Path to .glb file in local storage</param>
-        /// <returns>Success of loading</returns>
-        public async Task<bool> LoadModel(string modelPath)
+		public async Task<bool> LoadModel(string modelPath)
 		{
 			if (string.IsNullOrEmpty(modelPath))
 			{
 				// Debug.LogError($"Trying to load model from empty path");
 				// return false;
+				
 				modelPath = Constants.DuckModelPath;
 			}
 
-			SceneObject modelAsset = CreateSceneObject(AssetTypeId.Model);
+			SceneObject modelAsset = InstantiateSceneObject(AssetTypeId.Model);
 			var gltfAsset = modelAsset.gameObject.AddComponent<GltfAsset>();
 
 			bool isSuccess = await gltfAsset.Load(modelPath);
@@ -94,7 +66,6 @@ namespace Services.Loading
 				//     }
 				// }
 
-				modelAsset.transform.SetParent(_sceneObjectsRegistry.SceneObjectsHolder);
 				AddColliders(modelAsset);
 
 				// assets = modelAsset.GetComponentsInChildren<Transform>().ToList();
@@ -106,14 +77,25 @@ namespace Services.Loading
 			return true;
 		}
 
-        private SceneObject CreateSceneObject(AssetTypeId typeId)
+		public void LoadCamera()
+        {
+	        InstantiateSceneObject(AssetTypeId.Camera);
+        }
+
+		public void LoadLabel()
+        {
+	        InstantiateSceneObject(AssetTypeId.Label);
+        }
+
+		private SceneObject InstantiateSceneObject(AssetTypeId typeId)
 		{
+			// try to remove switch 
 			switch (typeId)
 			{
 			    case AssetTypeId.Model:
 			    {
 				    var modelPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(Constants.ModelPrefabPath);
-				    var model = _instantiateService.Instantiate<SceneObject>(modelPrefab);
+				    var model = _instantiateService.Instantiate<SceneObject>(modelPrefab, _sceneObjectsRegistry.SceneObjectsHolder);
 			        
 				    model.SetAssetType(AssetTypeId.Model);
 			        
@@ -147,7 +129,20 @@ namespace Services.Loading
 			}
 		}
 
-        /// <summary>
+		/// <summary>
+		///     Handles loading assets from local save file
+		/// </summary>
+		/// <param name="sceneNumber">Index of save file</param>
+		public async void LoadAssetsFromSaveFile(int sceneNumber)
+		{
+			string saveFilePath =
+				IOUtility.scenePath + sceneNumber + Constants.SceneFile;
+
+			bool success = await LoadModel(saveFilePath);
+			if (success) AssignTextures(sceneNumber);
+		}
+
+		/// <summary>
         ///     Rearranges imported assets in proper hierarchy
         /// </summary>
         /// <returns>Collection of assets in scene</returns>
@@ -209,7 +204,7 @@ namespace Services.Loading
 			return resultList;
 		}
 
-        /// <summary>
+		/// <summary>
         ///     Assigns textures to corresponding materials
         /// </summary>
         private void AssignTextures(int sceneNumber)
@@ -235,7 +230,7 @@ namespace Services.Loading
 			modelsFromSingleSaveFile.Clear();
 		}
 
-        /// <summary>
+		/// <summary>
         ///     Adds convex mesh collider to
         ///     all renderers in List of targets
         /// </summary>
