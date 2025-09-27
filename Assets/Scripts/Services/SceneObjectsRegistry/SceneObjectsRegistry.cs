@@ -9,10 +9,13 @@ namespace Services.SceneObjectsRegistry
 {
 	public class SceneObjectsRegistry : ISceneObjectsRegistry
 	{
+		private Transform _sceneObjectsHolder;
 		private readonly Dictionary<string, SceneObject> _sceneObjectsById = new();
 
 		public event Action<SceneObject> OnObjectRegistered;
 		public event Action<SceneObject> OnObjectUnregistered;
+		
+		public Transform SceneObjectsHolder => _sceneObjectsHolder;
 
 		public void Register(SceneObject sceneObject)
 		{
@@ -36,6 +39,11 @@ namespace Services.SceneObjectsRegistry
 			
 			_sceneObjectsById.Remove(sceneObject.Id);
 			OnObjectUnregistered?.Invoke(sceneObject);
+		}
+		
+		public void RegisterSceneObjectsHolder(Transform assetsHolder)
+		{
+			_sceneObjectsHolder = assetsHolder;
 		}
 		
 		public List<SceneObject> GetSceneObjects(AssetTypeId assetTypeId)
