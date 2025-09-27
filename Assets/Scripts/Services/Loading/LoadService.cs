@@ -112,7 +112,7 @@ namespace Services.Loading
 			{
 			    case AssetTypeId.Model:
 			    {
-				    var modelPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(Constants.ModelAssetHolderPrefabPath);
+				    var modelPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(Constants.ModelPrefabPath);
 				    var model = _instantiateService.Instantiate<SceneObject>(modelPrefab);
 			        
 				    model.SetAssetType(AssetTypeId.Model);
@@ -121,7 +121,7 @@ namespace Services.Loading
 			    }
 			    case AssetTypeId.Camera:
 			    {
-				    var cameraPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(Constants.CameraAssetPrefabPath);
+				    var cameraPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(Constants.CameraPrefabPath);
 				    var camera = _instantiateService.Instantiate<SceneObject>(cameraPrefab, _sceneObjectsRegistry.SceneObjectsHolder);
 			        
 				    camera.name = "Asset";
@@ -131,7 +131,7 @@ namespace Services.Loading
 			    }
 			    case AssetTypeId.Label:
 			    {
-				    var labelPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(Constants.LabelAssetPrefabPath);
+				    var labelPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(Constants.LabelPrefabPath);
 				    var label = _instantiateService.Instantiate<SceneObject>(labelPrefab, _sceneObjectsRegistry.SceneObjectsHolder);
 					
 				    label.name = "Asset";
