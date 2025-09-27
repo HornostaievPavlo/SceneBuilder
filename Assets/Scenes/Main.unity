@@ -2274,7 +2274,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd2edc411992fb84d83cfc22b0a6ccb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Main::SaveSceneWidget
-  savingSystem: {fileID: 1697327449}
   button: {fileID: 783570716}
   progressPopup: {fileID: 22195351}
 --- !u!1 &809214184
@@ -2819,6 +2818,7 @@ GameObject:
   m_Component:
   - component: {fileID: 994990351}
   - component: {fileID: 994990352}
+  - component: {fileID: 994990353}
   m_Layer: 0
   m_Name: ToRework
   m_TagString: Untagged
@@ -2853,6 +2853,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0eb6559014575b440a04aaf33e5a3cc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &994990353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 994990350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5340b3dde1a283b45833d8b56b39f988, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Main::IOUtility
 --- !u!1 &1009770913
 GameObject:
   m_ObjectHideFlags: 0
@@ -6390,7 +6402,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1697327447}
   - {fileID: 2093245010}
   - {fileID: 994990351}
   m_Father: {fileID: 0}
@@ -6663,65 +6674,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71266420625bfd14b8246d085f8c08e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1697327446
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1697327447}
-  - component: {fileID: 1697327449}
-  - component: {fileID: 1697327448}
-  m_Layer: 0
-  m_Name: Saving System
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1697327447
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1697327446}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1627617347}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1697327448
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1697327446}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5340b3dde1a283b45833d8b56b39f988, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1697327449
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1697327446}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 54e2b29fa657b264fa303f5f657ebfb7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rowsCoordinator: {fileID: 2093245012}
-  screenshotMaker: {fileID: 1685503928}
 --- !u!1 &1716760059
 GameObject:
   m_ObjectHideFlags: 0
