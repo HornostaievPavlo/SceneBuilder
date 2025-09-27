@@ -36,7 +36,7 @@ namespace Services.Loading
         public async void LoadAssetsFromSaveFile(int sceneNumber)
 		{
 			string saveFilePath =
-				IOUtility.scenePath + sceneNumber.ToString() + IOUtility.sceneFile;
+				IOUtility.scenePath + sceneNumber + Constants.SceneFile;
 
 			bool success = await LoadModel(saveFilePath);
 			if (success) AssignTextures(sceneNumber);
@@ -64,7 +64,7 @@ namespace Services.Loading
 			{
 				// Debug.LogError($"Trying to load model from empty path");
 				// return false;
-				modelPath = IOUtility.duckModelPath;
+				modelPath = Constants.DuckModelPath;
 			}
 
 			GameObject modelAsset = CreateAsset(AssetTypeId.Model);
@@ -224,7 +224,7 @@ namespace Services.Loading
 
 					if (material != null)
 					{
-						string currentAssetPath = $"/Asset{i + 1}" + IOUtility.textureFile;
+						string currentAssetPath = $"/Asset{i + 1}" + Constants.TextureFile;
 						string fullPath = IOUtility.scenePath + sceneNumber + currentAssetPath;
 
 						material.mainTexture = IOUtility.OpenDirectoryAndLoadTexture(fullPath);

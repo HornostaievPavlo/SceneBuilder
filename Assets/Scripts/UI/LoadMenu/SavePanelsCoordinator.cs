@@ -99,8 +99,8 @@ public class SavePanelsCoordinator : MonoBehaviour
     {
         string pathToPreviewTexture =
             IOUtility.scenePath +
-            panel.currentNumber.ToString() +
-            IOUtility.previewFile;
+            panel.currentNumber +
+            Constants.PreviewFile;
 
         Texture loadedPreview = IOUtility.OpenDirectoryAndLoadTexture(pathToPreviewTexture);
         panel.preview.texture = loadedPreview;
