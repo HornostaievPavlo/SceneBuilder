@@ -1,6 +1,6 @@
 using System.Collections;
 using RuntimeHandle;
-using Services.SceneObjectSelectionService;
+using Services.SceneObjectSelection;
 using UnityEngine;
 using Zenject;
 

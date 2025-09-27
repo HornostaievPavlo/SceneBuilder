@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Enums;
 using Gameplay;
-using Services.SceneObjectSelectionService;
+using Services.SceneObjectSelection;
 using Services.SceneObjectsRegistry;
 using TMPro;
 using UnityEngine;

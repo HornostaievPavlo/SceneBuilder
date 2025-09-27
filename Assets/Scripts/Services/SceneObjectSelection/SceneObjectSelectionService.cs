@@ -4,7 +4,7 @@ using Services.Input;
 using UnityEngine;
 using Zenject;
 
-namespace Services.SceneObjectSelectionService
+namespace Services.SceneObjectSelection
 {
 	public class SceneObjectSelectionService : ISceneObjectSelectionService, IInitializable, IDisposable
 	{

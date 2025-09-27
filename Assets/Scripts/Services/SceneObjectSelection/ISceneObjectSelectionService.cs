@@ -1,7 +1,7 @@
 ﻿using System;
 using Gameplay;
 
-namespace Services.SceneObjectSelectionService
+namespace Services.SceneObjectSelection
 {
 	public interface ISceneObjectSelectionService
 	{

@@ -1,6 +1,6 @@
 ﻿using Services.Input;
 using Services.Instantiation;
-using Services.SceneObjectSelectionService;
+using Services.SceneObjectSelection;
 using Services.SceneObjectsRegistry;
 using Zenject;
 

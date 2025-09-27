@@ -1,6 +1,6 @@
 using Enums;
 using Gameplay;
-using Services.SceneObjectSelectionService;
+using Services.SceneObjectSelection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
