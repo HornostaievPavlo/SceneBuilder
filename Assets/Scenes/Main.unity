@@ -6390,7 +6390,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1787243082}
   - {fileID: 1697327447}
   - {fileID: 2093245010}
   - {fileID: 994990351}
@@ -7016,63 +7015,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1765483007}
   m_CullTransparentMesh: 1
---- !u!1 &1787243081
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1787243082}
-  - component: {fileID: 1787243084}
-  - component: {fileID: 1787243083}
-  m_Layer: 0
-  m_Name: Painting System
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1787243082
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1787243081}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1627617347}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1787243083
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1787243081}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a70f9be50bfb11c4d9288bde4b2b2ba6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1787243084
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1787243081}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2f4349ccafb4b144b553beedb9a42f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1790837917
 GameObject:
   m_ObjectHideFlags: 0
@@ -9585,7 +9527,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1787243083}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SurfacePainter, Main
         m_MethodName: SetTexture
         m_Mode: 2
@@ -11365,7 +11307,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1787243083}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SurfacePainter, Main
         m_MethodName: SetOriginalMaterial
         m_Mode: 2
@@ -11903,7 +11845,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1787243083}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SurfacePainter, Main
         m_MethodName: SetTexture
         m_Mode: 2
@@ -14176,7 +14118,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1787243083}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SurfacePainter, Main
         m_MethodName: SetTexture
         m_Mode: 2
@@ -14387,7 +14329,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1787243083}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SurfacePainter, Main
         m_MethodName: SetTexture
         m_Mode: 2
@@ -14668,7 +14610,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1787243083}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SurfacePainter, Main
         m_MethodName: SetTexture
         m_Mode: 2
@@ -15943,7 +15885,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1787243083}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SurfacePainter, Main
         m_MethodName: SetTexture
         m_Mode: 2
@@ -17250,7 +17192,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1787243083}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SurfacePainter, Main
         m_MethodName: SetTexture
         m_Mode: 2
@@ -17815,7 +17757,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1787243083}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SurfacePainter, Main
         m_MethodName: SetTexture
         m_Mode: 2

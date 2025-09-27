@@ -5,7 +5,6 @@ using Zenject;
 
 public class SaveSceneWidget : MonoBehaviour
 {
-    [SerializeField] private SavingSystem savingSystem;
     [SerializeField] private Button button;
     [SerializeField] private GameObject progressPopup;
     
