@@ -7,7 +7,7 @@ using Services.SceneObjectSelection;
 using Services.SceneObjectsRegistry;
 using Zenject;
 
-namespace Installers
+namespace Installer
 {
 	public class BootstrapInstaller : MonoInstaller
 	{
