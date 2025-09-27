@@ -1,5 +1,6 @@
 ﻿using Services.Input;
 using Services.Instantiation;
+using Services.Painting;
 using Services.SceneObjectSelection;
 using Services.SceneObjectsRegistry;
 using Zenject;
@@ -14,6 +15,7 @@ namespace Installers
 			Container.BindInterfacesAndSelfTo<SceneObjectsRegistry>().AsSingle();
 			Container.BindInterfacesAndSelfTo<InputService>().AsSingle();
 			Container.BindInterfacesAndSelfTo<SceneObjectSelectionService>().AsSingle();
+			Container.BindInterfacesAndSelfTo<ModelPaintingService>().AsSingle();
 		}
 	}
 }
