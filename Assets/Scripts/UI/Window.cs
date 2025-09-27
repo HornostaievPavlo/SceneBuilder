@@ -1,3 +1,4 @@
+using Gameplay;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,30 +10,32 @@ public class Window : MonoBehaviour
     [SerializeField] private Toggle contentToggle;
     [SerializeField] private GameObject content;
 
-    private SelectableObject currentSelection;
+    private SceneObject currentSelection;
 
     private void OnEnable()
     {
-        SelectionSystem.OnObjectSelected += OnObjectSelected;
-        SelectionSystem.OnObjectDeselected += OnObjectDeselected;
+        // SelectionSystem.OnObjectSelected += OnObjectSelected;
+        // SelectionSystem.OnObjectDeselected += OnObjectDeselected;
 
         contentToggle.onValueChanged.AddListener(ToggleContent);
     }
 
     private void OnDisable()
     {
-        SelectionSystem.OnObjectSelected -= OnObjectSelected;
-        SelectionSystem.OnObjectDeselected -= OnObjectDeselected;
+        // SelectionSystem.OnObjectSelected -= OnObjectSelected;
+        // SelectionSystem.OnObjectDeselected -= OnObjectDeselected;
 
         contentToggle.onValueChanged.RemoveListener(ToggleContent);
     }
 
-    private void OnObjectSelected(SelectableObject selectable)
+    // move to new widget
+    private void OnObjectSelected(SceneObject scene)
     {
         Toolbox.SetActive(true);
-        currentSelection = selectable;
+        currentSelection = scene;
     }
-
+    
+    // move to new widget
     private void OnObjectDeselected()
     {
         Toolbox.SetActive(false);

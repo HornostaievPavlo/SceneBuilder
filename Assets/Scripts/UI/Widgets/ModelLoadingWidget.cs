@@ -1,6 +1,8 @@
-﻿using TMPro;
+﻿using Services.Loading;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace UI.Widgets
 {
@@ -9,8 +11,15 @@ namespace UI.Widgets
 		[SerializeField] private TMP_InputField inputField;
 		[SerializeField] private Button loadButton;
 		[SerializeField] private GameObject processingPopup;
-		[SerializeField] private LoadingSystem loadingSystem;
+		
+		private ILoadService _loadService;
 
+		[Inject]
+		private void Construct(ILoadService loadService)
+		{
+			_loadService = loadService;
+		}
+		
 		private void OnEnable()
 		{
 			loadButton.onClick.AddListener(HandleLoadButtonClicked);
@@ -30,11 +39,8 @@ namespace UI.Widgets
 		{
 			string input = inputField.text;
 			
-			if (input == string.Empty) 
-				return;
-			
 			processingPopup.SetActive(true);
-			await loadingSystem.LoadModel(input);
+			await _loadService.LoadModel(input);
 			processingPopup.SetActive(false);
 			
 			inputField.text = string.Empty;

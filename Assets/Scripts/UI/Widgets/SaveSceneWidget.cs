@@ -1,11 +1,20 @@
+using Services.Saving;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 public class SaveSceneWidget : MonoBehaviour
 {
-    [SerializeField] private SavingSystem savingSystem;
     [SerializeField] private Button button;
     [SerializeField] private GameObject progressPopup;
+    
+    private ISaveService _saveService;
+
+    [Inject]
+    private void Construct(ISaveService saveService)
+    {
+        _saveService = saveService;
+    }
 
     private void OnEnable()
     {
@@ -20,7 +29,7 @@ public class SaveSceneWidget : MonoBehaviour
     private async void HandleClick()
     {
         progressPopup.SetActive(true);
-        await savingSystem.SaveCurrentScene();
+        await _saveService.SaveCurrentScene();
         progressPopup.SetActive(false);
     }
 }

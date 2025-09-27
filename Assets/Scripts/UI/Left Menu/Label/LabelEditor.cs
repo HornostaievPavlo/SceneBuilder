@@ -1,7 +1,10 @@
 using Enums;
+using Gameplay;
+using Services.SceneObjectSelection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 public class LabelEditor : MonoBehaviour
 {
@@ -19,9 +22,17 @@ public class LabelEditor : MonoBehaviour
 
     private TMP_Text currentTitle;
     private TMP_Text currentDescription;
+    
+    private ISceneObjectSelectionService _sceneObjectSelectionService;
 
     private string InputTitle => titleInput.text.ToString();
     private string InputDescription => descriptionInput.text.ToString();
+
+    [Inject]
+    private void Construct(ISceneObjectSelectionService sceneObjectSelectionService)
+    {
+        _sceneObjectSelectionService = sceneObjectSelectionService;
+    }
 
     private void Awake()
     {
@@ -33,30 +44,30 @@ public class LabelEditor : MonoBehaviour
 
     private void OnEnable()
     {
-        SelectionSystem.OnObjectSelected += OnObjectSelected;
-        SelectionSystem.OnObjectDeselected += OnObjectDeselected;
+        _sceneObjectSelectionService.OnObjectSelected += OnObjectSelected;
+        _sceneObjectSelectionService.OnObjectDeselected += OnObjectDeselected;
     }
 
     private void OnDisable()
     {
-        SelectionSystem.OnObjectSelected -= OnObjectSelected;
-        SelectionSystem.OnObjectDeselected -= OnObjectDeselected;
+        _sceneObjectSelectionService.OnObjectSelected -= OnObjectSelected;
+        _sceneObjectSelectionService.OnObjectDeselected -= OnObjectDeselected;
     }
 
-    private void OnObjectSelected(SelectableObject selectable)
+    private void OnObjectSelected(SceneObject scene)
     {
-        if (selectable.TypeId != AssetTypeId.Label)
+        if (scene.AssetTypeId != AssetTypeId.Label)
             return;
 
-        currentSelectable = selectable.transform;
-
-        editLabelToggle = selectable.MenuRow.gameObject.GetComponentInChildren<Toggle>(true);
-        editLabelToggle.gameObject.SetActive(true);
-
-        TMP_Text[] labelTexts = selectable.MenuRow.gameObject.GetComponentsInChildren<TMP_Text>();
-
-        currentTitle = labelTexts[1];
-        currentDescription = labelTexts[2];
+        // currentSelectable = scene.transform;
+        //
+        // editLabelToggle = scene.MenuRow.gameObject.GetComponentInChildren<Toggle>(true);
+        // editLabelToggle.gameObject.SetActive(true);
+        //
+        // TMP_Text[] labelTexts = scene.MenuRow.gameObject.GetComponentsInChildren<TMP_Text>();
+        //
+        // currentTitle = labelTexts[1];
+        // currentDescription = labelTexts[2];
     }
 
     private void OnObjectDeselected()
