@@ -7061,7 +7061,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a70f9be50bfb11c4d9288bde4b2b2ba6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  copiedMaterials: []
 --- !u!114 &1787243084
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7074,8 +7073,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2f4349ccafb4b144b553beedb9a42f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colorTintSlider: {fileID: 409606446197863308}
-  colorsButtonsParent: {fileID: 3706885570199439033}
 --- !u!1 &1790837917
 GameObject:
   m_ObjectHideFlags: 0
@@ -7287,8 +7284,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 3033985748941087749}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -10942,13 +10939,28 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 558865330779573684}
+  - component: {fileID: 1806678657975304367}
   m_Layer: 5
   m_Name: ModelPaintingWidget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
+--- !u!114 &1806678657975304367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1806678657975304366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7027336f11544145967e2039b35e37cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Main::UI.Widgets.PaintingWidget
+  colorTintSlider: {fileID: 409606446197863308}
+  colorsButtonsParent: {fileID: 3706885570199439033}
 --- !u!1 &1849250078357440423
 GameObject:
   m_ObjectHideFlags: 0
