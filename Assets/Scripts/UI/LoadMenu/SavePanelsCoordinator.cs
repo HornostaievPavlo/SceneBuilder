@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.IO;
+using Services.Loading;
 using UnityEngine;
+using Zenject;
 
 public class SavePanelsCoordinator : MonoBehaviour
 {
@@ -13,17 +15,21 @@ public class SavePanelsCoordinator : MonoBehaviour
     [SerializeField]
     private RectTransform content;
 
-    private LoadingSystem loadingSystem;
-
     public static int panelsCounter = 0;
 
     [HideInInspector]
-    public List<SavePanel> panels = new List<SavePanel>();
+    public List<SavePanel> panels = new();
+
+    private ILoadService _loadService;
+
+    [Inject]
+    private void Construct(ILoadService loadService)
+    {
+        _loadService = loadService;
+    }
 
     private void Start()
     {
-        loadingSystem = GetComponent<LoadingSystem>();
-
         CreateRowsForExistingSaveFiles();
     }
 
@@ -64,7 +70,7 @@ public class SavePanelsCoordinator : MonoBehaviour
     /// <param name="panel">Target panel</param>
     private void AddRowButtonsListeners(SavePanel panel)
     {
-        panel.loadButton.onClick.AddListener(() => loadingSystem.LoadAssetsFromSaveFile(panel.currentNumber));
+        panel.loadButton.onClick.AddListener(() => _loadService.LoadAssetsFromSaveFile(panel.currentNumber));
         panel.loadButton.onClick.AddListener(() => loadMenu.SetActive(false));
 
         panel.deleteButton.onClick.AddListener(() => DeleteSaveFile(panel));
@@ -77,7 +83,7 @@ public class SavePanelsCoordinator : MonoBehaviour
     private void UpdateLoadingButtonIndex(SavePanel panel)
     {
         panel.loadButton.onClick.RemoveAllListeners();
-        panel.loadButton.onClick.AddListener(() => loadingSystem.LoadAssetsFromSaveFile(panel.currentNumber));
+        panel.loadButton.onClick.AddListener(() => _loadService.LoadAssetsFromSaveFile(panel.currentNumber));
         panel.loadButton.onClick.AddListener(() => loadMenu.SetActive(false));
 
         panel.deleteButton.onClick.RemoveAllListeners();
