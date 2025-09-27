@@ -2063,7 +2063,7 @@ MonoBehaviour:
   handle: {fileID: 846435614}
   gizmoLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
 --- !u!1 &721463432
 GameObject:
   m_ObjectHideFlags: 0
