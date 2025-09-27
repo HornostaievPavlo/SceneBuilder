@@ -1,4 +1,4 @@
-﻿using Services.InputService;
+﻿using Services.Input;
 using Services.Instantiation;
 using Services.SceneObjectSelectionService;
 using Services.SceneObjectsRegistry;

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Services.InputService;
+using Services.Input;
 using Services.SceneObjectSelectionService;
 using UnityEngine;
 using Zenject;

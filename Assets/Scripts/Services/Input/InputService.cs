@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using Zenject;
 
-namespace Services.InputService
+namespace Services.Input
 {
 	public class InputService : IInputService, IInitializable, ITickable
 	{
@@ -34,7 +34,7 @@ namespace Services.InputService
 		{
 			PollMouse();
 
-			_previousMousePosition = Input.mousePosition;
+			_previousMousePosition = UnityEngine.Input.mousePosition;
 			_hadFocus = Application.isFocused;
 		}
 
@@ -44,31 +44,31 @@ namespace Services.InputService
 
 			if (_hadFocus)
 			{
-				delta = NormalizeScreenVector(Input.mousePosition - _previousMousePosition);
+				delta = NormalizeScreenVector(UnityEngine.Input.mousePosition - _previousMousePosition);
 			}
 
-			if (Input.GetMouseButtonDown(0) && EventSystem.current.IsPointerOverGameObject() == false)
+			if (UnityEngine.Input.GetMouseButtonDown(0) && EventSystem.current.IsPointerOverGameObject() == false)
 			{
-				Raycast(Input.mousePosition);
+				Raycast(UnityEngine.Input.mousePosition);
 			}
 
-			if (Input.GetMouseButton(0) == false)
+			if (UnityEngine.Input.GetMouseButton(0) == false)
 			{
 				EndTouch();
 			}
 
-			if (Input.GetMouseButton(1))
+			if (UnityEngine.Input.GetMouseButton(1))
 			{
 				BeginTouch();
 				OnPrimaryDrag?.Invoke(delta * MouseRotationRate);
 			}
-			else if (Input.GetMouseButton(2))
+			else if (UnityEngine.Input.GetMouseButton(2))
 			{
 				OnSecondaryDrag?.Invoke(delta * MousePanRate);
 			}
-			else if (Input.mouseScrollDelta.y != 0f)
+			else if (UnityEngine.Input.mouseScrollDelta.y != 0f)
 			{
-				OnZoom?.Invoke(Input.mouseScrollDelta.y * MouseZoomRate);
+				OnZoom?.Invoke(UnityEngine.Input.mouseScrollDelta.y * MouseZoomRate);
 			}
 		}
 

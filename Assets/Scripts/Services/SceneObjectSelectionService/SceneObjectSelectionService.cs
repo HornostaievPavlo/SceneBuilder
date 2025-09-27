@@ -1,6 +1,6 @@
 ﻿using System;
 using Gameplay;
-using Services.InputService;
+using Services.Input;
 using UnityEngine;
 using Zenject;
 
