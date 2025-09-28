@@ -62,7 +62,7 @@ public class CameraModesWidget : MonoBehaviour
 
     private void OnObjectSelected(SceneObject scene)
     {
-        if (scene.AssetTypeId != AssetTypeId.Camera)
+        if (scene.SceneObjectTypeId != SceneObjectTypeId.Camera)
             return;
 
         ShowButtons(true);

@@ -46,9 +46,9 @@ namespace Services.SceneObjectsRegistry
 			_sceneObjectsHolder = assetsHolder;
 		}
 		
-		public List<SceneObject> GetSceneObjects(AssetTypeId assetTypeId)
+		public List<SceneObject> GetSceneObjects(SceneObjectTypeId sceneObjectTypeId)
 		{
-			return _sceneObjectsById.Values.Where(sceneObject => sceneObject.AssetTypeId == assetTypeId).ToList();
+			return _sceneObjectsById.Values.Where(sceneObject => sceneObject.SceneObjectTypeId == sceneObjectTypeId).ToList();
 		}
 	}
 }

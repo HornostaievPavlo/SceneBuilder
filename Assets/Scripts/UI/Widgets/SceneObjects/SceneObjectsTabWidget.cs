@@ -13,7 +13,7 @@ namespace UI.Widgets.SceneObjects
 {
 	public class SceneObjectsTabWidget : MonoBehaviour
 	{
-		[SerializeField] private AssetTypeId assetTypeId;
+		[SerializeField] private SceneObjectTypeId sceneObjectTypeId;
 
 		[SerializeField] private SceneObjectInfoWidget infoWidgetPrefab;
 		[SerializeField] private Transform infoWidgetsParent;
@@ -92,7 +92,7 @@ namespace UI.Widgets.SceneObjects
 
 		private void SetupWidgets()
 		{
-			List<SceneObject> sceneObjects = _sceneObjectsRegistry.GetSceneObjects(assetTypeId);
+			List<SceneObject> sceneObjects = _sceneObjectsRegistry.GetSceneObjects(sceneObjectTypeId);
 
 			foreach (SceneObject sceneObject in sceneObjects)
 			{

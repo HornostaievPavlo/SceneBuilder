@@ -38,7 +38,7 @@ namespace Services.Loading
 				modelPath = Constants.DuckModelPath;
 			}
 
-			SceneObject modelAsset = InstantiateSceneObject(AssetTypeId.Model);
+			SceneObject modelAsset = InstantiateSceneObject(SceneObjectTypeId.Model);
 			var gltfAsset = modelAsset.gameObject.AddComponent<GltfAsset>();
 
 			bool isSuccess = await gltfAsset.Load(modelPath);
@@ -79,45 +79,45 @@ namespace Services.Loading
 
 		public void LoadCamera()
         {
-	        InstantiateSceneObject(AssetTypeId.Camera);
+	        InstantiateSceneObject(SceneObjectTypeId.Camera);
         }
 
 		public void LoadLabel()
         {
-	        InstantiateSceneObject(AssetTypeId.Label);
+	        InstantiateSceneObject(SceneObjectTypeId.Label);
         }
 
-		private SceneObject InstantiateSceneObject(AssetTypeId typeId)
+		private SceneObject InstantiateSceneObject(SceneObjectTypeId typeId)
 		{
 			// try to remove switch 
 			switch (typeId)
 			{
-			    case AssetTypeId.Model:
+			    case SceneObjectTypeId.Model:
 			    {
 				    var modelPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(Constants.ModelPrefabPath);
 				    var model = _instantiateService.Instantiate<SceneObject>(modelPrefab, _sceneObjectsRegistry.SceneObjectsHolder);
 			        
-				    model.SetAssetType(AssetTypeId.Model);
+				    model.SetAssetType(SceneObjectTypeId.Model);
 			        
 				    return model;
 			    }
-			    case AssetTypeId.Camera:
+			    case SceneObjectTypeId.Camera:
 			    {
 				    var cameraPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(Constants.CameraPrefabPath);
 				    var camera = _instantiateService.Instantiate<SceneObject>(cameraPrefab, _sceneObjectsRegistry.SceneObjectsHolder);
 			        
 				    camera.name = "Asset";
-				    camera.SetAssetType(AssetTypeId.Camera);
+				    camera.SetAssetType(SceneObjectTypeId.Camera);
 					
 				    return camera;
 			    }
-			    case AssetTypeId.Label:
+			    case SceneObjectTypeId.Label:
 			    {
 				    var labelPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(Constants.LabelPrefabPath);
 				    var label = _instantiateService.Instantiate<SceneObject>(labelPrefab, _sceneObjectsRegistry.SceneObjectsHolder);
 					
 				    label.name = "Asset";
-				    label.SetAssetType(AssetTypeId.Label);
+				    label.SetAssetType(SceneObjectTypeId.Label);
 				    
 				    return label;
 			    }
@@ -190,7 +190,7 @@ namespace Services.Loading
 				if (!hasSelectable)
 				{
 					var selectable = asset.gameObject.AddComponent<SceneObject>();
-					selectable.SetAssetType(AssetTypeId.Model);
+					selectable.SetAssetType(SceneObjectTypeId.Model);
 
 					modelsFromSingleSaveFile.Add(asset.transform);
 				}

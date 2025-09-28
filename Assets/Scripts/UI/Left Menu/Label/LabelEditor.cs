@@ -56,7 +56,7 @@ public class LabelEditor : MonoBehaviour
 
     private void OnObjectSelected(SceneObject scene)
     {
-        if (scene.AssetTypeId != AssetTypeId.Label)
+        if (scene.SceneObjectTypeId != SceneObjectTypeId.Label)
             return;
 
         // currentSelectable = scene.transform;

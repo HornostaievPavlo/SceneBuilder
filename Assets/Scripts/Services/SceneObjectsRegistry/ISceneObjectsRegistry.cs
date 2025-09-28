@@ -14,6 +14,6 @@ namespace Services.SceneObjectsRegistry
 		void Register(SceneObject sceneObject);
 		void Unregister(SceneObject sceneObject);
 		void RegisterSceneObjectsHolder(Transform assetsHolder);
-		List<SceneObject> GetSceneObjects(AssetTypeId assetTypeId);
+		List<SceneObject> GetSceneObjects(SceneObjectTypeId sceneObjectTypeId);
 	}
 }

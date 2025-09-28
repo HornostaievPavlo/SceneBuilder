@@ -1,6 +1,6 @@
 namespace Enums
 {
-    public enum AssetTypeId
+    public enum SceneObjectTypeId
     {
         Model = 0,
         Camera = 1,
