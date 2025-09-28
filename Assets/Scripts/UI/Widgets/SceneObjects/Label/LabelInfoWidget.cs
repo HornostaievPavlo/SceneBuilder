@@ -4,12 +4,11 @@ using Enums;
 using Gameplay;
 using Services.SceneObjectsRegistry;
 using TMPro;
-using UI.Widgets.SceneObjects;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-namespace UI.Widgets
+namespace UI.Widgets.SceneObjects.Label
 {
 	public class LabelInfoWidget : SceneObjectInfoWidget
 	{
@@ -27,7 +26,7 @@ namespace UI.Widgets
 		private LabelEditWidget _labelEditWidget;
 		
 		private Camera _mainCamera;
-		private Label _label;
+		private Gameplay.Label _label;
 		
 		private ISceneObjectsRegistry _sceneObjectsRegistry;
 
@@ -97,12 +96,12 @@ namespace UI.Widgets
 			_label.transform.forward = _mainCamera.transform.forward;
 		}
 
-		private Label CacheLabel()
+		private Gameplay.Label CacheLabel()
 		{
 			List<SceneObject> labels = _sceneObjectsRegistry.GetSceneObjects(SceneObjectTypeId.Label);
 			SceneObject labelSceneObject = labels.FirstOrDefault(label => label.Id == SceneObject.Id);
 			
-			return labelSceneObject as Label;
+			return labelSceneObject as Gameplay.Label;
 		}
 	}
 }

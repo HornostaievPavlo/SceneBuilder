@@ -1,9 +1,8 @@
 ﻿using Enums;
 using Gameplay;
-using UI.Widgets.SceneObjects;
 using UnityEngine;
 
-namespace UI.Widgets
+namespace UI.Widgets.SceneObjects.Label
 {
 	public class LabelInfoLayoutWidget : SceneObjectInfoLayoutWidget
 	{

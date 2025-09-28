@@ -1,10 +1,9 @@
 ﻿using System;
-using Gameplay;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Widgets
+namespace UI.Widgets.SceneObjects.Label
 {
 	public class LabelEditWidget : MonoBehaviour
 	{
@@ -14,7 +13,7 @@ namespace UI.Widgets
 		[SerializeField] private TMP_InputField titleInputField;
 		[SerializeField] private TMP_InputField descriptionInputField;
 		
-		private Label _label;
+		private Gameplay.Label _label;
 		
 		public event Action OnClosed;
 		
@@ -30,7 +29,7 @@ namespace UI.Widgets
 			applyButton.onClick.RemoveListener(HandleApplyButtonClicked);
 		}
 
-		public void Setup(Label label)
+		public void Setup(Gameplay.Label label)
 		{
 			gameObject.SetActive(true);
 			_label = label;
