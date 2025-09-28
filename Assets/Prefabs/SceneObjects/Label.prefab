@@ -225,7 +225,7 @@ GameObject:
   - component: {fileID: 2085973794884341882}
   - component: {fileID: 21866972872833700}
   - component: {fileID: 858555029706988580}
-  - component: {fileID: 5088138849822908906}
+  - component: {fileID: 6202937713885864544}
   m_Layer: 0
   m_Name: Label
   m_TagString: Untagged
@@ -326,7 +326,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5088138849822908906
+--- !u!114 &6202937713885864544
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -335,9 +335,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 6184655565258954210}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b932c27ab4d58804b9fa4e33b28a0110, type: 3}
+  m_Script: {fileID: 11500000, guid: 8d3f5974a0e841878b5e4813a6880043, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Main::Gameplay.SceneObject
+  m_EditorClassIdentifier: Main::Gameplay.Label
 --- !u!1 &6928262709743704545
 GameObject:
   m_ObjectHideFlags: 0

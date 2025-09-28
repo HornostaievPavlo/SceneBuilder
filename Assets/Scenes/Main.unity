@@ -9857,8 +9857,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2736428699864131903}
-  - component: {fileID: 5041934270192798352}
   - component: {fileID: 3317933444869041524}
+  - component: {fileID: 3317933444869041525}
   m_Layer: 5
   m_Name: LabelsTab
   m_TagString: Untagged
@@ -11973,8 +11973,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8355030823647940347}
+  - component: {fileID: 8355030823647940348}
   m_Layer: 5
-  m_Name: LabelDataWidget
+  m_Name: LabelEditWidget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12375,6 +12376,22 @@ MonoBehaviour:
   labelDataMenu: {fileID: 3084294925786826111}
   editNormal: {fileID: 21300000, guid: 14b65efd4c31c3846b424db5da281805, type: 3}
   editSelected: {fileID: 21300000, guid: 4d00b960599668144b7c860a54ca6e91, type: 3}
+--- !u!114 &3317933444869041525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1258187375706413142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00f48e73d8da49edbffbc48e5b412f06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Main::UI.Widgets.LabelInfoLayoutWidget
+  sceneObjectTypeId: 2
+  infoWidgetPrefab: {fileID: 3377686164264452414, guid: 1d57b30d4e8526142ba55798fac90cfc, type: 3}
+  infoWidgetsParent: {fileID: 831219230311807171}
+  labelEditWidget: {fileID: 8355030823647940348}
 --- !u!114 &3342914474782708076
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13958,21 +13975,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 987206843068271148}
   m_CullTransparentMesh: 1
---- !u!114 &5041934270192798352
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1258187375706413142}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9254f17c8fe09254fa3cf8fc326770fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneObjectTypeId: 2
-  infoWidgetPrefab: {fileID: 3377686164264452414, guid: 1d57b30d4e8526142ba55798fac90cfc, type: 3}
-  infoWidgetsParent: {fileID: 831219230311807171}
 --- !u!222 &5070434365399465573
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -17857,6 +17859,18 @@ RectTransform:
   m_AnchoredPosition: {x: 658, y: 84.25995}
   m_SizeDelta: {x: 351, y: -615}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &8355030823647940348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3084294925786826111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43cc7f6e8f444a82bd39b1ca84b31c61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Main::UI.Widgets.LabelEditWidget
 --- !u!224 &8375258770319130567
 RectTransform:
   m_ObjectHideFlags: 0
