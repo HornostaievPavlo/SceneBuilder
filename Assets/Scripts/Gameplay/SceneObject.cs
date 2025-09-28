@@ -8,12 +8,12 @@ namespace Gameplay
 {
 	public class SceneObject : MonoBehaviour
 	{
-		private AssetTypeId _assetTypeId;
+		private SceneObjectTypeId _typeId;
 		private string _guid;
 		
 		private ISceneObjectsRegistry _sceneObjectsRegistry;
 
-		public AssetTypeId AssetTypeId => _assetTypeId;
+		public SceneObjectTypeId TypeId => _typeId;
 		public string Id => _guid;
 
 		[Inject]
@@ -33,9 +33,9 @@ namespace Gameplay
 			_sceneObjectsRegistry.Unregister(this);
 		}
 
-		public void SetAssetType(AssetTypeId typeId)
+		public void SetTypeId(SceneObjectTypeId typeId)
 		{
-			_assetTypeId = typeId;
+			_typeId = typeId;
 		}
 
 		private void GenerateGuid()

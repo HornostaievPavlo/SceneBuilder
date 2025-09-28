@@ -97,7 +97,7 @@ namespace Services.Loading
 				    var modelPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(Constants.ModelPrefabPath);
 				    var model = _instantiateService.Instantiate<SceneObject>(modelPrefab, _sceneObjectsRegistry.SceneObjectsHolder);
 			        
-				    model.SetAssetType(SceneObjectTypeId.Model);
+				    model.SetTypeId(SceneObjectTypeId.Model);
 			        
 				    return model;
 			    }
@@ -107,7 +107,7 @@ namespace Services.Loading
 				    var camera = _instantiateService.Instantiate<SceneObject>(cameraPrefab, _sceneObjectsRegistry.SceneObjectsHolder);
 			        
 				    camera.name = "Asset";
-				    camera.SetAssetType(SceneObjectTypeId.Camera);
+				    camera.SetTypeId(SceneObjectTypeId.Camera);
 					
 				    return camera;
 			    }
@@ -117,7 +117,7 @@ namespace Services.Loading
 				    var label = _instantiateService.Instantiate<SceneObject>(labelPrefab, _sceneObjectsRegistry.SceneObjectsHolder);
 					
 				    label.name = "Asset";
-				    label.SetAssetType(SceneObjectTypeId.Label);
+				    label.SetTypeId(SceneObjectTypeId.Label);
 				    
 				    return label;
 			    }
@@ -190,7 +190,7 @@ namespace Services.Loading
 				if (!hasSelectable)
 				{
 					var selectable = asset.gameObject.AddComponent<SceneObject>();
-					selectable.SetAssetType(SceneObjectTypeId.Model);
+					selectable.SetTypeId(SceneObjectTypeId.Model);
 
 					modelsFromSingleSaveFile.Add(asset.transform);
 				}
