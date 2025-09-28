@@ -1,3 +1,4 @@
+using UI.Widgets;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +11,7 @@ public class GeneralControlsWidget : MonoBehaviour
 
     [Header("Widgets")]
     [SerializeField] private SavesWidget savesWidget;
-    [SerializeField] private InfoWidget infoWidget;
+    [SerializeField] private ControlsWidget controlsWidget;
 
     private void OnEnable()
     {
@@ -33,7 +34,7 @@ public class GeneralControlsWidget : MonoBehaviour
 
     private void OnInfoButtonClicked()
     {
-        infoWidget.gameObject.SetActive(true);
+        controlsWidget.gameObject.SetActive(true);
     }
 
     private void OnQuitButtonClicked()

@@ -4536,7 +4536,7 @@ MonoBehaviour:
   infoButton: {fileID: 2050209156}
   quitButton: {fileID: 1579313639}
   savesWidget: {fileID: 260263518}
-  infoWidget: {fileID: 1492293206}
+  controlsWidget: {fileID: 0}
 --- !u!1 &1251436806
 GameObject:
   m_ObjectHideFlags: 0
@@ -5675,7 +5675,7 @@ GameObject:
   - component: {fileID: 1492293204}
   - component: {fileID: 1492293206}
   m_Layer: 5
-  m_Name: InfoWidget
+  m_Name: ControlsWidget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
