@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Enums;
+using Gameplay;
+using UnityEngine;
 using Zenject;
 
 namespace Services.Instantiation
@@ -24,6 +26,21 @@ namespace Services.Instantiation
             {
                 instantiated.transform.SetParent(parent, true);
             }
+
+            return instantiated;
+        }
+        
+        public SceneObject InstantiateSceneObject(GameObject prefab, Transform parent, SceneObjectTypeId typeId)
+        {
+            SceneObject instantiated = _instantiator.InstantiatePrefabForComponent<SceneObject>(prefab);
+            instantiated.name = instantiated.name.Replace("(Clone)", string.Empty);
+            
+            instantiated.transform.position = Vector3.zero;
+            instantiated.transform.rotation = Quaternion.identity;
+            
+            instantiated.transform.SetParent(parent, true);
+
+            instantiated.Register(typeId);
 
             return instantiated;
         }

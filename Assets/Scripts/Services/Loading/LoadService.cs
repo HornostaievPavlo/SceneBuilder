@@ -95,35 +95,30 @@ namespace Services.Loading
 			    case SceneObjectTypeId.Model:
 			    {
 				    var modelPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(Constants.ModelPrefabPath);
-				    var model = _instantiateService.Instantiate<SceneObject>(modelPrefab, _sceneObjectsRegistry.SceneObjectsHolder);
-			        
-				    model.SetTypeId(SceneObjectTypeId.Model);
+				    SceneObject model = _instantiateService.InstantiateSceneObject(modelPrefab, _sceneObjectsRegistry.SceneObjectsHolder, typeId);
 			        
 				    return model;
 			    }
 			    case SceneObjectTypeId.Camera:
 			    {
 				    var cameraPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(Constants.CameraPrefabPath);
-				    var camera = _instantiateService.Instantiate<SceneObject>(cameraPrefab, _sceneObjectsRegistry.SceneObjectsHolder);
+				    SceneObject camera = _instantiateService.InstantiateSceneObject(cameraPrefab, _sceneObjectsRegistry.SceneObjectsHolder, typeId);
 			        
 				    camera.name = "Asset";
-				    camera.SetTypeId(SceneObjectTypeId.Camera);
 					
 				    return camera;
 			    }
 			    case SceneObjectTypeId.Label:
 			    {
 				    var labelPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(Constants.LabelPrefabPath);
-				    var label = _instantiateService.Instantiate<SceneObject>(labelPrefab, _sceneObjectsRegistry.SceneObjectsHolder);
+				    SceneObject label = _instantiateService.InstantiateSceneObject(labelPrefab, _sceneObjectsRegistry.SceneObjectsHolder, typeId);
 					
 				    label.name = "Asset";
-				    label.SetTypeId(SceneObjectTypeId.Label);
 				    
 				    return label;
 			    }
 			    default:
 			    {
-				    Debug.LogError($"Trying to create scene object of unsupported type: {typeId}");
 				    return null;
 			    }
 			}
