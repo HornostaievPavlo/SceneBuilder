@@ -5,17 +5,19 @@ namespace UI.Widgets.SceneObjects
 {
 	public class SceneObjectInfoWidget : MonoBehaviour
 	{
-		private SceneObject _sceneObject;
+		protected SceneObject SceneObject;
 		
 		public void Setup(SceneObject sceneObject)
 		{
-			_sceneObject = sceneObject;
+			SceneObject = sceneObject;
+			
+			gameObject.name = string.Empty;
 			gameObject.name = $"{sceneObject.gameObject.name}{nameof(SceneObjectInfoWidget)}";
 		}
 		
 		public string GetSceneObjectId()
 		{
-			return _sceneObject.Id;
+			return SceneObject.Id;
 		}
 	}
 }
