@@ -22,9 +22,10 @@ namespace Gameplay
 			_sceneObjectsRegistry = sceneObjectsRegistry;
 		}
 
-		private void Awake()
+		public void Register(SceneObjectTypeId typeId) 
 		{
 			GenerateGuid();
+			SetTypeId(typeId);
 			_sceneObjectsRegistry.Register(this);
 		}
 
