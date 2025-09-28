@@ -11603,9 +11603,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9254f17c8fe09254fa3cf8fc326770fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  assetTypeId: 0
-  infoWidgetPrefab: {fileID: 0}
-  infoWidgetsParent: {fileID: 0}
+  sceneObjectTypeId: 1
+  infoWidgetPrefab: {fileID: 5541814544843690205, guid: 86eda2ea53f746346b95e7118d4f3be9, type: 3}
+  infoWidgetsParent: {fileID: 6653091563819209852}
 --- !u!1 &2832371723906267249
 GameObject:
   m_ObjectHideFlags: 0
@@ -14079,7 +14079,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9254f17c8fe09254fa3cf8fc326770fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  assetTypeId: 0
+  sceneObjectTypeId: 0
   infoWidgetPrefab: {fileID: 0}
   infoWidgetsParent: {fileID: 0}
 --- !u!222 &5070434365399465573
@@ -17156,7 +17156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9254f17c8fe09254fa3cf8fc326770fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  assetTypeId: 0
+  sceneObjectTypeId: 0
   infoWidgetPrefab: {fileID: 6359820779029637819, guid: ee2d964ec14347547b5a590d220551f6, type: 3}
   infoWidgetsParent: {fileID: 5692145538668494435}
 --- !u!114 &7397467181379770250

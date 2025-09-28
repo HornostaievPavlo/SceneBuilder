@@ -11,7 +11,7 @@ using Zenject;
 
 namespace UI.Widgets.SceneObjects
 {
-	public class SceneObjectsTabWidget : MonoBehaviour
+	public class SceneObjectInfoLayoutWidget : MonoBehaviour
 	{
 		[SerializeField] private SceneObjectTypeId sceneObjectTypeId;
 
