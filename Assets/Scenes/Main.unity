@@ -11551,7 +11551,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneObjectTypeId: 1
-  infoWidgetPrefab: {fileID: 5541814544843690205, guid: 86eda2ea53f746346b95e7118d4f3be9, type: 3}
+  infoWidgetPrefab: {fileID: 3377686164264452414, guid: 86eda2ea53f746346b95e7118d4f3be9, type: 3}
   infoWidgetsParent: {fileID: 6653091563819209852}
 --- !u!1 &2832371723906267249
 GameObject:
@@ -13971,7 +13971,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneObjectTypeId: 2
-  infoWidgetPrefab: {fileID: 8467101235215040110, guid: 1d57b30d4e8526142ba55798fac90cfc, type: 3}
+  infoWidgetPrefab: {fileID: 3377686164264452414, guid: 1d57b30d4e8526142ba55798fac90cfc, type: 3}
   infoWidgetsParent: {fileID: 831219230311807171}
 --- !u!222 &5070434365399465573
 CanvasRenderer:
@@ -17136,7 +17136,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneObjectTypeId: 0
-  infoWidgetPrefab: {fileID: 6359820779029637819, guid: ee2d964ec14347547b5a590d220551f6, type: 3}
+  infoWidgetPrefab: {fileID: 3377686164264452414, guid: ee2d964ec14347547b5a590d220551f6, type: 3}
   infoWidgetsParent: {fileID: 5692145538668494435}
 --- !u!114 &7397467181379770250
 MonoBehaviour:

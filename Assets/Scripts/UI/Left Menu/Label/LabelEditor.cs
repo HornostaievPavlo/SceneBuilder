@@ -72,9 +72,9 @@ public class LabelEditor : MonoBehaviour
 
     private void OnObjectDeselected()
     {
-        if (labelDataMenu.activeSelf) HideDataMenu();
-
-        editLabelToggle.gameObject.SetActive(false);
+        // if (labelDataMenu.activeSelf) HideDataMenu();
+        //
+        // editLabelToggle.gameObject.SetActive(false);
     }
 
     public void SetLabelEditMode(bool isEditModeOn)
