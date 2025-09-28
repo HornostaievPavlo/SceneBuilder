@@ -13,8 +13,12 @@ namespace UI.Widgets
 	public class LabelInfoWidget : SceneObjectInfoWidget
 	{
 		[SerializeField] private Button alignToCameraButton;
+		[SerializeField] private Button editButton;
+		
+		private LabelEditWidget _labelEditWidget;
 		
 		private Camera _mainCamera;
+		private Label _label;
 		
 		private ISceneObjectsRegistry _sceneObjectsRegistry;
 
@@ -32,11 +36,24 @@ namespace UI.Widgets
 		private void OnEnable()
 		{
 			alignToCameraButton.onClick.AddListener(HandleAlignButtonClicked);
+			editButton.onClick.AddListener(HandleEditButtonClicked);
 		}
 		
 		private void OnDisable()
 		{
 			alignToCameraButton.onClick.RemoveListener(HandleAlignButtonClicked);
+			editButton.onClick.RemoveListener(HandleEditButtonClicked);
+		}
+
+		public override void Setup(SceneObject sceneObject)
+		{
+			base.Setup(sceneObject);
+			_label = CacheLabel();
+		}
+
+		public void SetEditWidget(LabelEditWidget editWidget)
+		{
+			_labelEditWidget = editWidget;
 		}
 
 		private void HandleAlignButtonClicked()
@@ -44,16 +61,22 @@ namespace UI.Widgets
 			AlignToCamera();
 		}
 
-		private void AlignToCamera()
+		private void HandleEditButtonClicked()
 		{
-			SceneObject targetLabel = GetTargetLabel();
-			targetLabel.transform.forward = _mainCamera.transform.forward;
+			_labelEditWidget.Setup(_label);
 		}
 
-		private SceneObject GetTargetLabel()
+		private void AlignToCamera()
+		{
+			_label.transform.forward = _mainCamera.transform.forward;
+		}
+
+		private Label CacheLabel()
 		{
 			List<SceneObject> labels = _sceneObjectsRegistry.GetSceneObjects(SceneObjectTypeId.Label);
-			return labels.FirstOrDefault(label => label.Id == SceneObject.Id);
+			SceneObject labelSceneObject = labels.FirstOrDefault(label => label.Id == SceneObject.Id);
+			
+			return labelSceneObject as Label;
 		}
 	}
 }
