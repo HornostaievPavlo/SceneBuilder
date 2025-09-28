@@ -7,7 +7,7 @@ namespace UI.Widgets.SceneObjects
 	{
 		protected SceneObject SceneObject;
 		
-		public void Setup(SceneObject sceneObject)
+		public virtual void Setup(SceneObject sceneObject)
 		{
 			SceneObject = sceneObject;
 			
