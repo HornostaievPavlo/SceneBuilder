@@ -7,29 +7,31 @@ using Zenject;
 
 public class CameraModesWidget : MonoBehaviour
 {
+    [Header("Buttons")]
+    [SerializeField] private Button mainViewButton;
+    [SerializeField] private Button splitScreenViewButton;
+    [SerializeField] private Button cameraViewButton;
+    
+    [Header("Images")]
     [SerializeField] private Image mainViewImage;
+    [SerializeField] private Image splitScreenViewImage;
+    [SerializeField] private Image cameraViewImage;
+    
+    [Header("Sprites")]
+    [Space]
     [SerializeField] private Sprite mainViewImageSelected;
     [SerializeField] private Sprite mainViewImageDeselected;
     [Space]
-    [SerializeField] private Image splitScreenViewImage;
     [SerializeField] private Sprite splitScreenImageSelected;
     [SerializeField] private Sprite splitScreenImageDeselected;
     [Space]
-    [SerializeField] private Image cameraViewImage;
     [SerializeField] private Sprite cameraViewImageSelected;
     [SerializeField] private Sprite cameraViewImageDeselected;
 
-    private Camera mainCamera;
-    private Camera selectableCamera;
+    private Camera _mainCamera;
+    private Camera _sceneObjectCamera;
 
-    private Button[] modesButtons;
-
-    private const int zeroDepth = 0;
-    private const int lowestDepth = 1;
-    private const int middleDepth = 2;
-    private const int highestDepth = 3;
-
-    private CameraModeTypeId currentMode;
+    private CameraModeTypeId _currentModeTypeId;
     
     private ISceneObjectSelectionService _sceneObjectSelectionService;
 
@@ -39,125 +41,131 @@ public class CameraModesWidget : MonoBehaviour
         _sceneObjectSelectionService = sceneObjectSelectionService;
     }
 
-    private void Start()
+    private void Awake()
     {
-        mainCamera = Camera.main;
-
-        modesButtons = this.GetComponentsInChildren<Button>(true);
-
-        currentMode = CameraModeTypeId.MainView;
+        _mainCamera = Camera.main;
+        _currentModeTypeId = CameraModeTypeId.MainView;
+        ToggleButtonsActiveState(false);
     }
 
     private void OnEnable()
     {
-        _sceneObjectSelectionService.OnObjectSelected += OnObjectSelected;
-        _sceneObjectSelectionService.OnObjectDeselected += OnObjectDeselected;
+        _sceneObjectSelectionService.OnObjectSelected += HandleObjectSelected;
+        _sceneObjectSelectionService.OnObjectDeselected += HandleObjectDeselected;
+        
+        mainViewButton.onClick.AddListener(HandleMainViewButtonClicked);
+        splitScreenViewButton.onClick.AddListener(HandleSplitScreenViewButtonClicked);
+        cameraViewButton.onClick.AddListener(HandleCameraViewButtonClicked);
     }
 
     private void OnDisable()
     {
-        _sceneObjectSelectionService.OnObjectSelected -= OnObjectSelected;
-        _sceneObjectSelectionService.OnObjectDeselected -= OnObjectDeselected;
+        _sceneObjectSelectionService.OnObjectSelected -= HandleObjectSelected;
+        _sceneObjectSelectionService.OnObjectDeselected -= HandleObjectDeselected;
+        
+        mainViewButton.onClick.RemoveListener(HandleMainViewButtonClicked);
+        splitScreenViewButton.onClick.RemoveListener(HandleSplitScreenViewButtonClicked);
+        cameraViewButton.onClick.RemoveListener(HandleCameraViewButtonClicked);
     }
 
-    private void OnObjectSelected(SceneObject scene)
+    private void HandleObjectSelected(SceneObject sceneObject)
     {
-        if (scene.TypeId != SceneObjectTypeId.Camera)
+        if (sceneObject.TypeId != SceneObjectTypeId.Camera)
             return;
 
-        ShowButtons(true);
+        ToggleButtonsActiveState(true);
 
-        selectableCamera = scene.GetComponentInChildren<Camera>();
-
-        UpdateModesButtonsEvents(selectableCamera);
-
-        SetCameraMode(currentMode, selectableCamera);
+        _sceneObjectCamera = sceneObject.GetComponentInChildren<Camera>();
+        SetCameraMode(_currentModeTypeId);
     }
 
-    private void OnObjectDeselected()
+    private void HandleObjectDeselected()
     {
-        ShowButtons(false);
+        ToggleButtonsActiveState(false);
 
-        if (currentMode == CameraModeTypeId.CameraView)
+        if (_currentModeTypeId == CameraModeTypeId.CameraView)
         {
-            SetCameraMode(CameraModeTypeId.MainView, selectableCamera);
+            SetCameraMode(CameraModeTypeId.MainView);
         }
+        
+        _sceneObjectCamera = null;
     }
 
-    private void ShowButtons(bool isCameraSelected)
+    private void ToggleButtonsActiveState(bool value)
     {
-        foreach (var toggle in modesButtons)
-        {
-            toggle.gameObject.SetActive(isCameraSelected);
-        }
+        mainViewButton.gameObject.SetActive(value);
+        splitScreenViewButton.gameObject.SetActive(value);
+        cameraViewButton.gameObject.SetActive(value);
+    }
+    
+    private void HandleMainViewButtonClicked()
+    {
+        SetCameraMode(CameraModeTypeId.MainView);
     }
 
-    /// <summary>
-    /// Reassigns modes according to camera
-    /// </summary>
-    /// <param name="selectableCamera">Currently selected Camera</param>
-    private void UpdateModesButtonsEvents(Camera selectableCamera)
+    private void HandleSplitScreenViewButtonClicked()
     {
-        modesButtons[0].onClick.AddListener(() => SetCameraMode(CameraModeTypeId.MainView, selectableCamera));
-        modesButtons[1].onClick.AddListener(() => SetCameraMode(CameraModeTypeId.SplitScreenView, selectableCamera));
-        modesButtons[2].onClick.AddListener(() => SetCameraMode(CameraModeTypeId.CameraView, selectableCamera));
+        SetCameraMode(CameraModeTypeId.SplitScreenView);
     }
 
-    /// <summary>
-    /// Changes cameras properties according to mode
-    /// </summary>
-    /// <param name="mode">Defines changes to be made</param>
-    /// <param name="selectableCamera">Camera to operate with</param>
-    private void SetCameraMode(CameraModeTypeId mode, Camera selectableCamera)
+    private void HandleCameraViewButtonClicked()
     {
-        currentMode = mode;
+        SetCameraMode(CameraModeTypeId.CameraView);
+    }
 
-        switch (mode)
+    private void SetCameraMode(CameraModeTypeId modeTypeId)
+    {
+        _currentModeTypeId = modeTypeId;
+
+        switch (modeTypeId)
         {
             case CameraModeTypeId.MainView:
-
-                mainViewImage.sprite = mainViewImageSelected;
-
-                selectableCamera.depth = zeroDepth;
-
-                var full = new Rect(0, 0, 1, 1);
-                mainCamera.rect = full;
-                mainCamera.depth = highestDepth;
-
-                splitScreenViewImage.sprite = splitScreenImageDeselected;
-                cameraViewImage.sprite = cameraViewImageDeselected;
+                SetMainViewMode();
                 break;
 
             case CameraModeTypeId.SplitScreenView:
-
-                splitScreenViewImage.sprite = splitScreenImageSelected;
-
-                var mainHalf = new Rect(0, 0, 0.5f, 1);
-                mainCamera.rect = mainHalf;
-
-                var splitHalf = new Rect(0.5f, 0, 0.5f, 1);
-                selectableCamera.rect = splitHalf;
-                selectableCamera.depth = lowestDepth;
-
-                mainViewImage.sprite = mainViewImageDeselected;
-                cameraViewImage.sprite = cameraViewImageDeselected;
+                SetSplitScreenMode();
                 break;
 
             case CameraModeTypeId.CameraView:
-
-                cameraViewImage.sprite = cameraViewImageSelected;
-
-                var selectableFull = new Rect(0, 0, 1, 1);
-                selectableCamera.rect = selectableFull;
-                selectableCamera.depth = middleDepth;
-
-                mainCamera.depth = zeroDepth;
-
-                mainViewImage.sprite = mainViewImageDeselected;
-                splitScreenViewImage.sprite = splitScreenImageDeselected;
+                SetCameraViewMode();
                 break;
-
-            default: break;
         }
+    }
+
+    private void SetCameraViewMode()
+    {
+        _sceneObjectCamera.rect = new Rect(0, 0, 1, 1);
+        _sceneObjectCamera.depth = Constants.MiddleCameraDepth;
+
+        _mainCamera.depth = Constants.ZeroCameraDepth;
+        
+        cameraViewImage.sprite = cameraViewImageSelected;
+        mainViewImage.sprite = mainViewImageDeselected;
+        splitScreenViewImage.sprite = splitScreenImageDeselected;
+    }
+
+    private void SetSplitScreenMode()
+    {
+        _mainCamera.rect = new Rect(0, 0, 0.5f, 1);
+        _sceneObjectCamera.rect = new Rect(0.5f, 0, 0.5f, 1);
+        
+        _sceneObjectCamera.depth = Constants.LowestCameraDepth;
+
+        splitScreenViewImage.sprite = splitScreenImageSelected;
+        mainViewImage.sprite = mainViewImageDeselected;
+        cameraViewImage.sprite = cameraViewImageDeselected;
+    }
+
+    private void SetMainViewMode()
+    {
+        _mainCamera.rect = new Rect(0, 0, 1, 1);
+        
+        _sceneObjectCamera.depth = Constants.ZeroCameraDepth;
+        _mainCamera.depth = Constants.HighestCameraDepth;
+
+        mainViewImage.sprite = mainViewImageSelected;
+        splitScreenViewImage.sprite = splitScreenImageDeselected;
+        cameraViewImage.sprite = cameraViewImageDeselected;
     }
 }

@@ -9,4 +9,9 @@
 	public const string ModelPrefabPath = "Assets/Prefabs/SceneObjects/ModelHolder.prefab";
 	public const string CameraPrefabPath = "Assets/Prefabs/SceneObjects/Camera.prefab";
 	public const string LabelPrefabPath = "Assets/Prefabs/SceneObjects/Label.prefab";
+	
+	public const int ZeroCameraDepth = 0;
+	public const int LowestCameraDepth = 1;
+	public const int MiddleCameraDepth = 2;
+	public const int HighestCameraDepth = 3;
 }

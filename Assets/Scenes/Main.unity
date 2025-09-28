@@ -847,6 +847,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d418cfbbd89a53f47a32f79866f421cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainViewButton: {fileID: 1267235865}
+  splitScreenViewButton: {fileID: 863094088}
+  cameraViewButton: {fileID: 582707116}
   mainViewImage: {fileID: 1267235861}
   mainViewImageSelected: {fileID: 21300000, guid: 72c8d3c07ff8c0e4e883aa2fba56fffd, type: 3}
   mainViewImageDeselected: {fileID: 21300000, guid: a817f269a9f4b194bb02ff300d7b67f5, type: 3}
