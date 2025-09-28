@@ -105,7 +105,7 @@ namespace UI.Widgets.SceneObjects
 			}
 		}
 
-		private SceneObjectInfoWidget CreateInfoWidget(SceneObject sceneObject)
+		protected virtual SceneObjectInfoWidget CreateInfoWidget(SceneObject sceneObject)
 		{
 			var infoWidget = _instantiateService.Instantiate<SceneObjectInfoWidget>(infoWidgetPrefab, infoWidgetsParent);
 			
