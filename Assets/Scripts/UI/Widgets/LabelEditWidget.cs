@@ -1,5 +1,6 @@
 ﻿using System;
 using Gameplay;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,9 @@ namespace UI.Widgets
 	{
 		[SerializeField] private Button closeButton;
 		[SerializeField] private Button applyButton;
+
+		[SerializeField] private TMP_InputField titleInputField;
+		[SerializeField] private TMP_InputField descriptionInputField;
 		
 		private Label _label;
 		
@@ -40,6 +44,16 @@ namespace UI.Widgets
 
 		private void HandleApplyButtonClicked()
 		{
+			if (titleInputField.text != string.Empty && titleInputField.text != _label.Title)
+			{
+				_label.SetTitle(titleInputField.text);
+			}
+			
+			if (descriptionInputField.text != string.Empty && descriptionInputField.text != _label.Description)
+			{
+				_label.SetDescription(descriptionInputField.text);
+			}
+
 			OnClosed?.Invoke();
 			gameObject.SetActive(false);
 		}

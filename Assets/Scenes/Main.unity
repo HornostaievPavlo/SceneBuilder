@@ -11979,7 +11979,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!222 &3100208325903009566
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -17845,6 +17845,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Main::UI.Widgets.LabelEditWidget
   closeButton: {fileID: 4433675019507717490}
   applyButton: {fileID: 9113554597921161192}
+  titleInputField: {fileID: 3279036571432585898}
+  descriptionInputField: {fileID: 1783510206189945468}
 --- !u!224 &8375258770319130567
 RectTransform:
   m_ObjectHideFlags: 0
