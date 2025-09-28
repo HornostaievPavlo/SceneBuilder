@@ -2,9 +2,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Enums;
 using Gameplay;
+using Services.Instantiation;
 using Services.SceneObjectSelection;
 using Services.SceneObjectsRegistry;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -15,7 +17,7 @@ namespace UI.Widgets.SceneObjects
 	{
 		[SerializeField] private SceneObjectTypeId sceneObjectTypeId;
 
-		[SerializeField] private SceneObjectInfoWidget infoWidgetPrefab;
+		[SerializeField] private GameObject infoWidgetPrefab;
 		[SerializeField] private Transform infoWidgetsParent;
 
 		private readonly List<SceneObjectInfoWidget> _infoWidgets = new();
@@ -25,14 +27,17 @@ namespace UI.Widgets.SceneObjects
 
 		private ISceneObjectsRegistry _sceneObjectsRegistry;
 		private ISceneObjectSelectionService _sceneObjectSelectionService;
+		private IInstantiateService _instantiateService;
 
 		[Inject]
 		private void Construct(
 			ISceneObjectsRegistry sceneObjectsRegistry,
-			ISceneObjectSelectionService sceneObjectSelectionService)
+			ISceneObjectSelectionService sceneObjectSelectionService,
+			IInstantiateService instantiateService)
 		{
 			_sceneObjectsRegistry = sceneObjectsRegistry;
 			_sceneObjectSelectionService = sceneObjectSelectionService;
+			_instantiateService = instantiateService;
 		}
 
 		private void OnEnable()
@@ -102,7 +107,8 @@ namespace UI.Widgets.SceneObjects
 
 		private SceneObjectInfoWidget CreateInfoWidget(SceneObject sceneObject)
 		{
-			SceneObjectInfoWidget infoWidget = Instantiate(infoWidgetPrefab, infoWidgetsParent);
+			var infoWidget = _instantiateService.Instantiate<SceneObjectInfoWidget>(infoWidgetPrefab, infoWidgetsParent);
+			
 			_infoWidgets.Add(infoWidget);
 			infoWidget.Setup(sceneObject);
 
