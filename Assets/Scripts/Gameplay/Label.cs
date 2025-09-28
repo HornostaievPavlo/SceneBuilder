@@ -7,7 +7,13 @@
 		
 		public string Title => _title;
 		public string Description => _description;
-		
+
+		private void OnEnable()
+		{
+			_title = "Label";
+			_description = "Description";
+		}
+
 		public void SetTitle(string title)
 		{
 			_title = title;

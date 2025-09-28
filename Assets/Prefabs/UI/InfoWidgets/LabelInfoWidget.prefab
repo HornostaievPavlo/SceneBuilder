@@ -262,9 +262,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Label title
-
-'
+  m_text: Label
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6515151f97e095b49b8ae557ffac5f64, type: 2}
   m_sharedMaterial: {fileID: -5277597544304978710, guid: 6515151f97e095b49b8ae557ffac5f64, type: 2}
@@ -445,9 +443,9 @@ RectTransform:
   - {fileID: 3377686163497600364}
   - {fileID: 3377686163510807725}
   - {fileID: 1693139872265768638}
-  - {fileID: 1145323279693229156}
-  - {fileID: 4209313572502073408}
   - {fileID: 4472327070461352348}
+  - {fileID: 4209313572502073408}
+  - {fileID: 1145323279693229156}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -505,8 +503,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2cae6b15694963ad5965558cbcc762, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Main::UI.Widgets.LabelInfoWidget
+  titleText: {fileID: 3377686163510807724}
+  descriptionText: {fileID: 5829909874618888953}
   alignToCameraButton: {fileID: 4669981578141482361}
   editButton: {fileID: 2321827260491176113}
+  editButtonImage: {fileID: 4274905517353283213}
+  editButtonRegularSprite: {fileID: 21300000, guid: 14b65efd4c31c3846b424db5da281805, type: 3}
+  editButtonActiveSprite: {fileID: 21300000, guid: 4d00b960599668144b7c860a54ca6e91, type: 3}
 --- !u!1 &3898484723899586854
 GameObject:
   m_ObjectHideFlags: 0
@@ -572,7 +575,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Label description
+  m_text: Description
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6515151f97e095b49b8ae557ffac5f64, type: 2}
   m_sharedMaterial: {fileID: -5277597544304978710, guid: 6515151f97e095b49b8ae557ffac5f64, type: 2}
@@ -791,7 +794,7 @@ GameObject:
   - component: {fileID: 8480911093826619717}
   - component: {fileID: 8082987626900357065}
   m_Layer: 5
-  m_Name: AligntSprite
+  m_Name: AlignImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -987,7 +990,7 @@ GameObject:
   - component: {fileID: 3491179355829342490}
   - component: {fileID: 4274905517353283213}
   m_Layer: 5
-  m_Name: EditSprite
+  m_Name: EditImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1084,7 +1087,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 215, y: -42}
+  m_AnchoredPosition: {x: 214.99994, y: -42}
   m_SizeDelta: {x: 430, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1005788075191303537

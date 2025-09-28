@@ -3,6 +3,7 @@ using System.Linq;
 using Enums;
 using Gameplay;
 using Services.SceneObjectsRegistry;
+using TMPro;
 using UI.Widgets.SceneObjects;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,8 +13,16 @@ namespace UI.Widgets
 {
 	public class LabelInfoWidget : SceneObjectInfoWidget
 	{
+		[SerializeField] private TMP_Text titleText;
+		[SerializeField] private TMP_Text descriptionText;
+		
 		[SerializeField] private Button alignToCameraButton;
+		
+		[Header("Edit Button")]
 		[SerializeField] private Button editButton;
+		[SerializeField] private Image editButtonImage;
+		[SerializeField] private Sprite editButtonRegularSprite;
+		[SerializeField] private Sprite editButtonActiveSprite;
 		
 		private LabelEditWidget _labelEditWidget;
 		
@@ -43,6 +52,9 @@ namespace UI.Widgets
 		{
 			alignToCameraButton.onClick.RemoveListener(HandleAlignButtonClicked);
 			editButton.onClick.RemoveListener(HandleEditButtonClicked);
+			
+			if (_labelEditWidget != null)
+				_labelEditWidget.OnClosed -= HandleEditWidgetClosed;
 		}
 
 		public override void Setup(SceneObject sceneObject)
@@ -54,6 +66,7 @@ namespace UI.Widgets
 		public void SetEditWidget(LabelEditWidget editWidget)
 		{
 			_labelEditWidget = editWidget;
+			_labelEditWidget.OnClosed += HandleEditWidgetClosed;
 		}
 
 		private void HandleAlignButtonClicked()
@@ -61,9 +74,22 @@ namespace UI.Widgets
 			AlignToCamera();
 		}
 
+		private void HandleEditWidgetClosed()
+		{
+			editButtonImage.sprite = editButtonRegularSprite;
+			RefreshText();
+		}
+
 		private void HandleEditButtonClicked()
 		{
 			_labelEditWidget.Setup(_label);
+			editButtonImage.sprite = editButtonActiveSprite;
+		}
+
+		private void RefreshText()
+		{
+			titleText.text = _label.Title;
+			descriptionText.text = _label.Description;
 		}
 
 		private void AlignToCamera()
