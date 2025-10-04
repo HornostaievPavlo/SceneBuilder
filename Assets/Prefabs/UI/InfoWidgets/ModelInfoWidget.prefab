@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3377686163497600354}
   - component: {fileID: 3377686163497600355}
   m_Layer: 5
-  m_Name: Number Circle
+  m_Name: NumberImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 3377686163510807715}
   - component: {fileID: 3377686163510807724}
   m_Layer: 5
-  m_Name: Name
+  m_Name: NameText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -224,7 +224,7 @@ GameObject:
   - component: {fileID: 3377686164171017056}
   - component: {fileID: 3377686164171017057}
   m_Layer: 5
-  m_Name: Selection Dots
+  m_Name: SelectionImage
   m_TagString: Selection Dots
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -391,7 +391,7 @@ GameObject:
   - component: {fileID: 5478236477833937908}
   - component: {fileID: 3213924827347607490}
   m_Layer: 5
-  m_Name: Horizontal Line
+  m_Name: SeparatorLineImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -466,7 +466,7 @@ GameObject:
   - component: {fileID: 6411997351574144777}
   - component: {fileID: 6888830882320149738}
   m_Layer: 5
-  m_Name: 'Text '
+  m_Name: NumberText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -519,7 +519,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: 1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

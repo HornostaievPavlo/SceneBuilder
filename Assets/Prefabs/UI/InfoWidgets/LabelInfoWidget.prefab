@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 3377686163497600354}
   - component: {fileID: 3377686163497600355}
   m_Layer: 5
-  m_Name: NumberCircle
+  m_Name: NumberImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -345,7 +345,7 @@ GameObject:
   - component: {fileID: 3377686164171017056}
   - component: {fileID: 3377686164171017057}
   m_Layer: 5
-  m_Name: SelectionDots
+  m_Name: SelectionImage
   m_TagString: Selection Dots
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1065,7 +1065,7 @@ GameObject:
   - component: {fileID: 1005788075191303537}
   - component: {fileID: 5391001200172744885}
   m_Layer: 5
-  m_Name: Horizontal Line
+  m_Name: SeparatorLineImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
