@@ -1,8 +1,25 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SavesWidget : MonoBehaviour
+namespace UI.Widgets
 {
-    [SerializeField] private Button loadButton;
-    [SerializeField] private Button deleteButton;
+    public class SavesWidget : MonoBehaviour
+    {
+        [SerializeField] private Button closeButton;
+
+        private void OnEnable()
+        {
+            closeButton.onClick.AddListener(OnCloseButtonClicked);
+        }
+
+        private void OnDisable()
+        {
+            closeButton.onClick.RemoveListener(OnCloseButtonClicked);
+        }
+
+        private void OnCloseButtonClicked()
+        {
+            gameObject.SetActive(false);
+        }
+    }
 }
