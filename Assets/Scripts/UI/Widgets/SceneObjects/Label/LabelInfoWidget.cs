@@ -2,7 +2,6 @@
 using System.Linq;
 using Enums;
 using Gameplay;
-using Services.SceneObjectSelection;
 using Services.SceneObjectsRegistry;
 using TMPro;
 using UnityEngine;
@@ -13,6 +12,7 @@ namespace UI.Widgets.SceneObjects.Label
 {
 	public class LabelInfoWidget : SceneObjectInfoWidget
 	{
+		[Header("Label")]
 		[SerializeField] private TMP_Text titleText;
 		[SerializeField] private TMP_Text descriptionText;
 		
@@ -30,13 +30,11 @@ namespace UI.Widgets.SceneObjects.Label
 		private Gameplay.Label _label;
 		
 		private ISceneObjectsRegistry _sceneObjectsRegistry;
-		private ISceneObjectSelectionService _sceneObjectSelectionService;
 
 		[Inject]
-		private void Construct(ISceneObjectsRegistry sceneObjectsRegistry, ISceneObjectSelectionService sceneObjectSelectionService)
+		private void Construct(ISceneObjectsRegistry sceneObjectsRegistry)
 		{
 			_sceneObjectsRegistry = sceneObjectsRegistry;
-			_sceneObjectSelectionService = sceneObjectSelectionService;
 		}
 
 		private void Awake()
@@ -44,10 +42,9 @@ namespace UI.Widgets.SceneObjects.Label
 			_mainCamera = Camera.main;
 		}
 
-		private void OnEnable()
+		protected override void OnEnable()
 		{
-			_sceneObjectSelectionService.OnObjectSelected += HandleObjectSelected;
-			_sceneObjectSelectionService.OnObjectDeselected += HandleObjectDeselected;
+			base.OnEnable();
 			
 			alignToCameraButton.onClick.AddListener(HandleAlignButtonClicked);
 			editButton.onClick.AddListener(HandleEditButtonClicked);
@@ -55,11 +52,10 @@ namespace UI.Widgets.SceneObjects.Label
 			editButton.gameObject.SetActive(false);
 			alignToCameraButton.gameObject.SetActive(false);
 		}
-		
-		private void OnDisable()
+
+		protected override void OnDisable()
 		{
-			_sceneObjectSelectionService.OnObjectSelected -= HandleObjectSelected;
-			_sceneObjectSelectionService.OnObjectDeselected -= HandleObjectDeselected;
+			base.OnDisable();
 			
 			alignToCameraButton.onClick.RemoveListener(HandleAlignButtonClicked);
 			editButton.onClick.RemoveListener(HandleEditButtonClicked);
@@ -82,16 +78,20 @@ namespace UI.Widgets.SceneObjects.Label
 			_labelEditWidget.OnClosed += HandleEditWidgetClosed;
 		}
 
-		private void HandleObjectSelected(SceneObject sceneObject)
+		protected override void HandleObjectSelected(SceneObject sceneObject)
 		{
+			base.HandleObjectSelected(sceneObject);
+			
 			bool isTargetLabelSelected = sceneObject.Id == _label.Id;
 			
 			editButton.gameObject.SetActive(isTargetLabelSelected);
 			alignToCameraButton.gameObject.SetActive(isTargetLabelSelected);
 		}
 
-		private void HandleObjectDeselected()
+		protected override void HandleObjectDeselected()
 		{
+			base.HandleObjectDeselected();
+			
 			editButton.gameObject.SetActive(false);
 			alignToCameraButton.gameObject.SetActive(false);
 		}
