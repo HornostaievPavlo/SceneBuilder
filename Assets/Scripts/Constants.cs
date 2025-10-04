@@ -1,4 +1,6 @@
-﻿public static class Constants
+﻿using UnityEngine;
+
+public static class Constants
 {
 	public const string DuckModelPath = "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF/Duck.gltf";
 
@@ -14,4 +16,7 @@
 	public const int LowestCameraDepth = 1;
 	public const int MiddleCameraDepth = 2;
 	public const int HighestCameraDepth = 3;
+
+	public static readonly Color InfoWidgetSelectedColor = Color.blue;
+	public static readonly Color InfoWidgetUnselectedColor = Color.white;
 }

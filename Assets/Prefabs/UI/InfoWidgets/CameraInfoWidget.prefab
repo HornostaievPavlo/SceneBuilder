@@ -455,6 +455,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04ebf269d21571642846ff74382d4ac3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Main::UI.Widgets.SceneObjects.SceneObjectInfoWidget
+  numberText: {fileID: 6888830882320149738}
+  selectionImage: {fileID: 3377686164171017057}
 --- !u!1 &4544305976816723423
 GameObject:
   m_ObjectHideFlags: 0

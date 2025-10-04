@@ -6,7 +6,6 @@ using Services.Instantiation;
 using Services.SceneObjectSelection;
 using Services.SceneObjectsRegistry;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -22,21 +21,15 @@ namespace UI.Widgets.SceneObjects
 
 		private readonly List<SceneObjectInfoWidget> _infoWidgets = new();
 
-		private Color32 selectedRowColor = new Color32(63, 106, 204, 255);
-		private Color32 unselectedRowColor = new Color32(221, 223, 229, 255);
-
 		private ISceneObjectsRegistry _sceneObjectsRegistry;
-		private ISceneObjectSelectionService _sceneObjectSelectionService;
 		private IInstantiateService _instantiateService;
 
 		[Inject]
 		private void Construct(
 			ISceneObjectsRegistry sceneObjectsRegistry,
-			ISceneObjectSelectionService sceneObjectSelectionService,
 			IInstantiateService instantiateService)
 		{
 			_sceneObjectsRegistry = sceneObjectsRegistry;
-			_sceneObjectSelectionService = sceneObjectSelectionService;
 			_instantiateService = instantiateService;
 		}
 
@@ -44,8 +37,6 @@ namespace UI.Widgets.SceneObjects
 		{
 			_sceneObjectsRegistry.OnObjectRegistered += HandleObjectRegistered;
 			_sceneObjectsRegistry.OnObjectUnregistered += HandleObjectUnregistered;
-			_sceneObjectSelectionService.OnObjectSelected += HandleObjectSelected;
-			_sceneObjectSelectionService.OnObjectDeselected += HandleObjectDeselected;
 
 			Setup();
 		}
@@ -54,8 +45,6 @@ namespace UI.Widgets.SceneObjects
 		{
 			_sceneObjectsRegistry.OnObjectRegistered -= HandleObjectRegistered;
 			_sceneObjectsRegistry.OnObjectUnregistered -= HandleObjectUnregistered;
-			_sceneObjectSelectionService.OnObjectSelected -= HandleObjectSelected;
-			_sceneObjectSelectionService.OnObjectDeselected -= HandleObjectDeselected;
 		}
 
 		private void HandleObjectRegistered(SceneObject sceneObject)
@@ -67,16 +56,6 @@ namespace UI.Widgets.SceneObjects
 		{
 			SceneObjectInfoWidget infoWidget = _infoWidgets.FirstOrDefault(widget => widget.GetSceneObjectId() == sceneObject.Id);
 			DeleteInfoWidget(infoWidget);
-		}
-
-		private void HandleObjectSelected(SceneObject scene)
-		{
-			// HighlightRow(scene.MenuRow, true);
-		}
-
-		private void HandleObjectDeselected()
-		{
-			HighlightRow(null, false);
 		}
 
 		private void Setup()
@@ -131,35 +110,6 @@ namespace UI.Widgets.SceneObjects
 				TMP_Text text = row.GetComponentInChildren<TMP_Text>();
 				text.text = (rows.IndexOf(row) + 1).ToString();
 			}
-		}
-
-		private void HighlightRow(SceneObjectInfoWidget sceneObjectInfoWidget, bool isSelected)
-		{
-			if (sceneObjectInfoWidget != null)
-			{
-				DeselectAllRows();
-				GetHighlightDots(sceneObjectInfoWidget).color = isSelected ? selectedRowColor : unselectedRowColor;
-			}
-			else
-			{
-				DeselectAllRows();
-			}
-		}
-
-		private void DeselectAllRows()
-		{
-			foreach (SceneObjectInfoWidget infoWidget in _infoWidgets)
-			{
-				GetHighlightDots(infoWidget).color = unselectedRowColor;
-			}
-		}
-
-		private Image GetHighlightDots(SceneObjectInfoWidget sceneObjectInfoWidget)
-		{
-			Image[] images = sceneObjectInfoWidget.GetComponentsInChildren<Image>();
-			Image highlightningDots = images[1];
-
-			return highlightningDots;
 		}
 	}
 }

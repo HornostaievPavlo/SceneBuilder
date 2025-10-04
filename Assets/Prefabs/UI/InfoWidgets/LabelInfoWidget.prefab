@@ -503,6 +503,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2cae6b15694963ad5965558cbcc762, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Main::UI.Widgets.LabelInfoWidget
+  numberText: {fileID: 6888830882320149738}
+  selectionImage: {fileID: 3377686164171017057}
   titleText: {fileID: 3377686163510807724}
   descriptionText: {fileID: 5829909874618888953}
   alignToCameraButton: {fileID: 4669981578141482361}
