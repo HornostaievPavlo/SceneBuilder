@@ -2,6 +2,7 @@
 using System.Linq;
 using Enums;
 using Gameplay;
+using Services.SceneObjectSelection;
 using Services.SceneObjectsRegistry;
 using TMPro;
 using UnityEngine;
@@ -29,11 +30,13 @@ namespace UI.Widgets.SceneObjects.Label
 		private Gameplay.Label _label;
 		
 		private ISceneObjectsRegistry _sceneObjectsRegistry;
+		private ISceneObjectSelectionService _sceneObjectSelectionService;
 
 		[Inject]
-		private void Construct(ISceneObjectsRegistry sceneObjectsRegistry)
+		private void Construct(ISceneObjectsRegistry sceneObjectsRegistry, ISceneObjectSelectionService sceneObjectSelectionService)
 		{
 			_sceneObjectsRegistry = sceneObjectsRegistry;
+			_sceneObjectSelectionService = sceneObjectSelectionService;
 		}
 
 		private void Awake()
@@ -43,17 +46,28 @@ namespace UI.Widgets.SceneObjects.Label
 
 		private void OnEnable()
 		{
+			_sceneObjectSelectionService.OnObjectSelected += HandleObjectSelected;
+			_sceneObjectSelectionService.OnObjectDeselected += HandleObjectDeselected;
+			
 			alignToCameraButton.onClick.AddListener(HandleAlignButtonClicked);
 			editButton.onClick.AddListener(HandleEditButtonClicked);
+			
+			editButton.gameObject.SetActive(false);
+			alignToCameraButton.gameObject.SetActive(false);
 		}
 		
 		private void OnDisable()
 		{
+			_sceneObjectSelectionService.OnObjectSelected -= HandleObjectSelected;
+			_sceneObjectSelectionService.OnObjectDeselected -= HandleObjectDeselected;
+			
 			alignToCameraButton.onClick.RemoveListener(HandleAlignButtonClicked);
 			editButton.onClick.RemoveListener(HandleEditButtonClicked);
 			
 			if (_labelEditWidget != null)
+			{
 				_labelEditWidget.OnClosed -= HandleEditWidgetClosed;
+			}
 		}
 
 		public override void Setup(SceneObject sceneObject)
@@ -66,6 +80,20 @@ namespace UI.Widgets.SceneObjects.Label
 		{
 			_labelEditWidget = editWidget;
 			_labelEditWidget.OnClosed += HandleEditWidgetClosed;
+		}
+
+		private void HandleObjectSelected(SceneObject sceneObject)
+		{
+			bool isTargetLabelSelected = sceneObject.Id == _label.Id;
+			
+			editButton.gameObject.SetActive(isTargetLabelSelected);
+			alignToCameraButton.gameObject.SetActive(isTargetLabelSelected);
+		}
+
+		private void HandleObjectDeselected()
+		{
+			editButton.gameObject.SetActive(false);
+			alignToCameraButton.gameObject.SetActive(false);
 		}
 
 		private void HandleAlignButtonClicked()
