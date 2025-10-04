@@ -6403,6 +6403,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7142525926370874417}
+  - {fileID: 7193870529736130077}
   m_Father: {fileID: 1736767951}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1647213912
@@ -6823,9 +6824,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3873405}
-  - {fileID: 1613891736}
-  - {fileID: 7193870529736130077}
   - {fileID: 1439486001}
+  - {fileID: 1613891736}
   - {fileID: 672740411}
   - {fileID: 653800881}
   m_Father: {fileID: 0}
@@ -9726,7 +9726,7 @@ Light:
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
+  m_BounceIntensity: 0
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
@@ -11258,7 +11258,7 @@ Light:
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
+  m_BounceIntensity: 0
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
@@ -12348,7 +12348,7 @@ Light:
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
+  m_BounceIntensity: 0
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
@@ -13151,7 +13151,7 @@ GameObject:
   - component: {fileID: 313889971302143201}
   - component: {fileID: 5920595816826214004}
   m_Layer: 0
-  m_Name: Directional Light
+  m_Name: DirectionalLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14419,7 +14419,7 @@ GameObject:
   - component: {fileID: 7791978012158239498}
   - component: {fileID: 3293714491913122095}
   m_Layer: 0
-  m_Name: Left Spot
+  m_Name: LeftSpotLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16842,7 +16842,7 @@ Transform:
   - {fileID: 7791978012158239498}
   - {fileID: 1060331128122899066}
   - {fileID: 4164553142793845459}
-  m_Father: {fileID: 1736767951}
+  m_Father: {fileID: 1613891736}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7196283034443051691
 GameObject:
@@ -18049,7 +18049,7 @@ GameObject:
   - component: {fileID: 1060331128122899066}
   - component: {fileID: 2581160821655517213}
   m_Layer: 0
-  m_Name: Right Spot
+  m_Name: RightSpotLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18577,7 +18577,7 @@ GameObject:
   - component: {fileID: 4164553142793845459}
   - component: {fileID: 1167474917825712341}
   m_Layer: 0
-  m_Name: Back Spot
+  m_Name: BackSpotLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
