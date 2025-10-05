@@ -1,6 +1,7 @@
 using System.Collections;
 using RuntimeHandle;
 using Services.SceneObjectSelection;
+using Services.SceneObjectsRegistry;
 using UnityEngine;
 using Zenject;
 
@@ -14,11 +15,15 @@ namespace Gameplay
 		private int _gizmoLayerIndex;
 
 		private ISceneObjectSelectionService _sceneObjectSelectionService;
+		private ISceneObjectsRegistry _sceneObjectsRegistry;
 
 		[Inject]
-		private void Construct(ISceneObjectSelectionService sceneObjectSelectionService)
+		private void Construct(
+			ISceneObjectSelectionService sceneObjectSelectionService, 
+			ISceneObjectsRegistry sceneObjectsRegistry)
 		{
 			_sceneObjectSelectionService = sceneObjectSelectionService;
+			_sceneObjectsRegistry = sceneObjectsRegistry;
 		}
 
 		private void Awake()
@@ -30,12 +35,16 @@ namespace Gameplay
 		{
 			_sceneObjectSelectionService.OnObjectSelected += HandleObjectSelected;
 			_sceneObjectSelectionService.OnObjectDeselected += HandleObjectDeselected;
+			
+			_sceneObjectsRegistry.OnObjectUnregistered += HandleObjectUnregistered;
 		}
 
 		private void OnDisable()
 		{
 			_sceneObjectSelectionService.OnObjectSelected -= HandleObjectSelected;
 			_sceneObjectSelectionService.OnObjectDeselected -= HandleObjectDeselected;
+			
+			_sceneObjectsRegistry.OnObjectUnregistered -= HandleObjectUnregistered;
 		}
 
 		private void HandleObjectSelected(SceneObject sceneObject)
@@ -44,6 +53,11 @@ namespace Gameplay
 			handle.target = sceneObject.transform;
 
 			StartCoroutine(RefreshGizmoLayer());
+		}
+
+		private void HandleObjectUnregistered(SceneObject sceneObject)
+		{
+			HandleObjectDeselected();
 		}
 
 		public void HandleObjectDeselected()
