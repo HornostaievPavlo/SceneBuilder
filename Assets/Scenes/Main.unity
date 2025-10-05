@@ -3590,6 +3590,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1099585252}
   - component: {fileID: 1099585255}
+  - component: {fileID: 1099585256}
   - component: {fileID: 1099585254}
   - component: {fileID: 1099585253}
   m_Layer: 5
@@ -3689,6 +3690,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1099585251}
   m_CullTransparentMesh: 1
+--- !u!114 &1099585256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1099585251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea7c415c2dce44eaa7c7589ca532b0f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Main::UI.Widgets.ToolboxWidget
 --- !u!1 &1105746747
 GameObject:
   m_ObjectHideFlags: 0
@@ -3703,7 +3716,7 @@ GameObject:
   - component: {fileID: 1105746749}
   - component: {fileID: 1105746752}
   m_Layer: 5
-  m_Name: 'Copy Button   '
+  m_Name: 'CopyButton  '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3772,19 +3785,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1105746750}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: ApplicationUI, Main
-        m_MethodName: CopySelectedObject
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1105746750
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3882,7 +3883,7 @@ GameObject:
   - component: {fileID: 1111026718}
   - component: {fileID: 1111026721}
   m_Layer: 5
-  m_Name: Move Button
+  m_Name: MoveButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3951,19 +3952,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1111026719}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 672740412}
-        m_TargetAssemblyTypeName: TransformHandleSystem, Main
-        m_MethodName: SetPositionType
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1111026719
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4061,7 +4050,7 @@ GameObject:
   - component: {fileID: 1125821895}
   - component: {fileID: 1125821896}
   m_Layer: 5
-  m_Name: Painting Button
+  m_Name: PaintingButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4171,19 +4160,7 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1806678657975304366}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_IsOn: 0
 --- !u!114 &1125821896
 MonoBehaviour:
@@ -5529,7 +5506,7 @@ GameObject:
   - component: {fileID: 1468573208}
   - component: {fileID: 1468573211}
   m_Layer: 5
-  m_Name: Align Camera Button
+  m_Name: AlignCameraButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5598,19 +5575,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1468573209}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1685503929}
-        m_TargetAssemblyTypeName: OrbitCameraSystem, Main
-        m_MethodName: FocusOnSelectedObject
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1468573209
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5708,7 +5673,7 @@ GameObject:
   - component: {fileID: 1488490876}
   - component: {fileID: 1488490879}
   m_Layer: 5
-  m_Name: 'Rotate Button '
+  m_Name: RotateButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5777,19 +5742,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1488490877}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 672740412}
-        m_TargetAssemblyTypeName: TransformHandleSystem, Main
-        m_MethodName: SetRotationType
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1488490877
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6330,7 +6283,7 @@ GameObject:
   - component: {fileID: 1585493701}
   - component: {fileID: 1585493704}
   m_Layer: 5
-  m_Name: 'Scale Button  '
+  m_Name: 'ScaleButton '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6399,19 +6352,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1585493702}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 672740412}
-        m_TargetAssemblyTypeName: TransformHandleSystem, Main
-        m_MethodName: SetScaleType
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1585493702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7178,7 +7119,7 @@ GameObject:
   - component: {fileID: 1790837919}
   - component: {fileID: 1790837922}
   m_Layer: 5
-  m_Name: Delete Button
+  m_Name: DeleteButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7247,19 +7188,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1790837920}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: ApplicationUI, Main
-        m_MethodName: DeleteSelectedObject
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1790837920
 MonoBehaviour:
   m_ObjectHideFlags: 0
