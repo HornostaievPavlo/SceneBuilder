@@ -16,6 +16,8 @@ namespace UI.Widgets.SceneObjects
 		[SerializeField] private GameObject infoWidgetPrefab;
 		[SerializeField] private Transform infoWidgetsParent;
 
+		[SerializeField] private GameObject emptyLayoutInfo;
+
 		private readonly List<SceneObjectInfoWidget> _infoWidgets = new();
 
 		private ISceneObjectsRegistry _sceneObjectsRegistry;
@@ -47,6 +49,7 @@ namespace UI.Widgets.SceneObjects
 		private void HandleObjectRegistered(SceneObject sceneObject)
 		{
 			CreateInfoWidget(sceneObject);
+			RefreshEmptyLayoutInfoObject();
 		}
 
 		private void HandleObjectUnregistered(SceneObject sceneObject)
@@ -54,6 +57,7 @@ namespace UI.Widgets.SceneObjects
 			SceneObjectInfoWidget infoWidget = _infoWidgets.FirstOrDefault(widget => widget.GetSceneObjectId() == sceneObject.Id);
 			DeleteInfoWidget(infoWidget);
 			RefreshWidgetsNumbers();
+			RefreshEmptyLayoutInfoObject();
 		}
 
 		private void Setup()
@@ -61,6 +65,7 @@ namespace UI.Widgets.SceneObjects
 			Cleanup();
 			SetupWidgets();
 			RefreshWidgetsNumbers();
+			RefreshEmptyLayoutInfoObject();
 		}
 
 		private void Cleanup()
@@ -99,13 +104,18 @@ namespace UI.Widgets.SceneObjects
 		{
 			Destroy(infoWidget.gameObject);
 		}
-		
+
 		private void RefreshWidgetsNumbers()
 		{
 			for (int i = 0; i < _infoWidgets.Count; i++)
 			{
 				_infoWidgets[i].SetNumber(i + 1);
 			}
+		}
+
+		private void RefreshEmptyLayoutInfoObject()
+		{
+			emptyLayoutInfo.SetActive(_infoWidgets.Count == 0);
 		}
 	}
 }
