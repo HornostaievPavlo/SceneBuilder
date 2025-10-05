@@ -102,6 +102,7 @@ namespace UI.Widgets.SceneObjects
 
 		private void DeleteInfoWidget(SceneObjectInfoWidget infoWidget)
 		{
+			_infoWidgets.Remove(infoWidget);
 			Destroy(infoWidget.gameObject);
 		}
 
