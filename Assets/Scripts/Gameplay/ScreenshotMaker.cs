@@ -33,7 +33,7 @@ public class ScreenshotMaker : MonoBehaviour
         Texture2D screenshot = CaptureCameraView();
 
         string directoryPath = IOUtility.scenePath + sceneNumber;
-        string screenshotPath = directoryPath + IOUtility.previewFile;
+        string screenshotPath = directoryPath + Constants.PreviewFile;
         IOUtility.CreateDirectoryAndSaveTexture
             (screenshot, directoryPath, screenshotPath);
     }

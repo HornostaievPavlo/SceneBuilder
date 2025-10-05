@@ -11,6 +11,7 @@ namespace UI.Widgets.SceneObjects
         [SerializeField] private RectTransform content;
     
         [Header("Tabs")]
+        [SerializeField] private SceneObjectsTabsWidget tabsWidget;
         [SerializeField] private ToggleGroup tabsToggleGroup;
         [SerializeField] private GameObject lineSeparator;
 
@@ -19,22 +20,22 @@ namespace UI.Widgets.SceneObjects
         [SerializeField] private Sprite collapsedSprite;
         [SerializeField] private Sprite openedSprite;
 
-        private Toggle[] tabsToggles;
+        private Toggle[] _tabsToggles;
     
-        private float initialBackgroundWidth;
-        private float expandedBackgroundHeight;
+        private float _initialBackgroundWidth;
+        private float _expandedBackgroundHeight;
     
         private void Awake()
         {
-            initialBackgroundWidth = content.sizeDelta.x;
-            expandedBackgroundHeight = content.sizeDelta.y;
+            _initialBackgroundWidth = content.sizeDelta.x;
+            _expandedBackgroundHeight = content.sizeDelta.y;
         
-            content.sizeDelta = new Vector2(initialBackgroundWidth, 0f);
+            content.sizeDelta = new Vector2(_initialBackgroundWidth, 0f);
         
             expandToggle.gameObject.SetActive(false);
             lineSeparator.SetActive(false);
 
-            tabsToggles = tabsToggleGroup.gameObject.GetComponentsInChildren<Toggle>(true);
+            _tabsToggles = tabsToggleGroup.gameObject.GetComponentsInChildren<Toggle>(true);
         }
 
         private void OnEnable()
@@ -51,15 +52,34 @@ namespace UI.Widgets.SceneObjects
 
         private void HandleOpenToggleValueChanged(bool value)
         {
-            if (value == false) 
+            if (value == false)
+            {
                 HandleCollapsed();
-        
-            float targetHeight = value 
-                ? expandedBackgroundHeight / 2 
-                : 0f;
+            }
 
-            content.sizeDelta = new Vector2(initialBackgroundWidth, targetHeight);
-        
+            RefreshContentSize(value);
+            RefreshVisuals(value);
+
+            foreach (Toggle toggle in _tabsToggles)
+            {
+                toggle.interactable = value;
+            }
+            
+            tabsWidget.Setup(value);
+        }
+
+        private void HandleExpandToggleValueChanged(bool value)
+        {
+            float targetHeight = value 
+                ? _expandedBackgroundHeight 
+                : _expandedBackgroundHeight / 2;
+
+            content.sizeDelta = new Vector2(_initialBackgroundWidth, targetHeight);
+            expandToggle.transform.eulerAngles = new Vector3(0, 0, value ? 180 : 0);
+        }
+
+        private void RefreshVisuals(bool value)
+        {
             openToggle.transform.eulerAngles = new Vector3(0, 0, value ? 180 : 0);
             expandToggle.gameObject.SetActive(value);
             lineSeparator.SetActive(value);
@@ -67,21 +87,15 @@ namespace UI.Widgets.SceneObjects
             headerImage.sprite = value 
                 ? openedSprite 
                 : collapsedSprite;
-
-            foreach (Toggle toggle in tabsToggles)
-            {
-                toggle.interactable = value;
-            }
         }
 
-        private void HandleExpandToggleValueChanged(bool value)
+        private void RefreshContentSize(bool value)
         {
             float targetHeight = value 
-                ? expandedBackgroundHeight 
-                : expandedBackgroundHeight / 2;
+                ? _expandedBackgroundHeight / 2 
+                : 0f;
 
-            content.sizeDelta = new Vector2(initialBackgroundWidth, targetHeight);
-            expandToggle.transform.eulerAngles = new Vector3(0, 0, value ? 180 : 0);
+            content.sizeDelta = new Vector2(_initialBackgroundWidth, targetHeight);
         }
 
         private void HandleCollapsed()
@@ -89,8 +103,6 @@ namespace UI.Widgets.SceneObjects
             expandToggle.SetIsOnWithoutNotify(false);
             expandToggle.transform.eulerAngles = Vector3.zero;
             expandToggle.gameObject.SetActive(false);
-            
-            tabsToggleGroup.SetAllTogglesOff();
         }
     }
 }

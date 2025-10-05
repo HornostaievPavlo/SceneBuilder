@@ -7,21 +7,14 @@ public class IOUtility : MonoBehaviour
     public static string dataPath;
     public static string scenePath;
 
-    public static readonly string sceneFile = "/Asset.gltf";
-    public static readonly string textureFile = "/Texture.png";
-    public static readonly string previewFile = "/Preview.png";
-
-    public static readonly string duckModelPath =
-        "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF/Duck.gltf";
-
-    public static Transform assetsParent;
+    private static Transform assetsParent;
 
     private void Start()
     {
         dataPath = Application.persistentDataPath;
         scenePath = dataPath + "/Scene";
 
-        assetsParent = GameObject.Find("AssetsHolder").transform;
+        assetsParent = GameObject.Find("SceneObjectsHolder").transform;
     }
 
     public static SceneObject[] CollectSelectableObjects()

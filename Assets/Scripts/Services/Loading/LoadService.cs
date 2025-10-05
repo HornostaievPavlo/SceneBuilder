@@ -5,6 +5,8 @@ using Enums;
 using Gameplay;
 using GLTFast;
 using Services.Instantiation;
+using Services.SceneObjectsRegistry;
+using UnityEditor;
 using UnityEngine;
 using Zenject;
 
@@ -12,63 +14,32 @@ namespace Services.Loading
 {
 	public class LoadService : ILoadService
 	{
-		// prefabs paths to constants
-		// [SerializeField] private GameObject modelAssetHolderPrefab;
-		// [SerializeField] private GameObject cameraAssetPrefab;
-		// [SerializeField] private GameObject labelAssetPrefab;
-
 		private List<Transform> modelsFromSingleSaveFile = new();
 
 		private Transform[] children;
 
 		private IInstantiateService _instantiateService;
+		private ISceneObjectsRegistry _sceneObjectsRegistry;
 
 		[Inject]
-		private void Construct(IInstantiateService instantiateService)
+		private void Construct(IInstantiateService instantiateService, ISceneObjectsRegistry sceneObjectsRegistry)
 		{
 			_instantiateService = instantiateService;
+			_sceneObjectsRegistry = sceneObjectsRegistry;
 		}
 
-        /// <summary>
-        ///     Handles loading assets from local save file
-        /// </summary>
-        /// <param name="sceneNumber">Index of save file</param>
-        public async void LoadAssetsFromSaveFile(int sceneNumber)
-		{
-			string saveFilePath =
-				IOUtility.scenePath + sceneNumber.ToString() + IOUtility.sceneFile;
-
-			bool success = await LoadModel(saveFilePath);
-			if (success) AssignTextures(sceneNumber);
-		}
-
-        /// <summary>
-        ///     Adds camera asset to a scene
-        /// </summary>
-        public void LoadCameraAsset() => CreateAsset(AssetTypeId.Camera);
-
-        /// <summary>
-        ///     Adds label asset to a scene
-        /// </summary>
-        public void LoadLabelAsset() => CreateAsset(AssetTypeId.Label);
-
-        /// <summary>
-        ///     General model loading procedure.
-        ///     Handles adding of colliders to models
-        /// </summary>
-        /// <param name="modelPath">Path to .glb file in local storage</param>
-        /// <returns>Success of loading</returns>
-        public async Task<bool> LoadModel(string modelPath)
+		public async Task<bool> LoadModel(string modelPath)
 		{
 			if (string.IsNullOrEmpty(modelPath))
 			{
 				// Debug.LogError($"Trying to load model from empty path");
 				// return false;
-				modelPath = IOUtility.duckModelPath;
+				
+				modelPath = Constants.DuckModelPath;
 			}
 
-			GameObject modelAsset = CreateAsset(AssetTypeId.Model);
-			var gltfAsset = modelAsset.AddComponent<GltfAsset>();
+			SceneObject modelAsset = InstantiateSceneObject(SceneObjectTypeId.Model);
+			var gltfAsset = modelAsset.gameObject.AddComponent<GltfAsset>();
 
 			bool isSuccess = await gltfAsset.Load(modelPath);
 
@@ -95,7 +66,6 @@ namespace Services.Loading
 				//     }
 				// }
 
-				modelAsset.transform.SetParent(IOUtility.assetsParent);
 				AddColliders(modelAsset);
 
 				// assets = modelAsset.GetComponentsInChildren<Transform>().ToList();
@@ -107,47 +77,67 @@ namespace Services.Loading
 			return true;
 		}
 
-        /// <summary>
-        ///     Creates new selectable asset of specified type
-        /// </summary>
-        /// <param name="typeId">Specifies AssetType of created object</param>
-        /// <returns>Created instance</returns>
-        private GameObject CreateAsset(AssetTypeId typeId)
-		{
-			return new GameObject();
+		public void LoadCamera()
+        {
+	        InstantiateSceneObject(SceneObjectTypeId.Camera);
+        }
 
-			// switch (typeId)
-			// {
-			//     case AssetTypeId.Model:
-			//
-			//         var model = _instantiateService.Instantiate<SceneObject>(modelAssetHolderPrefab);
-			//         model.SetAssetType(AssetTypeId.Model);
-			//         
-			//         return model.gameObject;
-			//
-			//     case AssetTypeId.Camera:
-			//
-			//         GameObject camera = Instantiate(cameraAssetPrefab, IOUtility.assetsParent);
-			//         camera.name = "Asset";
-			//
-			//         var cameraScene = camera.AddComponent<SceneObject>();
-			//         cameraScene.SetAssetType(typeId);
-			//         return camera;
-			//
-			//     case AssetTypeId.Label:
-			//
-			//         GameObject label = Instantiate(labelAssetPrefab, IOUtility.assetsParent);
-			//         label.name = "Asset";
-			//
-			//         var labelScene = label.AddComponent<SceneObject>();
-			//         labelScene.SetAssetType(typeId);
-			//         return label;
-			//
-			//     default: return null;
-			// }
+		public void LoadLabel()
+        {
+	        InstantiateSceneObject(SceneObjectTypeId.Label);
+        }
+
+		private SceneObject InstantiateSceneObject(SceneObjectTypeId typeId)
+		{
+			// try to remove switch 
+			switch (typeId)
+			{
+			    case SceneObjectTypeId.Model:
+			    {
+				    var modelPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(Constants.ModelPrefabPath);
+				    SceneObject model = _instantiateService.InstantiateSceneObject(modelPrefab, _sceneObjectsRegistry.SceneObjectsHolder, typeId);
+			        
+				    return model;
+			    }
+			    case SceneObjectTypeId.Camera:
+			    {
+				    var cameraPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(Constants.CameraPrefabPath);
+				    SceneObject camera = _instantiateService.InstantiateSceneObject(cameraPrefab, _sceneObjectsRegistry.SceneObjectsHolder, typeId);
+			        
+				    camera.name = "Asset";
+					
+				    return camera;
+			    }
+			    case SceneObjectTypeId.Label:
+			    {
+				    var labelPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(Constants.LabelPrefabPath);
+				    SceneObject label = _instantiateService.InstantiateSceneObject(labelPrefab, _sceneObjectsRegistry.SceneObjectsHolder, typeId);
+					
+				    label.name = "Asset";
+				    
+				    return label;
+			    }
+			    default:
+			    {
+				    return null;
+			    }
+			}
 		}
 
-        /// <summary>
+		/// <summary>
+		///     Handles loading assets from local save file
+		/// </summary>
+		/// <param name="sceneNumber">Index of save file</param>
+		public async void LoadAssetsFromSaveFile(int sceneNumber)
+		{
+			string saveFilePath =
+				IOUtility.scenePath + sceneNumber + Constants.SceneFile;
+
+			bool success = await LoadModel(saveFilePath);
+			if (success) AssignTextures(sceneNumber);
+		}
+
+		/// <summary>
         ///     Rearranges imported assets in proper hierarchy
         /// </summary>
         /// <returns>Collection of assets in scene</returns>
@@ -163,15 +153,15 @@ namespace Services.Loading
 			if (!isSingleAsset)
 			{
 				sceneObj = GameObject.Find("Scene").transform;
-				sceneObj.SetParent(IOUtility.assetsParent);
+				sceneObj.SetParent(_sceneObjectsRegistry.SceneObjectsHolder);
 			}
 
 			// some Destroy???
-			var spawner = IOUtility.assetsParent.gameObject.GetComponentInChildren<GltfAsset>();
+			var spawner = _sceneObjectsRegistry.SceneObjectsHolder.gameObject.GetComponentInChildren<GltfAsset>();
 			// Destroy(spawner.gameObject.GetComponent<SceneObject>());
 			spawner.gameObject.name = "glTF Asset";
 
-			GltfAsset[] spawners = IOUtility.assetsParent.gameObject.GetComponentsInChildren<GltfAsset>();
+			GltfAsset[] spawners = _sceneObjectsRegistry.SceneObjectsHolder.gameObject.GetComponentsInChildren<GltfAsset>();
 			foreach (GltfAsset item in spawners)
 			{
 				// Destroy(item.gameObject.GetComponent<SceneObject>());
@@ -179,7 +169,7 @@ namespace Services.Loading
 			}
 
 			Array.Clear(children, 0, children.Length);
-			children = IOUtility.assetsParent.gameObject.GetComponentsInChildren<Transform>();
+			children = _sceneObjectsRegistry.SceneObjectsHolder.gameObject.GetComponentsInChildren<Transform>();
 
 			for (int i = 0; i < children.Length; i++)
 			{
@@ -188,14 +178,14 @@ namespace Services.Loading
 
 			foreach (var asset in resultList)
 			{
-				asset.SetParent(IOUtility.assetsParent);
+				asset.SetParent(_sceneObjectsRegistry.SceneObjectsHolder);
 
 				bool hasSelectable = asset.GetComponentInChildren<SceneObject>() != null;
 
 				if (!hasSelectable)
 				{
 					var selectable = asset.gameObject.AddComponent<SceneObject>();
-					selectable.SetAssetType(AssetTypeId.Model);
+					selectable.SetTypeId(SceneObjectTypeId.Model);
 
 					modelsFromSingleSaveFile.Add(asset.transform);
 				}
@@ -209,7 +199,7 @@ namespace Services.Loading
 			return resultList;
 		}
 
-        /// <summary>
+		/// <summary>
         ///     Assigns textures to corresponding materials
         /// </summary>
         private void AssignTextures(int sceneNumber)
@@ -224,7 +214,7 @@ namespace Services.Loading
 
 					if (material != null)
 					{
-						string currentAssetPath = $"/Asset{i + 1}" + IOUtility.textureFile;
+						string currentAssetPath = $"/Asset{i + 1}" + Constants.TextureFile;
 						string fullPath = IOUtility.scenePath + sceneNumber + currentAssetPath;
 
 						material.mainTexture = IOUtility.OpenDirectoryAndLoadTexture(fullPath);
@@ -235,7 +225,7 @@ namespace Services.Loading
 			modelsFromSingleSaveFile.Clear();
 		}
 
-        /// <summary>
+		/// <summary>
         ///     Adds convex mesh collider to
         ///     all renderers in List of targets
         /// </summary>
@@ -254,9 +244,9 @@ namespace Services.Loading
 			}
 		}
 
-		private void AddColliders(GameObject asset)
+		private void AddColliders(SceneObject sceneObject)
 		{
-			MeshRenderer[] meshRenderers = asset.GetComponentsInChildren<MeshRenderer>();
+			MeshRenderer[] meshRenderers = sceneObject.gameObject.GetComponentsInChildren<MeshRenderer>();
 
 			foreach (MeshRenderer meshRenderer in meshRenderers)
 			{

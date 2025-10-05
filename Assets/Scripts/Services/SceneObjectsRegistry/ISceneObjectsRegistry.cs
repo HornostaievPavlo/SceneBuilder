@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Enums;
 using Gameplay;
+using UnityEngine;
 
 namespace Services.SceneObjectsRegistry
 {
@@ -9,8 +10,10 @@ namespace Services.SceneObjectsRegistry
 	{
 		event Action<SceneObject> OnObjectRegistered;
 		event Action<SceneObject> OnObjectUnregistered;
+		Transform SceneObjectsHolder { get; }
 		void Register(SceneObject sceneObject);
 		void Unregister(SceneObject sceneObject);
-		List<SceneObject> GetSceneObjects(AssetTypeId assetTypeId);
+		void RegisterSceneObjectsHolder(Transform assetsHolder);
+		List<SceneObject> GetSceneObjects(SceneObjectTypeId sceneObjectTypeId);
 	}
 }

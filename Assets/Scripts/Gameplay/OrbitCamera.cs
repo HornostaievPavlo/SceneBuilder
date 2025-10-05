@@ -22,7 +22,7 @@ namespace Gameplay
         private Quaternion _rotation;
         private Quaternion _defaultCameraRotation;
 
-        private const float MinPitchAngle = -90f;
+        private const float MinPitchAngle = 3f;
         private const float MaxPitchAngle = 90f;
     
         private IInputService _inputService;
