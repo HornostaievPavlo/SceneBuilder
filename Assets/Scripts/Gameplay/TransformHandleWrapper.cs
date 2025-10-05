@@ -47,6 +47,12 @@ namespace Gameplay
 			_sceneObjectsRegistry.OnObjectUnregistered -= HandleObjectUnregistered;
 		}
 
+		public void SetType(HandleType type)
+		{
+			handle.type = type;
+			StartCoroutine(RefreshGizmoLayer());
+		}
+
 		private void HandleObjectSelected(SceneObject sceneObject)
 		{
 			handle.gameObject.SetActive(true);
@@ -55,21 +61,15 @@ namespace Gameplay
 			StartCoroutine(RefreshGizmoLayer());
 		}
 
-		private void HandleObjectUnregistered(SceneObject sceneObject)
-		{
-			HandleObjectDeselected();
-		}
-
-		public void HandleObjectDeselected()
+		private void HandleObjectDeselected()
 		{
 			handle.gameObject.SetActive(false);
 			handle.target = null;
 		}
 
-		public void SetType(HandleType type)
+		private void HandleObjectUnregistered(SceneObject sceneObject)
 		{
-			handle.type = type;
-			StartCoroutine(RefreshGizmoLayer());
+			HandleObjectDeselected();
 		}
 
 		private IEnumerator RefreshGizmoLayer()
