@@ -1,4 +1,5 @@
-﻿using Gameplay;
+﻿using Enums;
+using Gameplay;
 using RuntimeHandle;
 using Services.SceneObjectSelection;
 using Services.SceneObjectsRegistry;
@@ -10,8 +11,9 @@ namespace UI.Widgets
 {
 	public class ToolboxWidget : MonoBehaviour
 	{
-		[Header("Holder")]
+		[Header("Holders")]
 		[SerializeField] private GameObject buttonsHolder;
+		[SerializeField] private GameObject modelOnlyButtonsHolder;
 		
 		[Header("Transform")]
 		[SerializeField] private TransformHandleWrapper transformHandleWrapper;
@@ -74,6 +76,7 @@ namespace UI.Widgets
 		private void HandleObjectSelected(SceneObject sceneObject)
 		{
 			buttonsHolder.SetActive(true);
+			modelOnlyButtonsHolder.SetActive(sceneObject.TypeId == SceneObjectTypeId.Model);
 		}
 
 		private void HandleObjectDeselected()
@@ -113,6 +116,7 @@ namespace UI.Widgets
 		private void HandleDeleteButtonClicked()
 		{
 			_sceneObjectsRegistry.DeleteObject(_sceneObjectSelectionService.SelectedObject);
+			buttonsHolder.SetActive(false);
 		}
 
 		private void HandleFocusButtonClicked()
