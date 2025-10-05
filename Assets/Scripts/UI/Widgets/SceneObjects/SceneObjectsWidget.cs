@@ -19,22 +19,22 @@ namespace UI.Widgets.SceneObjects
         [SerializeField] private Sprite collapsedSprite;
         [SerializeField] private Sprite openedSprite;
 
-        private Toggle[] tabsToggles;
+        private Toggle[] _tabsToggles;
     
-        private float initialBackgroundWidth;
-        private float expandedBackgroundHeight;
+        private float _initialBackgroundWidth;
+        private float _expandedBackgroundHeight;
     
         private void Awake()
         {
-            initialBackgroundWidth = content.sizeDelta.x;
-            expandedBackgroundHeight = content.sizeDelta.y;
+            _initialBackgroundWidth = content.sizeDelta.x;
+            _expandedBackgroundHeight = content.sizeDelta.y;
         
-            content.sizeDelta = new Vector2(initialBackgroundWidth, 0f);
+            content.sizeDelta = new Vector2(_initialBackgroundWidth, 0f);
         
             expandToggle.gameObject.SetActive(false);
             lineSeparator.SetActive(false);
 
-            tabsToggles = tabsToggleGroup.gameObject.GetComponentsInChildren<Toggle>(true);
+            _tabsToggles = tabsToggleGroup.gameObject.GetComponentsInChildren<Toggle>(true);
         }
 
         private void OnEnable()
@@ -55,10 +55,10 @@ namespace UI.Widgets.SceneObjects
                 HandleCollapsed();
         
             float targetHeight = value 
-                ? expandedBackgroundHeight / 2 
+                ? _expandedBackgroundHeight / 2 
                 : 0f;
 
-            content.sizeDelta = new Vector2(initialBackgroundWidth, targetHeight);
+            content.sizeDelta = new Vector2(_initialBackgroundWidth, targetHeight);
         
             openToggle.transform.eulerAngles = new Vector3(0, 0, value ? 180 : 0);
             expandToggle.gameObject.SetActive(value);
@@ -68,7 +68,7 @@ namespace UI.Widgets.SceneObjects
                 ? openedSprite 
                 : collapsedSprite;
 
-            foreach (Toggle toggle in tabsToggles)
+            foreach (Toggle toggle in _tabsToggles)
             {
                 toggle.interactable = value;
             }
@@ -77,10 +77,10 @@ namespace UI.Widgets.SceneObjects
         private void HandleExpandToggleValueChanged(bool value)
         {
             float targetHeight = value 
-                ? expandedBackgroundHeight 
-                : expandedBackgroundHeight / 2;
+                ? _expandedBackgroundHeight 
+                : _expandedBackgroundHeight / 2;
 
-            content.sizeDelta = new Vector2(initialBackgroundWidth, targetHeight);
+            content.sizeDelta = new Vector2(_initialBackgroundWidth, targetHeight);
             expandToggle.transform.eulerAngles = new Vector3(0, 0, value ? 180 : 0);
         }
 
