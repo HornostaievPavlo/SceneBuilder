@@ -1,17 +1,27 @@
-﻿using UnityEngine;
+﻿using Services.SceneObjectsRegistry;
+using UnityEngine;
+using Zenject;
 
 namespace Gameplay
 {
 	public class SceneObjectCopyInstantiator : MonoBehaviour
 	{
-		public SceneObject CreateCopy(SceneObject originalObject)
+		private ISceneObjectsRegistry _sceneObjectsRegistry;
+
+		[Inject]
+		private void Construct(ISceneObjectsRegistry sceneObjectsRegistry)
+		{
+			_sceneObjectsRegistry = sceneObjectsRegistry;
+		}
+		
+		public void CreateCopy(SceneObject originalObject)
 		{
 			Transform selectableTr = originalObject.transform;
 
 			var meshCopy = new Mesh();
 			meshCopy.Clear();
 			meshCopy = selectableTr.GetComponentInChildren<MeshFilter>().mesh;
-			meshCopy.name = "test";
+			meshCopy.name = "mesh";
 
 			Material materialCopy = selectableTr.GetComponentInChildren<MeshRenderer>().material;
 			Texture2D textureCopy = IOUtility.DuplicateTexture((Texture2D)materialCopy.mainTexture);
@@ -23,7 +33,8 @@ namespace Gameplay
 			copyObject.gameObject.GetComponentInChildren<MeshRenderer>().material.mainTexture = textureCopy;
 			copyObject.gameObject.GetComponentInChildren<MeshCollider>().sharedMesh = meshCopy;
 			
-			return copyObject;
+			copyObject.GenerateGuid();
+			_sceneObjectsRegistry.Register(copyObject);
 		}
 	}
 }

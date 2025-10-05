@@ -107,16 +107,12 @@ namespace UI.Widgets
 			SceneObject selectedObject = _sceneObjectSelectionService.SelectedObject;
 			
 			var copyInstantiator = selectedObject.GetComponent<SceneObjectCopyInstantiator>();
-			SceneObject copy = copyInstantiator.CreateCopy(selectedObject);
-			copy.GenerateGuid();
-			
-			_sceneObjectsRegistry.Register(copy);
+			copyInstantiator.CreateCopy(selectedObject);
 		}
 
 		private void HandleDeleteButtonClicked()
 		{
-			SceneObject selectedObject = _sceneObjectSelectionService.SelectedObject;
-			_sceneObjectsRegistry.DeleteObject(selectedObject);
+			_sceneObjectsRegistry.DeleteObject(_sceneObjectSelectionService.SelectedObject);
 		}
 
 		private void HandleFocusButtonClicked()
