@@ -51,22 +51,13 @@ namespace UI.Widgets.SceneObjects
 
         private void HandleOpenToggleValueChanged(bool value)
         {
-            if (value == false) 
+            if (value == false)
+            {
                 HandleCollapsed();
-        
-            float targetHeight = value 
-                ? _expandedBackgroundHeight / 2 
-                : 0f;
+            }
 
-            content.sizeDelta = new Vector2(_initialBackgroundWidth, targetHeight);
-        
-            openToggle.transform.eulerAngles = new Vector3(0, 0, value ? 180 : 0);
-            expandToggle.gameObject.SetActive(value);
-            lineSeparator.SetActive(value);
-        
-            headerImage.sprite = value 
-                ? openedSprite 
-                : collapsedSprite;
+            RefreshContentSize(value);
+            RefreshVisuals(value);
 
             foreach (Toggle toggle in _tabsToggles)
             {
@@ -82,6 +73,26 @@ namespace UI.Widgets.SceneObjects
 
             content.sizeDelta = new Vector2(_initialBackgroundWidth, targetHeight);
             expandToggle.transform.eulerAngles = new Vector3(0, 0, value ? 180 : 0);
+        }
+
+        private void RefreshVisuals(bool value)
+        {
+            openToggle.transform.eulerAngles = new Vector3(0, 0, value ? 180 : 0);
+            expandToggle.gameObject.SetActive(value);
+            lineSeparator.SetActive(value);
+        
+            headerImage.sprite = value 
+                ? openedSprite 
+                : collapsedSprite;
+        }
+
+        private void RefreshContentSize(bool value)
+        {
+            float targetHeight = value 
+                ? _expandedBackgroundHeight / 2 
+                : 0f;
+
+            content.sizeDelta = new Vector2(_initialBackgroundWidth, targetHeight);
         }
 
         private void HandleCollapsed()
