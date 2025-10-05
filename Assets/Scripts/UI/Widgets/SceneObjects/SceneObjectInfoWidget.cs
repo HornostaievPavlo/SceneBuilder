@@ -1,6 +1,5 @@
 using Gameplay;
 using Services.SceneObjectSelection;
-using Services.SceneObjectsRegistry;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,15 +14,11 @@ namespace UI.Widgets.SceneObjects
 		
 		protected SceneObject SceneObject;
 		
-		private ISceneObjectsRegistry _sceneObjectsRegistry;
 		private ISceneObjectSelectionService _sceneObjectSelectionService;
 
 		[Inject]
-		private void Construct(
-			ISceneObjectsRegistry sceneObjectsRegistry, 
-			ISceneObjectSelectionService sceneObjectSelectionService)
+		private void Construct(ISceneObjectSelectionService sceneObjectSelectionService)
 		{
-			_sceneObjectsRegistry = sceneObjectsRegistry;
 			_sceneObjectSelectionService = sceneObjectSelectionService;
 		}
 		
@@ -31,6 +26,8 @@ namespace UI.Widgets.SceneObjects
 		{
 			_sceneObjectSelectionService.OnObjectSelected += HandleObjectSelected;
 			_sceneObjectSelectionService.OnObjectDeselected += HandleObjectDeselected;
+			
+			RefreshSelectionImage();
 		}
 		
 		protected virtual void OnDisable()
@@ -47,6 +44,8 @@ namespace UI.Widgets.SceneObjects
 			gameObject.name = $"{sceneObject.gameObject.name}{nameof(SceneObjectInfoWidget)}";
 			
 			numberText.text = number.ToString();
+			
+			RefreshSelectionImage();
 		}
 
 		public void SetNumber(int number)
@@ -69,6 +68,13 @@ namespace UI.Widgets.SceneObjects
 		public string GetSceneObjectId()
 		{
 			return SceneObject.Id;
+		}
+
+		private void RefreshSelectionImage()
+		{
+			selectionImage.color = _sceneObjectSelectionService.SelectedObject == SceneObject
+				? Constants.InfoWidgetSelectedColor
+				: Constants.InfoWidgetUnselectedColor;
 		}
 	}
 }

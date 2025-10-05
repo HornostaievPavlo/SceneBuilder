@@ -60,6 +60,7 @@ namespace UI.Widgets.SceneObjects
 		{
 			Cleanup();
 			SetupWidgets();
+			RefreshWidgetsNumbers();
 		}
 
 		private void Cleanup()
