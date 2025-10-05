@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1967508163968439382}
   - component: {fileID: 5890608643161557292}
+  - component: {fileID: 812455463251479765}
   m_Layer: 0
   m_Name: ModelHolder
   m_TagString: Untagged
@@ -44,3 +45,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b932c27ab4d58804b9fa4e33b28a0110, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Main::Gameplay.SceneObject
+--- !u!114 &812455463251479765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2722499254834551569}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42bc5ff7be974cac9dad7a3918711d52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Main::Gameplay.SceneObjectCopyInstantiator

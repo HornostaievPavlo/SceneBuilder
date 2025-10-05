@@ -70,8 +70,9 @@ namespace UI.Widgets.SceneObjects
 
 		private void Cleanup()
 		{
-			foreach (SceneObjectInfoWidget infoWidget in _infoWidgets)
+			for (var i = _infoWidgets.Count - 1; i >= 0; i--)
 			{
+				SceneObjectInfoWidget infoWidget = _infoWidgets[i];
 				DeleteInfoWidget(infoWidget);
 			}
 
@@ -102,6 +103,10 @@ namespace UI.Widgets.SceneObjects
 
 		private void DeleteInfoWidget(SceneObjectInfoWidget infoWidget)
 		{
+			if (infoWidget == null)
+				return;
+			
+			_infoWidgets.Remove(infoWidget);
 			Destroy(infoWidget.gameObject);
 		}
 

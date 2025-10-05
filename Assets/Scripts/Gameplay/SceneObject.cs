@@ -31,7 +31,10 @@ namespace Gameplay
 
 		private void OnDestroy()
 		{
-			_sceneObjectsRegistry.Unregister(this);
+			if (_sceneObjectsRegistry != null)
+			{
+				_sceneObjectsRegistry.Unregister(this);
+			}
 		}
 
 		public void SetTypeId(SceneObjectTypeId typeId)
@@ -39,7 +42,7 @@ namespace Gameplay
 			_typeId = typeId;
 		}
 
-		private void GenerateGuid()
+		public void GenerateGuid()
 		{
 			_guid = Guid.NewGuid().ToString();
 		}
