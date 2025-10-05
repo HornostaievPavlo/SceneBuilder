@@ -3745,6 +3745,7 @@ MonoBehaviour:
   scaleButton: {fileID: 1585493701}
   paintButton: {fileID: 1125821897}
   paintingWidget: {fileID: 1806678657975304367}
+  copyButton: {fileID: 1105746749}
 --- !u!1 &1105746747
 GameObject:
   m_ObjectHideFlags: 0
