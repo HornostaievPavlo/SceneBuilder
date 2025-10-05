@@ -1277,31 +1277,7 @@ MonoBehaviour:
   m_Group: {fileID: 7999673339930163337}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1258187375706413142}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 5316365723791851793}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
+      m_Calls: []
   m_IsOn: 0
 --- !u!1 &467543022
 GameObject:
@@ -1674,31 +1650,7 @@ MonoBehaviour:
   m_Group: {fileID: 7999673339930163337}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2857811471201096571}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 3971699149080105108}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
+      m_Calls: []
   m_IsOn: 0
 --- !u!1 &582707111
 GameObject:
@@ -5181,19 +5133,7 @@ MonoBehaviour:
   m_Group: {fileID: 7999673339930163337}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6782649424225133705}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
+      m_Calls: []
   m_IsOn: 0
 --- !u!1 &1439486000
 GameObject:
@@ -9734,7 +9674,7 @@ GameObject:
   - component: {fileID: 2736428699864131903}
   - component: {fileID: 3317933444869041525}
   m_Layer: 5
-  m_Name: LabelsTab
+  m_Name: LabelsInfoLayoutWidget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10988,7 +10928,7 @@ GameObject:
   - component: {fileID: 5977869389601579731}
   - component: {fileID: 7397467181379770250}
   m_Layer: 5
-  m_Name: LabelsViewport
+  m_Name: Viewport
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11456,7 +11396,7 @@ GameObject:
   - component: {fileID: 5972484268573814788}
   - component: {fileID: 2757898199808197881}
   m_Layer: 5
-  m_Name: 'CamerasTab '
+  m_Name: CamerasInfoLayoutWidget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11784,7 +11724,7 @@ GameObject:
   - component: {fileID: 7999673339930163337}
   - component: {fileID: 7999673339930163338}
   m_Layer: 5
-  m_Name: TabsToggleGroup
+  m_Name: SceneObjectsTabsWidget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11866,6 +11806,7 @@ MonoBehaviour:
   openToggle: {fileID: 339824287}
   expandToggle: {fileID: 268448746}
   content: {fileID: 110410504}
+  tabsWidget: {fileID: 7999673339930163338}
   tabsToggleGroup: {fileID: 7999673339930163337}
   lineSeparator: {fileID: 7445130467254482887}
   headerImage: {fileID: 8946596617938460704}
@@ -12540,7 +12481,7 @@ GameObject:
   - component: {fileID: 7581173863589386692}
   - component: {fileID: 7387869803011246370}
   m_Layer: 5
-  m_Name: ModelsTab
+  m_Name: ModelsInfoLayoutWidget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13205,7 +13146,7 @@ GameObject:
   - component: {fileID: 5224184609097650355}
   - component: {fileID: 5224184609097650354}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17252,9 +17193,9 @@ MonoBehaviour:
   modelsTabToggle: {fileID: 1435052800}
   camerasTabToggle: {fileID: 511416167}
   labelsTabToggle: {fileID: 392509661}
-  modelsTabParent: {fileID: 3744060194813417336}
-  camerasTabParent: {fileID: 2857811471201096571}
-  labelsTabParent: {fileID: 1258187375706413142}
+  modelsLayoutWidget: {fileID: 7387869803011246370}
+  camerasLayoutWidget: {fileID: 2757898199808197881}
+  labelsLayoutWidget: {fileID: 3317933444869041525}
 --- !u!1 &8022878622114088667
 GameObject:
   m_ObjectHideFlags: 0

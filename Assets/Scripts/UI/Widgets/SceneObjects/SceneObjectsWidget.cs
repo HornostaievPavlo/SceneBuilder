@@ -11,6 +11,7 @@ namespace UI.Widgets.SceneObjects
         [SerializeField] private RectTransform content;
     
         [Header("Tabs")]
+        [SerializeField] private SceneObjectsTabsWidget tabsWidget;
         [SerializeField] private ToggleGroup tabsToggleGroup;
         [SerializeField] private GameObject lineSeparator;
 
@@ -63,6 +64,8 @@ namespace UI.Widgets.SceneObjects
             {
                 toggle.interactable = value;
             }
+            
+            tabsWidget.Setup(value);
         }
 
         private void HandleExpandToggleValueChanged(bool value)
@@ -100,8 +103,6 @@ namespace UI.Widgets.SceneObjects
             expandToggle.SetIsOnWithoutNotify(false);
             expandToggle.transform.eulerAngles = Vector3.zero;
             expandToggle.gameObject.SetActive(false);
-            
-            tabsToggleGroup.SetAllTogglesOff();
         }
     }
 }
