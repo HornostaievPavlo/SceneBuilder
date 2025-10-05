@@ -20,10 +20,7 @@ namespace Services.SceneObjectsRegistry
 		public void Register(SceneObject sceneObject)
 		{
 			if (_sceneObjectsById.ContainsKey(sceneObject.Id))
-			{
-				Debug.LogError($"Trying to register a SceneObject which is already registered: {sceneObject.name}");
 				return;
-			}
 			
 			_sceneObjectsById.Add(sceneObject.Id, sceneObject);
 			OnObjectRegistered?.Invoke(sceneObject);
@@ -32,10 +29,7 @@ namespace Services.SceneObjectsRegistry
 		public void Unregister(SceneObject sceneObject)
 		{
 			if (_sceneObjectsById.ContainsKey(sceneObject.Id) == false)
-			{
-				Debug.LogError($"Trying to unregister a SceneObject that is not registered: {sceneObject.name}");
 				return;
-			}
 			
 			_sceneObjectsById.Remove(sceneObject.Id);
 			OnObjectUnregistered?.Invoke(sceneObject);
@@ -53,6 +47,11 @@ namespace Services.SceneObjectsRegistry
 
 		public void DeleteObject(SceneObject sceneObject)
 		{
+			if (_sceneObjectsById.ContainsValue(sceneObject))
+			{
+				Unregister(sceneObject);
+			}
+			
 			UnityEngine.Object.Destroy(sceneObject.gameObject);
 		}
 	}
