@@ -66,9 +66,9 @@ namespace UI.Widgets.SceneObjects.Label
 			}
 		}
 
-		public override void Setup(SceneObject sceneObject)
+		public override void Setup(SceneObject sceneObject, int number)
 		{
-			base.Setup(sceneObject);
+			base.Setup(sceneObject, number);
 			_label = CacheLabel();
 		}
 

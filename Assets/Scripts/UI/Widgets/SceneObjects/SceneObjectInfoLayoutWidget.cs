@@ -3,11 +3,8 @@ using System.Linq;
 using Enums;
 using Gameplay;
 using Services.Instantiation;
-using Services.SceneObjectSelection;
 using Services.SceneObjectsRegistry;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using Zenject;
 
 namespace UI.Widgets.SceneObjects
@@ -56,6 +53,7 @@ namespace UI.Widgets.SceneObjects
 		{
 			SceneObjectInfoWidget infoWidget = _infoWidgets.FirstOrDefault(widget => widget.GetSceneObjectId() == sceneObject.Id);
 			DeleteInfoWidget(infoWidget);
+			RefreshWidgetsNumbers();
 		}
 
 		private void Setup()
@@ -89,9 +87,9 @@ namespace UI.Widgets.SceneObjects
 			var infoWidget = _instantiateService.Instantiate<SceneObjectInfoWidget>(infoWidgetPrefab, infoWidgetsParent);
 			
 			_infoWidgets.Add(infoWidget);
-			infoWidget.Setup(sceneObject);
-
-			// AssignRowsNumbers(rows);
+			
+			int widgetNumber = _infoWidgets.IndexOf(infoWidget) + 1;
+			infoWidget.Setup(sceneObject, widgetNumber);
 
 			return infoWidget;
 		}
@@ -99,16 +97,13 @@ namespace UI.Widgets.SceneObjects
 		private void DeleteInfoWidget(SceneObjectInfoWidget infoWidget)
 		{
 			Destroy(infoWidget.gameObject);
-
-			// AssignRowsNumbers(rows);
 		}
-
-		private void AssignRowsNumbers(List<SceneObjectInfoWidget> rows)
+		
+		private void RefreshWidgetsNumbers()
 		{
-			foreach (var row in rows)
+			for (int i = 0; i < _infoWidgets.Count; i++)
 			{
-				TMP_Text text = row.GetComponentInChildren<TMP_Text>();
-				text.text = (rows.IndexOf(row) + 1).ToString();
+				_infoWidgets[i].SetNumber(i + 1);
 			}
 		}
 	}

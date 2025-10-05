@@ -39,14 +39,21 @@ namespace UI.Widgets.SceneObjects
 			_sceneObjectSelectionService.OnObjectDeselected -= HandleObjectDeselected;
 		}
 		
-		public virtual void Setup(SceneObject sceneObject)
+		public virtual void Setup(SceneObject sceneObject, int number)
 		{
 			SceneObject = sceneObject;
 			
 			gameObject.name = string.Empty;
 			gameObject.name = $"{sceneObject.gameObject.name}{nameof(SceneObjectInfoWidget)}";
+			
+			numberText.text = number.ToString();
 		}
 
+		public void SetNumber(int number)
+		{
+			numberText.text = number.ToString();
+		}
+		
 		protected virtual void HandleObjectSelected(SceneObject sceneObject)
 		{
 			selectionImage.color = sceneObject == SceneObject
