@@ -39,11 +39,11 @@ namespace Services.SceneObjectSelection
 		{
 			var sceneObject = hit.transform.gameObject.GetComponentInParent<SceneObject>();
 
-			if (sceneObject != null)
-			{
-				_selectedObject = sceneObject;
-				OnObjectSelected?.Invoke(sceneObject);
-			}
+			if (sceneObject == null || sceneObject == _selectedObject)
+				return;
+			
+			_selectedObject = sceneObject;
+			OnObjectSelected?.Invoke(sceneObject);
 		}
 
 		private void HandleRayMiss()
