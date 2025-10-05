@@ -1,6 +1,5 @@
 ﻿using Gameplay;
 using RuntimeHandle;
-using Services.Loading;
 using Services.SceneObjectSelection;
 using Services.SceneObjectsRegistry;
 using UnityEngine;
@@ -26,6 +25,7 @@ namespace UI.Widgets
 		
 		[Header("Loading")]
 		[SerializeField] private Button copyButton;
+		[SerializeField] private Button deleteButton;
 		
 		private ISceneObjectSelectionService _sceneObjectSelectionService;
 		private ISceneObjectsRegistry _sceneObjectsRegistry;
@@ -49,6 +49,7 @@ namespace UI.Widgets
 			scaleButton.onClick.AddListener(HandleScaleButtonClicked);
 			paintButton.onClick.AddListener(HandlePaintButtonClicked);
 			copyButton.onClick.AddListener(HandleCopyButtonClicked);
+			deleteButton.onClick.AddListener(HandleDeleteButtonClicked);
 		}
 		
 		private void OnDisable()
@@ -61,6 +62,7 @@ namespace UI.Widgets
 			scaleButton.onClick.RemoveListener(HandleScaleButtonClicked);
 			paintButton.onClick.RemoveListener(HandlePaintButtonClicked);
 			copyButton.onClick.RemoveListener(HandleCopyButtonClicked);
+			deleteButton.onClick.RemoveListener(HandleDeleteButtonClicked);
 		}
 
 		private void HandleObjectSelected(SceneObject sceneObject)
@@ -103,6 +105,12 @@ namespace UI.Widgets
 			copy.GenerateGuid();
 			
 			_sceneObjectsRegistry.Register(copy);
+		}
+
+		private void HandleDeleteButtonClicked()
+		{
+			SceneObject selectedObject = _sceneObjectSelectionService.SelectedObject;
+			_sceneObjectsRegistry.DeleteObject(selectedObject);
 		}
 	}
 }

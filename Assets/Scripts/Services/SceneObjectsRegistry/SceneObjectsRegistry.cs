@@ -50,5 +50,10 @@ namespace Services.SceneObjectsRegistry
 		{
 			return _sceneObjectsById.Values.Where(sceneObject => sceneObject.TypeId == sceneObjectTypeId).ToList();
 		}
+
+		public void DeleteObject(SceneObject sceneObject)
+		{
+			UnityEngine.Object.Destroy(sceneObject.gameObject);
+		}
 	}
 }
