@@ -27,6 +27,10 @@ namespace UI.Widgets
 		[SerializeField] private Button copyButton;
 		[SerializeField] private Button deleteButton;
 		
+		[Header("Camera")]
+		[SerializeField] private Button focusButton;
+		[SerializeField] private OrbitCamera orbitCamera;
+		
 		private ISceneObjectSelectionService _sceneObjectSelectionService;
 		private ISceneObjectsRegistry _sceneObjectsRegistry;
 
@@ -50,6 +54,7 @@ namespace UI.Widgets
 			paintButton.onClick.AddListener(HandlePaintButtonClicked);
 			copyButton.onClick.AddListener(HandleCopyButtonClicked);
 			deleteButton.onClick.AddListener(HandleDeleteButtonClicked);
+			focusButton.onClick.AddListener(HandleFocusButtonClicked);
 		}
 		
 		private void OnDisable()
@@ -63,6 +68,7 @@ namespace UI.Widgets
 			paintButton.onClick.RemoveListener(HandlePaintButtonClicked);
 			copyButton.onClick.RemoveListener(HandleCopyButtonClicked);
 			deleteButton.onClick.RemoveListener(HandleDeleteButtonClicked);
+			focusButton.onClick.RemoveListener(HandleFocusButtonClicked);
 		}
 
 		private void HandleObjectSelected(SceneObject sceneObject)
@@ -111,6 +117,11 @@ namespace UI.Widgets
 		{
 			SceneObject selectedObject = _sceneObjectSelectionService.SelectedObject;
 			_sceneObjectsRegistry.DeleteObject(selectedObject);
+		}
+
+		private void HandleFocusButtonClicked()
+		{
+			orbitCamera.FocusOnSelectedObject();
 		}
 	}
 }
