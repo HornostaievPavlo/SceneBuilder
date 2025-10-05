@@ -39,7 +39,7 @@ namespace Gameplay
 			_typeId = typeId;
 		}
 
-		private void GenerateGuid()
+		public void GenerateGuid()
 		{
 			_guid = Guid.NewGuid().ToString();
 		}

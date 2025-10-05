@@ -1,6 +1,8 @@
 ﻿using Gameplay;
 using RuntimeHandle;
+using Services.Loading;
 using Services.SceneObjectSelection;
+using Services.SceneObjectsRegistry;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -22,12 +24,19 @@ namespace UI.Widgets
 		[SerializeField] private Button paintButton;
 		[SerializeField] private PaintingWidget paintingWidget;
 		
+		[Header("Loading")]
+		[SerializeField] private Button copyButton;
+		
 		private ISceneObjectSelectionService _sceneObjectSelectionService;
+		private ISceneObjectsRegistry _sceneObjectsRegistry;
 
 		[Inject]
-		private void Construct(ISceneObjectSelectionService sceneObjectSelectionService)
+		private void Construct(
+			ISceneObjectSelectionService sceneObjectSelectionService,
+			ISceneObjectsRegistry sceneObjectsRegistry)
 		{
 			_sceneObjectSelectionService = sceneObjectSelectionService;
+			_sceneObjectsRegistry = sceneObjectsRegistry;
 		}
 		
 		private void OnEnable()
@@ -39,6 +48,7 @@ namespace UI.Widgets
 			rotateButton.onClick.AddListener(HandleRotateButtonClicked);
 			scaleButton.onClick.AddListener(HandleScaleButtonClicked);
 			paintButton.onClick.AddListener(HandlePaintButtonClicked);
+			copyButton.onClick.AddListener(HandleCopyButtonClicked);
 		}
 		
 		private void OnDisable()
@@ -50,6 +60,7 @@ namespace UI.Widgets
 			rotateButton.onClick.RemoveListener(HandleRotateButtonClicked);
 			scaleButton.onClick.RemoveListener(HandleScaleButtonClicked);
 			paintButton.onClick.RemoveListener(HandlePaintButtonClicked);
+			copyButton.onClick.RemoveListener(HandleCopyButtonClicked);
 		}
 
 		private void HandleObjectSelected(SceneObject sceneObject)
@@ -81,6 +92,17 @@ namespace UI.Widgets
 		{
 			paintingWidget.gameObject.SetActive(true);
 			buttonsHolder.SetActive(false);
+		}
+
+		private void HandleCopyButtonClicked()
+		{
+			SceneObject selectedObject = _sceneObjectSelectionService.SelectedObject;
+			
+			var copyInstantiator = selectedObject.GetComponent<SceneObjectCopyInstantiator>();
+			SceneObject copy = copyInstantiator.CreateCopy(selectedObject);
+			copy.GenerateGuid();
+			
+			_sceneObjectsRegistry.Register(copy);
 		}
 	}
 }
