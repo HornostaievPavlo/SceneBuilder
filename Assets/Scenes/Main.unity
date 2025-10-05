@@ -3124,7 +3124,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 994990351}
-  - component: {fileID: 994990352}
   - component: {fileID: 994990353}
   - component: {fileID: 994990354}
   m_Layer: 0
@@ -3149,18 +3148,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &994990352
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 994990350}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0eb6559014575b440a04aaf33e5a3cc3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &994990353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3746,6 +3733,7 @@ MonoBehaviour:
   paintButton: {fileID: 1125821897}
   paintingWidget: {fileID: 1806678657975304367}
   copyButton: {fileID: 1105746749}
+  deleteButton: {fileID: 1790837919}
 --- !u!1 &1105746747
 GameObject:
   m_ObjectHideFlags: 0
