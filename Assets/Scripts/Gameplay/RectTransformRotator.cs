@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace UI.Widgets
+namespace Gameplay
 {
 	public class RectTransformRotator : MonoBehaviour
 	{
