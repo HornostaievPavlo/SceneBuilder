@@ -87,7 +87,7 @@ GameObject:
   - component: {fileID: 1132159655475646917}
   - component: {fileID: 1971947062914503238}
   m_Layer: 5
-  m_Name: SaveFilePanel
+  m_Name: LocalSaveWidget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

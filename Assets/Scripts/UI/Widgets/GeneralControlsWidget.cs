@@ -10,7 +10,7 @@ public class GeneralControlsWidget : MonoBehaviour
     [SerializeField] private Button quitButton;
 
     [Header("Widgets")]
-    [SerializeField] private SavesWidget savesWidget;
+    [SerializeField] private LocalSavesWidget localSavesWidget;
     [SerializeField] private ControlsWidget controlsWidget;
 
     private void OnEnable()
@@ -29,7 +29,7 @@ public class GeneralControlsWidget : MonoBehaviour
 
     private void OnLoadButtonClicked()
     {
-        savesWidget.gameObject.SetActive(true);
+        localSavesWidget.gameObject.SetActive(true);
     }    
 
     private void OnInfoButtonClicked()

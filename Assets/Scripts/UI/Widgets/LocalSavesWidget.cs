@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace UI.Widgets
 {
-    public class SavesWidget : MonoBehaviour
+    public class LocalSavesWidget : MonoBehaviour
     {
         [SerializeField] private Button closeButton;
 
