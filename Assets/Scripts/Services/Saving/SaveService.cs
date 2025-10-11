@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Enums;
 using Gameplay;
 using GLTFast.Export;
-using Services.LocalSaves;
+using LocalSaves;
+using Services.LocalSavesRepository;
 using Services.SceneObjectsRegistry;
 using UnityEngine;
 using Zenject;
@@ -16,18 +19,17 @@ namespace Services.Saving
 		private ReadableTextureCopyInstantiator _textureCopyInstantiator;
 		
 		private ISceneObjectsRegistry _sceneObjectsRegistry;
-		private ILocalSavesService _localSavesService;
+		private ILocalSavesRepository _localSavesRepository;
 
 		[Inject]
-		private void Construct(ISceneObjectsRegistry sceneObjectsRegistry, ILocalSavesService localSavesService)
+		private void Construct(ISceneObjectsRegistry sceneObjectsRegistry, ILocalSavesRepository localSavesRepository)
 		{
+			_localSavesRepository = localSavesRepository;
 			_sceneObjectsRegistry = sceneObjectsRegistry;
-			_localSavesService = localSavesService;
-			
 			_textureCopyInstantiator = new ReadableTextureCopyInstantiator();
 		}
 
-		public async Task SaveScene(Texture2D preview)
+		public async Task CreateLocalSave(Texture2D preview)
 		{
 			string directoryPath = CreateLocalSaveDirectory();
 			List<SceneObject> saveTargets = _sceneObjectsRegistry.GetSceneObjects(SceneObjectTypeId.Model);
@@ -35,11 +37,22 @@ namespace Services.Saving
 			await SaveModels(directoryPath, saveTargets);
 			SaveTextures(directoryPath, saveTargets);
 			SavePreview(directoryPath, preview);
+			
+			_localSavesRepository.AddLocalSave(new LocalSave(directoryPath, preview));
+		}
+		
+		public void DeleteLocalSave(LocalSave localSave)
+		{
+			if (Directory.Exists(localSave.DirectoryPath) == false)
+				return;
+			
+			Directory.Delete(localSave.DirectoryPath, true);
+			_localSavesRepository.RemoveLocalSave(localSave);
 		}
 
 		private string CreateLocalSaveDirectory()
 		{
-			int sceneNumber = _localSavesService.GetLocalSaves().Count + 1;
+			int sceneNumber = _localSavesRepository.GetLocalSaves().Count + 1;
 			string directoryPath = Constants.ScenePath + sceneNumber;
 			
 			Directory.CreateDirectory(directoryPath);

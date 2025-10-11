@@ -1,10 +1,12 @@
 ﻿using System.Threading.Tasks;
+using LocalSaves;
 using UnityEngine;
 
 namespace Services.Saving
 {
 	public interface ISaveService
 	{
-		Task SaveScene(Texture2D preview);
+		Task CreateLocalSave(Texture2D preview);
+		void DeleteLocalSave(LocalSave localSave);
 	}
 }
