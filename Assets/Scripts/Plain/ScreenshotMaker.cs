@@ -4,7 +4,12 @@ namespace Gameplay
 {
     public class ScreenshotMaker
     {
-        private readonly Camera _mainCamera = Camera.main;
+        private readonly Camera _mainCamera;
+
+        public ScreenshotMaker()
+        {
+            _mainCamera = Camera.main;
+        }
 
         public Texture2D CreatePreview()
         {
