@@ -1,3 +1,4 @@
+using Gameplay;
 using Services.Saving;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,6 +8,7 @@ public class SaveSceneWidget : MonoBehaviour
 {
     [SerializeField] private Button button;
     [SerializeField] private GameObject progressPopup;
+    [SerializeField] private ScreenshotMaker screenshotMaker;
     
     private ISaveService _saveService;
 
@@ -29,7 +31,10 @@ public class SaveSceneWidget : MonoBehaviour
     private async void HandleClick()
     {
         progressPopup.SetActive(true);
-        await _saveService.SaveCurrentScene();
+
+        Texture2D previewTexture = screenshotMaker.CreatePreview();
+        await _saveService.SaveScene(previewTexture);
+        
         progressPopup.SetActive(false);
     }
 }
