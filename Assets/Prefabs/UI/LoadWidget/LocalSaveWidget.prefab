@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7997374227068947161}
   - component: {fileID: 7061685654367776101}
   m_Layer: 5
-  m_Name: Main Background
+  m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,7 +31,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1132159655475646917}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -87,7 +86,7 @@ GameObject:
   - component: {fileID: 1132159655475646917}
   - component: {fileID: 1971947062914503238}
   m_Layer: 5
-  m_Name: SaveFilePanel
+  m_Name: LocalSaveWidget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -112,7 +111,6 @@ RectTransform:
   - {fileID: 8563774195493358392}
   - {fileID: 6875888315309117508}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -131,7 +129,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee9ab696f9d50be44b112015c19a39af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentNumber: 0
+  preview: {fileID: 3206046129457618497}
+  loadButton: {fileID: 2743337962789122999}
+  deleteButton: {fileID: 4475422883408273560}
 --- !u!1 &1542503094107588441
 GameObject:
   m_ObjectHideFlags: 0
@@ -144,7 +144,7 @@ GameObject:
   - component: {fileID: 4053816130038826900}
   - component: {fileID: 3206046129457618497}
   m_Layer: 5
-  m_Name: Preview Image
+  m_Name: PreviewImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -163,7 +163,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1132159655475646917}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -217,7 +216,7 @@ GameObject:
   - component: {fileID: 5371815406289611184}
   - component: {fileID: 5438599023603382136}
   m_Layer: 5
-  m_Name: Scene Text
+  m_Name: FileNameText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -236,7 +235,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1132159655475646917}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
@@ -314,15 +312,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -353,7 +353,7 @@ GameObject:
   - component: {fileID: 3977290232454873975}
   - component: {fileID: 4475422883408273560}
   m_Layer: 5
-  m_Name: Delete Button
+  m_Name: DeleteButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -372,7 +372,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1132159655475646917}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
@@ -473,7 +472,7 @@ GameObject:
   - component: {fileID: 1630581074421074815}
   - component: {fileID: 2989024233227325615}
   m_Layer: 5
-  m_Name: Horizontal Line
+  m_Name: SeparatorImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -492,7 +491,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1132159655475646917}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -550,7 +548,7 @@ GameObject:
   - component: {fileID: 2800588776159283883}
   - component: {fileID: 2743337962789122999}
   m_Layer: 5
-  m_Name: Load Button
+  m_Name: LoadButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -569,7 +567,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1132159655475646917}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
