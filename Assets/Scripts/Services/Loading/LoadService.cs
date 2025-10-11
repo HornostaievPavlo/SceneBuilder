@@ -50,7 +50,7 @@ namespace Services.Loading
 			if (isSuccess == false)
 				return false;
 
-			bool isLoadedFromLocalSave = modelPath.Contains(Constants.DataPath);
+			bool isLoadedFromLocalSave = modelPath.Contains(Constants.ApplicationDataPath);
 
 			if (isLoadedFromLocalSave)
 			{
