@@ -2058,7 +2058,6 @@ GameObject:
   m_Component:
   - component: {fileID: 634473426}
   - component: {fileID: 634473428}
-  - component: {fileID: 634473429}
   - component: {fileID: 634473427}
   m_Layer: 5
   m_Name: ProcessingPopup
@@ -2125,20 +2124,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 634473425}
   m_CullTransparentMesh: 1
---- !u!114 &634473429
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 634473425}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2a246fdee924c94888a9a7cfcf14e18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Main::ConstantRectRotation
-  image: {fileID: 1653938010}
-  speed: 150
 --- !u!1 &653800880
 GameObject:
   m_ObjectHideFlags: 0
@@ -6709,6 +6694,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1653938010}
   - component: {fileID: 1653938013}
+  - component: {fileID: 1653938014}
   - component: {fileID: 1653938012}
   m_Layer: 5
   m_Name: Icon
@@ -6774,6 +6760,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1653938009}
   m_CullTransparentMesh: 1
+--- !u!114 &1653938014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1653938009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2a246fdee924c94888a9a7cfcf14e18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Main::UI.Widgets.RectTransformRotator
 --- !u!1 &1685503924
 GameObject:
   m_ObjectHideFlags: 0
