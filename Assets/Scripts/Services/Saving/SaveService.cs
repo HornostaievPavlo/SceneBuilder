@@ -13,6 +13,8 @@ namespace Services.Saving
 {
 	public class SaveService : ISaveService
 	{
+		private ReadableTextureCopyInstantiator _textureCopyInstantiator;
+		
 		private ISceneObjectsRegistry _sceneObjectsRegistry;
 		private ILocalSavesService _localSavesService;
 
@@ -21,6 +23,8 @@ namespace Services.Saving
 		{
 			_sceneObjectsRegistry = sceneObjectsRegistry;
 			_localSavesService = localSavesService;
+			
+			_textureCopyInstantiator = new ReadableTextureCopyInstantiator();
 		}
 
 		public async Task SaveScene(Texture2D preview)
@@ -68,7 +72,7 @@ namespace Services.Saving
 				if (material.mainTexture == null) 
 					continue;
 				
-				Texture2D texture = CreateReadableTexture(material.mainTexture);
+				Texture2D texture = _textureCopyInstantiator.CreateReadableTexture(material.mainTexture);
 
 				string directoryPath = path + $"/Asset{i + 1}";
 				string filePath = directoryPath + Constants.TextureFile;
@@ -91,26 +95,6 @@ namespace Services.Saving
 			string fullPath = Path.Combine(directoryInfo.FullName, file);
 
 			File.WriteAllBytes(fullPath, textureBytes);
-		}
-
-		private Texture2D CreateReadableTexture(Texture source)
-		{
-			RenderTexture renderTex = RenderTexture.GetTemporary(
-				source.width,
-				source.height,
-				0,
-				RenderTextureFormat.Default,
-				RenderTextureReadWrite.Linear);
-
-			Graphics.Blit(source, renderTex);
-			RenderTexture previous = RenderTexture.active;
-			RenderTexture.active = renderTex;
-			Texture2D readableText = new Texture2D(source.width, source.height);
-			readableText.ReadPixels(new Rect(0, 0, renderTex.width, renderTex.height), 0, 0);
-			readableText.Apply();
-			RenderTexture.active = previous;
-			RenderTexture.ReleaseTemporary(renderTex);
-			return readableText;
 		}
 	}
 }
