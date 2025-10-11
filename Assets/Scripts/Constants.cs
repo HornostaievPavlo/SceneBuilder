@@ -7,6 +7,9 @@ public static class Constants
 	public const string SceneFile = "/Asset.gltf";
 	public const string TextureFile = "/Texture.png";
 	public const string PreviewFile = "/Preview.png";
+	
+	public static readonly string DataPath = Application.persistentDataPath;
+	public static readonly string ScenePath = $"{DataPath}/Scene";
 
 	public const string ModelPrefabPath = "Assets/Prefabs/SceneObjects/ModelHolder.prefab";
 	public const string CameraPrefabPath = "Assets/Prefabs/SceneObjects/Camera.prefab";
