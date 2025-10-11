@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using LocalSaves;
 using Services.Loading;
@@ -12,6 +13,9 @@ namespace Services.LocalSavesRepository
 		private readonly List<LocalSave> _localSaves = new();
 		
 		private readonly ILoadService _loadService;
+		
+		public event Action<LocalSave> OnLocalSaveCreated;
+		public event Action<LocalSave> OnLocalSaveDeleted;
 
 		public LocalSavesRepository(ILoadService loadService)
 		{
@@ -21,6 +25,24 @@ namespace Services.LocalSavesRepository
 		public void Initialize()
 		{
 			RefreshLocalSaves();
+		}
+
+		public void AddLocalSave(LocalSave localSave)
+		{
+			if (_localSaves.Contains(localSave))
+				return;
+			
+			_localSaves.Add(localSave);
+			OnLocalSaveCreated?.Invoke(localSave);
+		}
+
+		public void RemoveLocalSave(LocalSave localSave)
+		{
+			if (_localSaves.Contains(localSave) == false)
+				return;
+			
+			_localSaves.Remove(localSave);
+			OnLocalSaveDeleted?.Invoke(localSave);
 		}
 
 		public List<LocalSave> GetLocalSaves()
@@ -43,7 +65,7 @@ namespace Services.LocalSavesRepository
 
 		private List<string> GetLocalSaveDirectoryPaths()
 		{
-			return new List<string>(Directory.EnumerateDirectories(Constants.DataPath));
+			return new List<string>(Directory.EnumerateDirectories(Constants.ApplicationDataPath));
 		}
 	}
 }
