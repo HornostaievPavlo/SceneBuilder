@@ -41,7 +41,7 @@ namespace Services.LocalSavesRepository
 			if (_localSaves.Contains(localSave) == false)
 				return;
 			
-			_localSaves.Remove(localSave);
+			RefreshLocalSaves();
 			OnLocalSaveDeleted?.Invoke(localSave);
 		}
 
@@ -52,6 +52,8 @@ namespace Services.LocalSavesRepository
 
 		private void RefreshLocalSaves()
 		{
+			_localSaves.Clear();
+			
 			List<string> directoryPaths = GetLocalSaveDirectoryPaths();
 			
 			foreach (string path in directoryPaths)
