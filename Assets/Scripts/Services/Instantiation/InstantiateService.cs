@@ -8,10 +8,12 @@ namespace Services.Instantiation
     public class InstantiateService : IInstantiateService
     {
         private readonly IInstantiator _instantiator;
+        private readonly DiContainer _container;
 
-        public InstantiateService(IInstantiator instantiator)
+        public InstantiateService(IInstantiator instantiator, DiContainer container)
         {
             _instantiator = instantiator;
+            _container = container;
         }
         
         public T Instantiate<T>(GameObject prefab, Transform parent = null) where T : Component
@@ -43,6 +45,16 @@ namespace Services.Instantiation
             instantiated.Register(typeId);
 
             return instantiated;
+        }
+
+        public SceneObject AddSceneObjectComponent(GameObject existingGameObject, SceneObjectTypeId typeId)
+        {
+            SceneObject sceneObject = existingGameObject.AddComponent<SceneObject>();
+            _container.InjectGameObject(existingGameObject);
+            
+            sceneObject.Register(typeId);
+
+            return sceneObject;
         }
     }
 }
