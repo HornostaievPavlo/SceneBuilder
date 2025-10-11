@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Enums;
 using Gameplay;
 using GLTFast;
+using LocalSaves;
 using Services.Instantiation;
 using Services.SceneObjectsRegistry;
 using UnityEditor;
@@ -48,7 +49,7 @@ namespace Services.Loading
 
 			List<Transform> assets;
 
-			if (modelPath.Contains(IOUtility.dataPath))
+			if (modelPath.Contains(Constants.DataPath))
 			{
 				// check if it is needed on save/load refactor
 				// assets = InitializeImportedAssets();
@@ -124,17 +125,16 @@ namespace Services.Loading
 			}
 		}
 
-		/// <summary>
-		///     Handles loading assets from local save file
-		/// </summary>
-		/// <param name="sceneNumber">Index of save file</param>
-		public async void LoadAssetsFromSaveFile(int sceneNumber)
+		public async void LoadLocalSave(LocalSave localSave)
 		{
-			string saveFilePath =
-				IOUtility.scenePath + sceneNumber + Constants.SceneFile;
+			string assetPath = localSave.DirectoryPath + Constants.AssetFile;
 
-			bool success = await LoadModel(saveFilePath);
-			if (success) AssignTextures(sceneNumber);
+			bool isLoadedSuccessfully = await LoadModel(assetPath);
+			
+			if (isLoadedSuccessfully)
+			{
+				// AssignTextures(sceneNumber);
+			}
 		}
 
 		/// <summary>
@@ -204,25 +204,25 @@ namespace Services.Loading
         /// </summary>
         private void AssignTextures(int sceneNumber)
 		{
-			for (int i = 0; i < modelsFromSingleSaveFile.Count; i++)
-			{
-				Renderer renderer = modelsFromSingleSaveFile[i].gameObject.GetComponentInChildren<MeshRenderer>();
-
-				if (renderer != null)
-				{
-					Material material = renderer.material;
-
-					if (material != null)
-					{
-						string currentAssetPath = $"/Asset{i + 1}" + Constants.TextureFile;
-						string fullPath = IOUtility.scenePath + sceneNumber + currentAssetPath;
-
-						material.mainTexture = IOUtility.OpenDirectoryAndLoadTexture(fullPath);
-					}
-				}
-			}
-
-			modelsFromSingleSaveFile.Clear();
+			// for (int i = 0; i < modelsFromSingleSaveFile.Count; i++)
+			// {
+			// 	Renderer renderer = modelsFromSingleSaveFile[i].gameObject.GetComponentInChildren<MeshRenderer>();
+			//
+			// 	if (renderer != null)
+			// 	{
+			// 		Material material = renderer.material;
+			//
+			// 		if (material != null)
+			// 		{
+			// 			string currentAssetPath = $"/Asset{i + 1}" + Constants.TextureFile;
+			// 			string fullPath = Constants.ScenePath + sceneNumber + currentAssetPath;
+			//
+			// 			material.mainTexture = IOUtility.OpenDirectoryAndLoadTexture(fullPath);
+			// 		}
+			// 	}
+			// }
+			//
+			// modelsFromSingleSaveFile.Clear();
 		}
 
 		/// <summary>
