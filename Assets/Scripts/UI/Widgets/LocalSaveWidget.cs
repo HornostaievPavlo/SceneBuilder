@@ -1,5 +1,6 @@
 using LocalSaves;
 using Services.Loading;
+using Services.Saving;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -15,11 +16,15 @@ namespace UI.Widgets
         private LocalSave _localSave;
         
         private ILoadService _loadService;
+        private ISaveService _saveService;
+        
+        public LocalSave LocalSave => _localSave;
 
         [Inject]
-        private void Construct(ILoadService loadService)
+        private void Construct(ILoadService loadService, ISaveService saveService)
         {
             _loadService = loadService;
+            _saveService = saveService;
         }
 
         private void OnEnable()
@@ -47,7 +52,7 @@ namespace UI.Widgets
 
         private void HandleDeleteButtonClicked()
         {
-            
+            _saveService.DeleteLocalSave(_localSave);
         }
     }
 }
