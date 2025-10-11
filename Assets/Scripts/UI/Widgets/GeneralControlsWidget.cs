@@ -29,7 +29,7 @@ public class GeneralControlsWidget : MonoBehaviour
 
     private void OnLoadButtonClicked()
     {
-        localSavesWidget.gameObject.SetActive(true);
+        localSavesWidget.Setup();
     }    
 
     private void OnInfoButtonClicked()
