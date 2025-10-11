@@ -29,14 +29,6 @@ namespace Gameplay
 			_sceneObjectsRegistry.Register(this);
 		}
 
-		private void OnDestroy()
-		{
-			if (_sceneObjectsRegistry == null)
-				return;
-			
-			_sceneObjectsRegistry.Unregister(this);
-		}
-
 		private void SetTypeId(SceneObjectTypeId typeId)
 		{
 			_typeId = typeId;
