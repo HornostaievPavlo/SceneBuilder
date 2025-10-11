@@ -1,13 +1,10 @@
 ﻿using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Services.Saving
 {
 	public interface ISaveService
 	{
-		/// <summary>
-		///     Saves all scene assets,
-		///     creates save file row in UI
-		/// </summary>
-		Task SaveCurrentScene();
+		Task SaveScene(Texture2D preview);
 	}
 }

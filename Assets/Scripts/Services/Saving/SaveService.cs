@@ -1,87 +1,116 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
+using Enums;
 using Gameplay;
 using GLTFast.Export;
+using Services.LocalSaves;
+using Services.SceneObjectsRegistry;
 using UnityEngine;
+using Zenject;
 
 namespace Services.Saving
 {
 	public class SaveService : ISaveService
 	{
-		private string scenePath;
+		private ISceneObjectsRegistry _sceneObjectsRegistry;
+		private ILocalSavesService _localSavesService;
 
-        /// <summary>
-        ///     Saves all scene assets,
-        ///     creates save file row in UI
-        /// </summary>
-        public async Task SaveCurrentScene()
+		[Inject]
+		private void Construct(ISceneObjectsRegistry sceneObjectsRegistry, ILocalSavesService localSavesService)
 		{
-			scenePath = CreateNewSaveDirectory();
-			var saveTargets = IOUtility.CollectSelectableObjects();
-
-			SaveTextures(saveTargets);
-			await SaveModels(saveTargets);
-
-			// rowsCoordinator.CreateRowForNewSaveFile();
+			_sceneObjectsRegistry = sceneObjectsRegistry;
+			_localSavesService = localSavesService;
 		}
 
-        /// <summary>
-        ///     Creates directory for save file,
-        ///     adds preview screenshot
-        /// </summary>
-        /// <returns>Path to created directory</returns>
-        private string CreateNewSaveDirectory()
+		public async Task SaveScene(Texture2D preview)
 		{
-			int number = SavePanelsCoordinator.panelsCounter;
-			number++;
+			string directoryPath = CreateLocalSaveDirectory();
+			List<SceneObject> saveTargets = _sceneObjectsRegistry.GetSceneObjects(SceneObjectTypeId.Model);
 
-			// screenshotMaker.MakePreviewScreenshot(number);
-
-			return IOUtility.scenePath + number;
+			await SaveModels(directoryPath, saveTargets);
+			SaveTextures(directoryPath, saveTargets);
+			SavePreview(directoryPath, preview);
 		}
 
-        /// <summary>
-        ///     Saves all Models to file
-        /// </summary>
-        /// <param name="targets">Array of objects to save</param>
-        private async Task<bool> SaveModels(SceneObject[] targets)
+		private string CreateLocalSaveDirectory()
 		{
-			GameObject[] models = new GameObject[targets.Length];
+			int sceneNumber = _localSavesService.GetLocalSaves().Count + 1;
+			string directoryPath = Constants.ScenePath + sceneNumber;
+			
+			Directory.CreateDirectory(directoryPath);
+			return directoryPath;
+		}
 
-			for (int i = 0; i < targets.Length; i++)
+		private async Task SaveModels(string path, List<SceneObject> modelsList)
+		{
+			GameObject[] modelsArray = new GameObject[modelsList.Count];
+
+			for (int i = 0; i < modelsList.Count; i++)
 			{
-				models[i] = targets[i].gameObject;
+				modelsArray[i] = modelsList[i].gameObject;
 			}
 
 			var export = new GameObjectExport();
-			export.AddScene(models);
+			export.AddScene(modelsArray);
 
-			string filePath = scenePath + Constants.SceneFile;
-			bool success = await export.SaveToFileAndDispose(filePath);
-
-			return success;
+			string filePath = path + Constants.AssetFile;
+			await export.SaveToFileAndDispose(filePath);
 		}
 
-        /// <summary>
-        ///     Saves textures of all Models in the scene
-        /// </summary>
-        /// <param name="targets">Array of objects with textures</param>
-        private void SaveTextures(SceneObject[] targets)
+		private void SaveTextures(string path, List<SceneObject> modelsList)
 		{
-			for (int i = 0; i < targets.Length; i++)
+			for (int i = 0; i < modelsList.Count; i++)
 			{
-				Renderer renderer = targets[i].GetComponentInChildren<Renderer>();
+				Renderer renderer = modelsList[i].GetComponentInChildren<Renderer>();
 				Material material = renderer.sharedMaterial;
 
-				if (material.mainTexture != null)
-				{
-					Texture2D texture = IOUtility.DuplicateTexture((Texture2D) material.mainTexture);
+				if (material.mainTexture == null) 
+					continue;
+				
+				Texture2D texture = CreateReadableTexture(material.mainTexture);
 
-					string directoryPath = scenePath + $"/Asset{i + 1}";
-					string filePath = directoryPath + Constants.TextureFile;
+				string directoryPath = path + $"/Asset{i + 1}";
+				string filePath = directoryPath + Constants.TextureFile;
 
-					IOUtility.CreateDirectoryAndSaveTexture(texture, directoryPath, filePath);
-				}
+				SaveTextureToDirectory(texture, directoryPath, filePath);
 			}
+		}
+
+		private void SavePreview(string path, Texture2D preview)
+		{
+			string screenshotPath = path + Constants.PreviewFile;
+			SaveTextureToDirectory(preview, path, screenshotPath);
+		}
+
+		private void SaveTextureToDirectory(Texture2D texture, string directoryPath, string file)
+		{
+			byte[] textureBytes = texture.EncodeToPNG();
+
+			DirectoryInfo directoryInfo = Directory.CreateDirectory(directoryPath);
+			string fullPath = Path.Combine(directoryInfo.FullName, file);
+
+			File.WriteAllBytes(fullPath, textureBytes);
+		}
+
+		private Texture2D CreateReadableTexture(Texture source)
+		{
+			RenderTexture renderTex = RenderTexture.GetTemporary(
+				source.width,
+				source.height,
+				0,
+				RenderTextureFormat.Default,
+				RenderTextureReadWrite.Linear);
+
+			Graphics.Blit(source, renderTex);
+			RenderTexture previous = RenderTexture.active;
+			RenderTexture.active = renderTex;
+			Texture2D readableText = new Texture2D(source.width, source.height);
+			readableText.ReadPixels(new Rect(0, 0, renderTex.width, renderTex.height), 0, 0);
+			readableText.Apply();
+			RenderTexture.active = previous;
+			RenderTexture.ReleaseTemporary(renderTex);
+			return readableText;
 		}
 	}
 }
