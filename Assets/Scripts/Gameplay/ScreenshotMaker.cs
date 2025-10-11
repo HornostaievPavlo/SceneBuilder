@@ -2,14 +2,9 @@ using UnityEngine;
 
 namespace Gameplay
 {
-    public class ScreenshotMaker : MonoBehaviour
+    public class ScreenshotMaker
     {
-        private Camera _mainCamera;
-
-        private void Awake()
-        {
-            _mainCamera = GetComponent<Camera>();
-        }
+        private readonly Camera _mainCamera = Camera.main;
 
         public Texture2D CreatePreview()
         {
@@ -27,7 +22,7 @@ namespace Gameplay
 
             _mainCamera.targetTexture = null;
             RenderTexture.active = null;
-            DestroyImmediate(renderTexture);
+            Object.DestroyImmediate(renderTexture);
 
             resultTexture.Apply();
             return resultTexture;
