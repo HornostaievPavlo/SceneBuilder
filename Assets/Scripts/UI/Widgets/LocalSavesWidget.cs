@@ -28,18 +28,29 @@ namespace UI.Widgets
 
         private void OnEnable()
         {
-            closeButton.onClick.AddListener(OnCloseButtonClicked);
+            closeButton.onClick.AddListener(HandleCloseButtonClicked);
+            
+            _localSavesRepository.OnLocalSaveCreated += HandleLocalSaveCreated;
+            _localSavesRepository.OnLocalSaveDeleted += HandleLocalSaveDeleted;
         }
 
         private void OnDisable()
         {
-            closeButton.onClick.RemoveListener(OnCloseButtonClicked);
+            closeButton.onClick.RemoveListener(HandleCloseButtonClicked);
+            
+            _localSavesRepository.OnLocalSaveCreated -= HandleLocalSaveCreated;
+            _localSavesRepository.OnLocalSaveDeleted -= HandleLocalSaveDeleted;
         }
 
         public void Setup()
         {
             Cleanup();
-            SetupWidgets();
+            
+            foreach (LocalSave localSave in _localSavesRepository.GetLocalSaves())
+            {
+                CreateWidget(localSave);
+            }
+
             gameObject.SetActive(true);
         }
 
@@ -53,18 +64,33 @@ namespace UI.Widgets
             _localSavesWidgets.Clear();
         }
 
-        private void SetupWidgets()
+        private void CreateWidget(LocalSave localSave)
         {
-            foreach (LocalSave localSave in _localSavesRepository.GetLocalSaves())
-            {
-                LocalSaveWidget widget = _instantiateService.Instantiate<LocalSaveWidget>(localSaveWidgetPrefab, content);
-                widget.Setup(localSave);
+            LocalSaveWidget widget = _instantiateService.Instantiate<LocalSaveWidget>(localSaveWidgetPrefab, content);
+            widget.Setup(localSave);
             
-                _localSavesWidgets.Add(widget);
+            _localSavesWidgets.Add(widget);
+        }
+
+        private void HandleLocalSaveCreated(LocalSave localSave)
+        {
+            CreateWidget(localSave);
+        }
+
+        private void HandleLocalSaveDeleted(LocalSave localSave)
+        {
+            foreach (LocalSaveWidget widget in _localSavesWidgets)
+            {
+                if (widget.LocalSave != localSave) 
+                    continue;
+                
+                _localSavesWidgets.Remove(widget);
+                Destroy(widget.gameObject);
+                break;
             }
         }
 
-        private void OnCloseButtonClicked()
+        private void HandleCloseButtonClicked()
         {
             gameObject.SetActive(false);
         }
