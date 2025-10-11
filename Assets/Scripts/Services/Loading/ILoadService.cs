@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using LocalSaves;
+using UnityEngine;
 
 namespace Services.Loading
 {
@@ -9,5 +10,6 @@ namespace Services.Loading
 		void LoadCamera();
 		void LoadLabel();
 		void LoadLocalSave(LocalSave localSave);
+		Texture LoadTexture(string path);
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Enums;
@@ -24,17 +25,12 @@ namespace Services.Loading
 
 		private IInstantiateService _instantiateService;
 		private ISceneObjectsRegistry _sceneObjectsRegistry;
-		private ILocalSavesService _localSavesService;
 
 		[Inject]
-		private void Construct(
-			IInstantiateService instantiateService, 
-			ISceneObjectsRegistry sceneObjectsRegistry,
-			ILocalSavesService localSavesService)
+		private void Construct(IInstantiateService instantiateService, ISceneObjectsRegistry sceneObjectsRegistry)
 		{
 			_instantiateService = instantiateService;
 			_sceneObjectsRegistry = sceneObjectsRegistry;
-			_localSavesService = localSavesService;
 		}
 
 		public async Task<bool> LoadModel(string modelPath, string localSaveDirectoryPath = "")
@@ -212,7 +208,7 @@ namespace Services.Loading
 				string texturePath = $"/Asset{i + 1}" + Constants.TextureFile;
 				string fullPath = localSaveDirectoryPath + texturePath;
 			
-				material.mainTexture = _localSavesService.LoadTexture(fullPath);
+				material.mainTexture = LoadTexture(fullPath);
 			}
 			
 			AddCollidersToAssets(localSaveModels);
@@ -246,6 +242,16 @@ namespace Services.Loading
 				var meshCollider = meshRenderer.gameObject.AddComponent<MeshCollider>();
 				meshCollider.convex = true;
 			}
+		}
+		
+		public Texture LoadTexture(string path)
+		{
+			byte[] loadedBytes = File.ReadAllBytes(path);
+
+			Texture2D textureFromBytes = new Texture2D(2, 2);
+			textureFromBytes.LoadImage(loadedBytes);
+
+			return textureFromBytes;
 		}
 	}
 }
