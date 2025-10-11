@@ -36,8 +36,7 @@ namespace Gameplay
 			
 			GameObject copyGameObject = Instantiate(originalObject.gameObject, Vector3.zero, Quaternion.identity, _sceneObjectsRegistry.SceneObjectsHolder);
 			
-			SceneObject existingSceneObject = copyGameObject.GetComponent<SceneObject>();
-			if (existingSceneObject != null)
+			if (copyGameObject.TryGetComponent(out SceneObject existingSceneObject))
 			{
 				DestroyImmediate(existingSceneObject);
 			}
