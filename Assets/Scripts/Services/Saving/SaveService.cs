@@ -47,6 +47,8 @@ namespace Services.Saving
 				return;
 			
 			Directory.Delete(localSave.DirectoryPath, true);
+			RearrangeDirectories();
+			
 			_localSavesRepository.RemoveLocalSave(localSave);
 		}
 
@@ -108,6 +110,24 @@ namespace Services.Saving
 			string fullPath = Path.Combine(directoryInfo.FullName, file);
 
 			File.WriteAllBytes(fullPath, textureBytes);
+		}
+		
+		private void RearrangeDirectories()
+		{
+			string[] directories = Directory.GetDirectories(Constants.ApplicationDataPath);
+			
+			for (int i = 0; i < directories.Length; i++)
+			{
+				DirectoryInfo directoryInfo = new DirectoryInfo(directories[i]);
+
+				string currentName = Constants.ApplicationDataPath + @"/" + directoryInfo.Name;
+				string targetName = Constants.ScenePath + (i + 1);
+
+				if (currentName != targetName)
+				{
+					Directory.Move(currentName, targetName);
+				}
+			}
 		}
 	}
 }
