@@ -88,6 +88,16 @@ namespace UI.Widgets
                 Destroy(widget.gameObject);
                 break;
             }
+            
+            List<LocalSave> localSaves = _localSavesRepository.GetLocalSaves();
+            
+            for (int i = 0; i < _localSavesWidgets.Count; i++)
+            {
+                if (i >= localSaves.Count) 
+                    break;
+                
+                _localSavesWidgets[i].Setup(localSaves[i]);
+            }
         }
 
         private void HandleCloseButtonClicked()
