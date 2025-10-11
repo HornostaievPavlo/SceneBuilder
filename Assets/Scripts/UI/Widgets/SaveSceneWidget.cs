@@ -40,7 +40,7 @@ public class SaveSceneWidget : MonoBehaviour
         progressPopup.SetActive(true);
 
         Texture2D previewTexture = _screenshotMaker.CreatePreview();
-        await _saveService.SaveScene(previewTexture);
+        await _saveService.CreateLocalSave(previewTexture);
         
         progressPopup.SetActive(false);
     }
