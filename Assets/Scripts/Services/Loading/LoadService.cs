@@ -1,35 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Enums;
 using Gameplay;
 using GLTFast;
 using LocalSaves;
 using Services.Instantiation;
+using Services.LocalSaves;
 using Services.SceneObjectsRegistry;
 using UnityEditor;
 using UnityEngine;
 using Zenject;
+using Object = UnityEngine.Object;
 
 namespace Services.Loading
 {
 	public class LoadService : ILoadService
 	{
-		private List<Transform> modelsFromSingleSaveFile = new();
+		// private List<Transform> modelsFromSingleSaveFile = new();
 
-		private Transform[] children;
+		// private Transform[] children;
 
 		private IInstantiateService _instantiateService;
 		private ISceneObjectsRegistry _sceneObjectsRegistry;
+		private ILocalSavesService _localSavesService;
 
 		[Inject]
-		private void Construct(IInstantiateService instantiateService, ISceneObjectsRegistry sceneObjectsRegistry)
+		private void Construct(
+			IInstantiateService instantiateService, 
+			ISceneObjectsRegistry sceneObjectsRegistry,
+			ILocalSavesService localSavesService)
 		{
 			_instantiateService = instantiateService;
 			_sceneObjectsRegistry = sceneObjectsRegistry;
+			_localSavesService = localSavesService;
 		}
 
-		public async Task<bool> LoadModel(string modelPath)
+		public async Task<bool> LoadModel(string modelPath, string localSaveDirectoryPath = "")
 		{
 			if (string.IsNullOrEmpty(modelPath))
 			{
@@ -47,12 +55,11 @@ namespace Services.Loading
 			if (isSuccess == false)
 				return false;
 
-			List<Transform> assets;
+			bool isLoadedFromLocalSave = modelPath.Contains(Constants.DataPath);
 
-			if (modelPath.Contains(Constants.DataPath))
+			if (isLoadedFromLocalSave)
 			{
-				// check if it is needed on save/load refactor
-				// assets = InitializeImportedAssets();
+				// SetupLocalSaveAssets(localSaveDirectoryPath);
 			}
 			else
 			{
@@ -67,13 +74,12 @@ namespace Services.Loading
 				//     }
 				// }
 
-				AddColliders(modelAsset);
+				// AddColliders(modelAsset);
 
 				// assets = modelAsset.GetComponentsInChildren<Transform>().ToList();
 			}
-
-			// check if it is needed on save/load refactor
-			// AddCollidersToAssets(assets);
+			
+			AddColliders(modelAsset);
 
 			return true;
 		}
@@ -128,24 +134,14 @@ namespace Services.Loading
 		public async void LoadLocalSave(LocalSave localSave)
 		{
 			string assetPath = localSave.DirectoryPath + Constants.AssetFile;
-
-			bool isLoadedSuccessfully = await LoadModel(assetPath);
-			
-			if (isLoadedSuccessfully)
-			{
-				// AssignTextures(sceneNumber);
-			}
+			await LoadModel(assetPath, localSave.DirectoryPath);
 		}
 
-		/// <summary>
-        ///     Rearranges imported assets in proper hierarchy
-        /// </summary>
-        /// <returns>Collection of assets in scene</returns>
-        private List<Transform> InitializeImportedAssets()
+        private void SetupLocalSaveAssets(string localSaveDirectoryPath)
 		{
 			List<Transform> resultList = new();
-
-			modelsFromSingleSaveFile.Clear();
+			List<Transform> localSaveModels = new();
+			List<Transform> children = new();
 
 			bool isSingleAsset = GameObject.Find("Scene") == null;
 			Transform sceneObj = null;
@@ -156,22 +152,20 @@ namespace Services.Loading
 				sceneObj.SetParent(_sceneObjectsRegistry.SceneObjectsHolder);
 			}
 
-			// some Destroy???
 			var spawner = _sceneObjectsRegistry.SceneObjectsHolder.gameObject.GetComponentInChildren<GltfAsset>();
-			// Destroy(spawner.gameObject.GetComponent<SceneObject>());
+			Object.Destroy(spawner.gameObject.GetComponent<SceneObject>());
 			spawner.gameObject.name = "glTF Asset";
 
 			GltfAsset[] spawners = _sceneObjectsRegistry.SceneObjectsHolder.gameObject.GetComponentsInChildren<GltfAsset>();
 			foreach (GltfAsset item in spawners)
 			{
-				// Destroy(item.gameObject.GetComponent<SceneObject>());
+				Object.Destroy(item.gameObject.GetComponent<SceneObject>());
 				item.gameObject.name = "glTF Asset";
 			}
 
-			Array.Clear(children, 0, children.Length);
-			children = _sceneObjectsRegistry.SceneObjectsHolder.gameObject.GetComponentsInChildren<Transform>();
+			children = _sceneObjectsRegistry.SceneObjectsHolder.gameObject.GetComponentsInChildren<Transform>().ToList();
 
-			for (int i = 0; i < children.Length; i++)
+			for (int i = 0; i < children.Count; i++)
 			{
 				if (children[i].gameObject.name == "Asset") resultList.Add(children[i]);
 			}
@@ -182,57 +176,56 @@ namespace Services.Loading
 
 				bool hasSelectable = asset.GetComponentInChildren<SceneObject>() != null;
 
-				if (!hasSelectable)
+				if (hasSelectable == false)
 				{
-					var selectable = asset.gameObject.AddComponent<SceneObject>();
-					selectable.SetTypeId(SceneObjectTypeId.Model);
+					SceneObject sceneObject = asset.gameObject.AddComponent<SceneObject>();
+					sceneObject.Register(SceneObjectTypeId.Model);
 
-					modelsFromSingleSaveFile.Add(asset.transform);
+					localSaveModels.Add(asset.transform);
 				}
 			}
 
 			if (sceneObj)
 			{
-				// Destroy(sceneObj.gameObject);
+				Object.Destroy(sceneObj.gameObject);
 			}
-
-			return resultList;
+			
+			// AssignTextures(localSaveModels, localSaveDirectoryPath);
+			localSaveModels.Clear();
 		}
 
-		/// <summary>
-        ///     Assigns textures to corresponding materials
-        /// </summary>
-        private void AssignTextures(int sceneNumber)
+        // private void AssignTextures(int sceneNumber)
+        private void AssignTextures(List<Transform> localSaveModels, string localSaveDirectoryPath)
 		{
-			// for (int i = 0; i < modelsFromSingleSaveFile.Count; i++)
-			// {
-			// 	Renderer renderer = modelsFromSingleSaveFile[i].gameObject.GetComponentInChildren<MeshRenderer>();
-			//
-			// 	if (renderer != null)
-			// 	{
-			// 		Material material = renderer.material;
-			//
-			// 		if (material != null)
-			// 		{
-			// 			string currentAssetPath = $"/Asset{i + 1}" + Constants.TextureFile;
-			// 			string fullPath = Constants.ScenePath + sceneNumber + currentAssetPath;
-			//
-			// 			material.mainTexture = IOUtility.OpenDirectoryAndLoadTexture(fullPath);
-			// 		}
-			// 	}
-			// }
-			//
-			// modelsFromSingleSaveFile.Clear();
+			for (int i = 0; i < localSaveModels.Count; i++)
+			{
+				Renderer renderer = localSaveModels[i].gameObject.GetComponentInChildren<MeshRenderer>();
+
+				if (renderer == null) 
+					continue;
+				
+				Material material = renderer.material;
+
+				if (material == null) 
+					continue;
+				
+				string texturePath = $"/Asset{i + 1}" + Constants.TextureFile;
+				string fullPath = localSaveDirectoryPath + texturePath;
+			
+				material.mainTexture = _localSavesService.LoadTexture(fullPath);
+			}
+			
+			AddCollidersToAssets(localSaveModels);
 		}
 
-		/// <summary>
-        ///     Adds convex mesh collider to
-        ///     all renderers in List of targets
-        /// </summary>
-        /// <param name="assets">Collection of targets</param>
+		private void AssignTextures(string localSaveDirectoryPath)
+		{
+			
+		}
+
         private void AddCollidersToAssets(List<Transform> assets)
 		{
-			foreach (var asset in assets)
+			foreach (Transform asset in assets)
 			{
 				MeshRenderer[] meshRenderers = asset.gameObject.GetComponentsInChildren<MeshRenderer>();
 
