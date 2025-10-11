@@ -130,6 +130,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   preview: {fileID: 3206046129457618497}
+  loadButton: {fileID: 2743337962789122999}
+  deleteButton: {fileID: 4475422883408273560}
 --- !u!1 &1542503094107588441
 GameObject:
   m_ObjectHideFlags: 0
