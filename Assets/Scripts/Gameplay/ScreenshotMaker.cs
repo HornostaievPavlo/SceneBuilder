@@ -1,33 +1,36 @@
 using UnityEngine;
 
-public class ScreenshotMaker : MonoBehaviour
+namespace Gameplay
 {
-    private Camera _mainCamera;
-
-    private void Awake()
+    public class ScreenshotMaker : MonoBehaviour
     {
-        _mainCamera = GetComponent<Camera>();
-    }
+        private Camera _mainCamera;
 
-    public Texture2D CreatePreview()
-    {
-        int width = Screen.width;
-        int height = Screen.height;
-        var resultTexture = new Texture2D(width, height, TextureFormat.RGBA32, false);
+        private void Awake()
+        {
+            _mainCamera = GetComponent<Camera>();
+        }
 
-        RenderTexture renderTexture = new RenderTexture(width, height, 24, RenderTextureFormat.ARGB32);
+        public Texture2D CreatePreview()
+        {
+            int width = Screen.width;
+            int height = Screen.height;
+            var resultTexture = new Texture2D(width, height, TextureFormat.RGBA32, false);
 
-        _mainCamera.targetTexture = renderTexture;
-        _mainCamera.Render();
+            RenderTexture renderTexture = new RenderTexture(width, height, 24, RenderTextureFormat.ARGB32);
 
-        RenderTexture.active = _mainCamera.targetTexture;
-        resultTexture.ReadPixels(new Rect(0, 0, width, height), 0, 0);
+            _mainCamera.targetTexture = renderTexture;
+            _mainCamera.Render();
 
-        _mainCamera.targetTexture = null;
-        RenderTexture.active = null;
-        DestroyImmediate(renderTexture);
+            RenderTexture.active = _mainCamera.targetTexture;
+            resultTexture.ReadPixels(new Rect(0, 0, width, height), 0, 0);
 
-        resultTexture.Apply();
-        return resultTexture;
+            _mainCamera.targetTexture = null;
+            RenderTexture.active = null;
+            DestroyImmediate(renderTexture);
+
+            resultTexture.Apply();
+            return resultTexture;
+        }
     }
 }
