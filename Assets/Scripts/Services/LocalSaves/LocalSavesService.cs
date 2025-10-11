@@ -20,13 +20,25 @@ namespace Services.LocalSaves
 			return _localSaves;
 		}
 
+		public Texture LoadTexture(string path)
+		{
+			byte[] loadedBytes = File.ReadAllBytes(path);
+
+			Texture2D textureFromBytes = new Texture2D(2, 2);
+			textureFromBytes.LoadImage(loadedBytes);
+
+			return textureFromBytes;
+		}
+
 		private void RefreshLocalSaves()
 		{
 			List<string> directoryPaths = GetLocalSaveDirectoryPaths();
 			
 			foreach (string path in directoryPaths)
 			{
-				var localSave = new LocalSave(path, LoadPreviewTexture(path));
+				Texture texture = LoadTexture(path + Constants.PreviewFile);
+				
+				var localSave = new LocalSave(path, texture);
 				_localSaves.Add(localSave);
 			}
 		}
@@ -34,17 +46,6 @@ namespace Services.LocalSaves
 		private List<string> GetLocalSaveDirectoryPaths()
 		{
 			return new List<string>(Directory.EnumerateDirectories(Constants.DataPath));
-		}
-
-		private static Texture LoadPreviewTexture(string directoryPath)
-		{
-			string previewPath = directoryPath + Constants.PreviewFile;
-			byte[] loadedBytes = File.ReadAllBytes(previewPath);
-
-			Texture2D textureFromBytes = new Texture2D(2, 2);
-			textureFromBytes.LoadImage(loadedBytes);
-
-			return textureFromBytes;
 		}
 	}
 }
