@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using LocalSaves;
-using UnityEngine;
 
-namespace Services.LocalSaves
+namespace Services.LocalSavesRepository
 {
-	public interface ILocalSavesService
+	public interface ILocalSavesRepository
 	{
 		List<LocalSave> GetLocalSaves();
 	}

@@ -5,15 +5,15 @@ using Services.Loading;
 using UnityEngine;
 using Zenject;
 
-namespace Services.LocalSaves
+namespace Services.LocalSavesRepository
 {
-	public class LocalSavesService : ILocalSavesService, IInitializable
+	public class LocalSavesRepository : ILocalSavesRepository, IInitializable
 	{
 		private readonly List<LocalSave> _localSaves = new();
 		
 		private readonly ILoadService _loadService;
 
-		public LocalSavesService(ILoadService loadService)
+		public LocalSavesRepository(ILoadService loadService)
 		{
 			_loadService = loadService;
 		}

@@ -1,7 +1,7 @@
 ﻿using Services.Input;
 using Services.Instantiation;
 using Services.Loading;
-using Services.LocalSaves;
+using Services.LocalSavesRepository;
 using Services.Painting;
 using Services.Saving;
 using Services.SceneObjectSelection;
@@ -21,7 +21,7 @@ namespace Installer
 			Container.BindInterfacesAndSelfTo<ModelPaintingService>().AsSingle();
 			Container.BindInterfacesAndSelfTo<SaveService>().AsSingle();
 			Container.BindInterfacesAndSelfTo<LoadService>().AsSingle();
-			Container.BindInterfacesAndSelfTo<LocalSavesService>().AsSingle();
+			Container.BindInterfacesAndSelfTo<LocalSavesRepository>().AsSingle();
 		}
 	}
 }

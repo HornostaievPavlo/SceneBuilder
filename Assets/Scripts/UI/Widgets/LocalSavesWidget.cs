@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using LocalSaves;
 using Services.Instantiation;
-using Services.LocalSaves;
+using Services.LocalSavesRepository;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -16,13 +16,13 @@ namespace UI.Widgets
         
         private readonly List<LocalSaveWidget> _localSavesWidgets = new();
 
-        private ILocalSavesService _localSavesService;
+        private ILocalSavesRepository _localSavesRepository;
         private IInstantiateService _instantiateService;
 
         [Inject]
-        private void Construct(ILocalSavesService localSavesService, IInstantiateService instantiateService)
+        private void Construct(ILocalSavesRepository localSavesRepository, IInstantiateService instantiateService)
         {
-            _localSavesService = localSavesService;
+            _localSavesRepository = localSavesRepository;
             _instantiateService = instantiateService;
         }
 
@@ -55,7 +55,7 @@ namespace UI.Widgets
 
         private void SetupWidgets()
         {
-            foreach (LocalSave localSave in _localSavesService.GetLocalSaves())
+            foreach (LocalSave localSave in _localSavesRepository.GetLocalSaves())
             {
                 LocalSaveWidget widget = _instantiateService.Instantiate<LocalSaveWidget>(localSaveWidgetPrefab, content);
                 widget.Setup(localSave);
