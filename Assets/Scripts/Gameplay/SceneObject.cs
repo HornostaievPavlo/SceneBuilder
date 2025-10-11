@@ -31,18 +31,18 @@ namespace Gameplay
 
 		private void OnDestroy()
 		{
-			if (_sceneObjectsRegistry != null)
-			{
-				_sceneObjectsRegistry.Unregister(this);
-			}
+			if (_sceneObjectsRegistry == null)
+				return;
+			
+			_sceneObjectsRegistry.Unregister(this);
 		}
 
-		public void SetTypeId(SceneObjectTypeId typeId)
+		private void SetTypeId(SceneObjectTypeId typeId)
 		{
 			_typeId = typeId;
 		}
 
-		public void GenerateGuid()
+		private void GenerateGuid()
 		{
 			_guid = Guid.NewGuid().ToString();
 		}
