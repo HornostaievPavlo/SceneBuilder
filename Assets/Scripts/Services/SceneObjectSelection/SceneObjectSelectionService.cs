@@ -48,6 +48,9 @@ namespace Services.SceneObjectSelection
 
 		private void HandleRayMiss()
 		{
+			if (_selectedObject == null)
+				return;
+			
 			_selectedObject = null;
 			OnObjectDeselected?.Invoke();
 		}
