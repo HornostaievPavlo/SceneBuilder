@@ -102,7 +102,7 @@ namespace Gameplay
 		private void AnimateGizmoAppear()
 		{
 			transform.DOKill(true);
-			transform.DOPunchScale(handle.transform.localScale * 0.9f, 0.2f);
+			transform.DOPunchScale(handle.transform.localScale * 0.9f, 0.25f);
 		}
 	}
 }
