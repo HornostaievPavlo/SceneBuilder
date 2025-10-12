@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Enums;
@@ -19,6 +20,8 @@ namespace Services.Loading
 
 		private IInstantiateService _instantiateService;
 		private ISceneObjectsRegistry _sceneObjectsRegistry;
+
+		public event Action OnLocalSaveLoaded;
 
 		[Inject]
 		private void Construct(IInstantiateService instantiateService, ISceneObjectsRegistry sceneObjectsRegistry)
@@ -78,7 +81,12 @@ namespace Services.Loading
 		public async void LoadLocalSave(LocalSave localSave)
 		{
 			string assetPath = localSave.DirectoryPath + Constants.AssetFile;
-			await LoadModel(assetPath);
+			bool isSuccess = await LoadModel(assetPath);
+			
+			if (isSuccess)
+			{
+				OnLocalSaveLoaded?.Invoke();
+			}
 		}
 
 		public Texture LoadTexture(string path)

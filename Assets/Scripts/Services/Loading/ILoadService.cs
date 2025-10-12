@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using LocalSaves;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ namespace Services.Loading
 {
 	public interface ILoadService
 	{
+		public event Action OnLocalSaveLoaded;
 		Task<bool> LoadModel(string modelPath);
 		void LoadCamera();
 		void LoadLabel();
