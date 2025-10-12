@@ -13,7 +13,7 @@ namespace UI.Widgets
 
         [Header("Widgets")]
         [SerializeField] private LocalSavesWidget localSavesWidget;
-        [SerializeField] private ControlsWidget controlsWidget;
+        [SerializeField] private ControlsInfoWidget controlsInfoWidget;
 
         private void OnEnable()
         {
@@ -36,7 +36,7 @@ namespace UI.Widgets
 
         private void OnInfoButtonClicked()
         {
-            controlsWidget.gameObject.SetActive(true);
+            controlsInfoWidget.gameObject.SetActive(true);
         }
 
         private void OnQuitButtonClicked()
