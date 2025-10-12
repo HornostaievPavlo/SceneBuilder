@@ -76,11 +76,17 @@ namespace UI.Widgets.SceneObjects
         private void ChangeLastActiveToggleState(bool value)
         {
             if (_lastActiveWidget == modelsLayoutWidget)
+            {
                 modelsTabToggle.isOn = value;
+            }
             else if (_lastActiveWidget == camerasLayoutWidget)
+            {
                 camerasTabToggle.isOn = value;
+            }
             else if (_lastActiveWidget == labelsLayoutWidget)
+            {
                 labelsTabToggle.isOn = value;
+            }
         }
     }
 }

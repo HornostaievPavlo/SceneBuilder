@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Gameplay
+namespace Plain
 {
 	public class ReadableTextureCopyInstantiator
 	{

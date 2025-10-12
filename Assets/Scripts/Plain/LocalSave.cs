@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace LocalSaves
+namespace Plain
 {
 	public class LocalSave
 	{
