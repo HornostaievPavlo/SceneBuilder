@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Enums;
 using Gameplay;
 using GLTFast;
+using LocalSaves;
+using Plain;
 using Services.Instantiation;
 using Services.SceneObjectsRegistry;
 using UnityEditor;
@@ -14,66 +17,55 @@ namespace Services.Loading
 {
 	public class LoadService : ILoadService
 	{
-		private List<Transform> modelsFromSingleSaveFile = new();
-
-		private Transform[] children;
+		private ReadableTextureCopyInstantiator _textureCopyInstantiator;
 
 		private IInstantiateService _instantiateService;
 		private ISceneObjectsRegistry _sceneObjectsRegistry;
+
+		public event Action OnLocalSaveLoaded;
 
 		[Inject]
 		private void Construct(IInstantiateService instantiateService, ISceneObjectsRegistry sceneObjectsRegistry)
 		{
 			_instantiateService = instantiateService;
 			_sceneObjectsRegistry = sceneObjectsRegistry;
+
+			_textureCopyInstantiator = new ReadableTextureCopyInstantiator();
 		}
 
 		public async Task<bool> LoadModel(string modelPath)
 		{
 			if (string.IsNullOrEmpty(modelPath))
 			{
-				// Debug.LogError($"Trying to load model from empty path");
-				// return false;
-				
 				modelPath = Constants.DuckModelPath;
 			}
 
-			SceneObject modelAsset = InstantiateSceneObject(SceneObjectTypeId.Model);
-			var gltfAsset = modelAsset.gameObject.AddComponent<GltfAsset>();
+			SceneObject sceneObject = InstantiateSceneObject(SceneObjectTypeId.Model);
+			
+			var gltfAsset = sceneObject.gameObject.AddComponent<GltfAsset>();
+			var instantiationSettings = new InstantiationSettings()
+			{
+				SceneObjectCreation = SceneObjectCreation.Never
+			};
+
+			gltfAsset.InstantiationSettings = instantiationSettings;
 
 			bool isSuccess = await gltfAsset.Load(modelPath);
 
 			if (isSuccess == false)
 				return false;
 
-			List<Transform> assets;
+			bool isLoadedFromLocalSave = modelPath.Contains(Constants.ApplicationDataPath);
 
-			if (modelPath.Contains(IOUtility.dataPath))
+			if (isLoadedFromLocalSave)
 			{
-				// check if it is needed on save/load refactor
-				// assets = InitializeImportedAssets();
+				SetupLocalSaveAssets();
 			}
 			else
 			{
-				// List<Transform> assets = new();
-				// Transform[] children = IOUtility.assetsParent.gameObject.GetComponentsInChildren<Transform>();
-				//
-				// for (int i = 0; i < children.Length; i++)
-				// {
-				//     if (children[i].gameObject.name == "Asset")
-				//     {
-				//         assets.Add(children[i]);
-				//     }
-				// }
-
-				AddColliders(modelAsset);
-
-				// assets = modelAsset.GetComponentsInChildren<Transform>().ToList();
+				AddColliders(sceneObject);
 			}
-
-			// check if it is needed on save/load refactor
-			// AddCollidersToAssets(assets);
-
+			
 			return true;
 		}
 
@@ -87,161 +79,121 @@ namespace Services.Loading
 	        InstantiateSceneObject(SceneObjectTypeId.Label);
         }
 
+		public async void LoadLocalSave(LocalSave localSave)
+		{
+			string assetPath = localSave.DirectoryPath + Constants.AssetFile;
+			bool isLoadSuccessful = await LoadModel(assetPath);
+			
+			if (isLoadSuccessful)
+			{
+				OnLocalSaveLoaded?.Invoke();
+			}
+		}
+
+		public Texture LoadTexture(string texturePath)
+		{
+			byte[] textureBytes = File.ReadAllBytes(texturePath);
+
+			Texture2D loadedTexture = new Texture2D(2, 2);
+			loadedTexture.LoadImage(textureBytes);
+
+			return loadedTexture;
+		}
+
 		private SceneObject InstantiateSceneObject(SceneObjectTypeId typeId)
 		{
-			// try to remove switch 
-			switch (typeId)
+			GameObject prefab = typeId switch
 			{
-			    case SceneObjectTypeId.Model:
-			    {
-				    var modelPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(Constants.ModelPrefabPath);
-				    SceneObject model = _instantiateService.InstantiateSceneObject(modelPrefab, _sceneObjectsRegistry.SceneObjectsHolder, typeId);
-			        
-				    return model;
-			    }
-			    case SceneObjectTypeId.Camera:
-			    {
-				    var cameraPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(Constants.CameraPrefabPath);
-				    SceneObject camera = _instantiateService.InstantiateSceneObject(cameraPrefab, _sceneObjectsRegistry.SceneObjectsHolder, typeId);
-			        
-				    camera.name = "Asset";
-					
-				    return camera;
-			    }
-			    case SceneObjectTypeId.Label:
-			    {
-				    var labelPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(Constants.LabelPrefabPath);
-				    SceneObject label = _instantiateService.InstantiateSceneObject(labelPrefab, _sceneObjectsRegistry.SceneObjectsHolder, typeId);
-					
-				    label.name = "Asset";
-				    
-				    return label;
-			    }
-			    default:
-			    {
-				    return null;
-			    }
+				SceneObjectTypeId.Model => AssetDatabase.LoadAssetAtPath<GameObject>(Constants.ModelPrefabPath),
+				SceneObjectTypeId.Camera => AssetDatabase.LoadAssetAtPath<GameObject>(Constants.CameraPrefabPath),
+				SceneObjectTypeId.Label => AssetDatabase.LoadAssetAtPath<GameObject>(Constants.LabelPrefabPath),
+				_ => null
+			};
+
+			return _instantiateService.InstantiateSceneObject(prefab, _sceneObjectsRegistry.SceneObjectsHolder, typeId);
+		}
+
+		private void SetupLocalSaveAssets()
+		{
+			Transform sceneObjectsHolder = _sceneObjectsRegistry.SceneObjectsHolder;
+			SceneObject exportParent = PrepareExportParent(sceneObjectsHolder);
+			
+			List<Transform> modelHolders = FindModelHolders(sceneObjectsHolder, exportParent.transform);
+			List<ModelAssets> extractedAssets = ExtractAssetCopiesFromModels(modelHolders);
+
+			_sceneObjectsRegistry.DeleteObject(exportParent);
+
+			for (int i = 0; i < modelHolders.Count; i++)
+			{
+				SceneObject sceneObject = ApplyExtractedAssetsToModels(modelHolders[i], extractedAssets[i]);
+				AddColliders(sceneObject);
 			}
 		}
 
-		/// <summary>
-		///     Handles loading assets from local save file
-		/// </summary>
-		/// <param name="sceneNumber">Index of save file</param>
-		public async void LoadAssetsFromSaveFile(int sceneNumber)
+		private SceneObject PrepareExportParent(Transform sceneObjectsHolder)
 		{
-			string saveFilePath =
-				IOUtility.scenePath + sceneNumber + Constants.SceneFile;
-
-			bool success = await LoadModel(saveFilePath);
-			if (success) AssignTextures(sceneNumber);
+			var exportParent = sceneObjectsHolder.GetComponentInChildren<SceneObject>();
+			exportParent.gameObject.name = "ExportParent";
+			return exportParent;
 		}
 
-		/// <summary>
-        ///     Rearranges imported assets in proper hierarchy
-        /// </summary>
-        /// <returns>Collection of assets in scene</returns>
-        private List<Transform> InitializeImportedAssets()
+		private List<Transform> FindModelHolders(Transform sceneObjectsHolder, Transform exportParentTransform)
 		{
-			List<Transform> resultList = new();
+			Transform[] allChildTransforms = sceneObjectsHolder.GetComponentsInChildren<Transform>(true);
+			List<Transform> modelHolders = new();
 
-			modelsFromSingleSaveFile.Clear();
-
-			bool isSingleAsset = GameObject.Find("Scene") == null;
-			Transform sceneObj = null;
-
-			if (!isSingleAsset)
+			foreach (Transform childTransform in allChildTransforms)
 			{
-				sceneObj = GameObject.Find("Scene").transform;
-				sceneObj.SetParent(_sceneObjectsRegistry.SceneObjectsHolder);
-			}
-
-			// some Destroy???
-			var spawner = _sceneObjectsRegistry.SceneObjectsHolder.gameObject.GetComponentInChildren<GltfAsset>();
-			// Destroy(spawner.gameObject.GetComponent<SceneObject>());
-			spawner.gameObject.name = "glTF Asset";
-
-			GltfAsset[] spawners = _sceneObjectsRegistry.SceneObjectsHolder.gameObject.GetComponentsInChildren<GltfAsset>();
-			foreach (GltfAsset item in spawners)
-			{
-				// Destroy(item.gameObject.GetComponent<SceneObject>());
-				item.gameObject.name = "glTF Asset";
-			}
-
-			Array.Clear(children, 0, children.Length);
-			children = _sceneObjectsRegistry.SceneObjectsHolder.gameObject.GetComponentsInChildren<Transform>();
-
-			for (int i = 0; i < children.Length; i++)
-			{
-				if (children[i].gameObject.name == "Asset") resultList.Add(children[i]);
-			}
-
-			foreach (var asset in resultList)
-			{
-				asset.SetParent(_sceneObjectsRegistry.SceneObjectsHolder);
-
-				bool hasSelectable = asset.GetComponentInChildren<SceneObject>() != null;
-
-				if (!hasSelectable)
+				bool isModelHolder = childTransform.gameObject.name == Constants.ModelHolderObjectName;
+				bool isNotExportParent = childTransform != exportParentTransform;
+				
+				if (isModelHolder && isNotExportParent)
 				{
-					var selectable = asset.gameObject.AddComponent<SceneObject>();
-					selectable.SetTypeId(SceneObjectTypeId.Model);
-
-					modelsFromSingleSaveFile.Add(asset.transform);
+					modelHolders.Add(childTransform);
 				}
 			}
 
-			if (sceneObj)
-			{
-				// Destroy(sceneObj.gameObject);
-			}
-
-			return resultList;
+			return modelHolders;
 		}
 
-		/// <summary>
-        ///     Assigns textures to corresponding materials
-        /// </summary>
-        private void AssignTextures(int sceneNumber)
+		private List<ModelAssets> ExtractAssetCopiesFromModels(List<Transform> modelHolders)
 		{
-			for (int i = 0; i < modelsFromSingleSaveFile.Count; i++)
+			List<ModelAssets> extractedAssets = new();
+
+			foreach (Transform modelHolder in modelHolders)
 			{
-				Renderer renderer = modelsFromSingleSaveFile[i].gameObject.GetComponentInChildren<MeshRenderer>();
+				modelHolder.SetParent(_sceneObjectsRegistry.SceneObjectsHolder);
+				
+				var meshFilter = modelHolder.GetComponentInChildren<MeshFilter>();
+				var meshRenderer = modelHolder.GetComponentInChildren<MeshRenderer>();
+				
+				var meshCopy = new Mesh();
+				meshCopy.Clear();
+				meshCopy = meshFilter.mesh;
+				meshCopy.name = "mesh";
+				
+				var materialCopy = new Material(meshRenderer.material);
 
-				if (renderer != null)
-				{
-					Material material = renderer.material;
+				Texture2D textureCopy = _textureCopyInstantiator.CreateReadableTexture(meshRenderer.material.mainTexture);
 
-					if (material != null)
-					{
-						string currentAssetPath = $"/Asset{i + 1}" + Constants.TextureFile;
-						string fullPath = IOUtility.scenePath + sceneNumber + currentAssetPath;
-
-						material.mainTexture = IOUtility.OpenDirectoryAndLoadTexture(fullPath);
-					}
-				}
+				var modelAssets = new ModelAssets(meshCopy, materialCopy, textureCopy);
+				extractedAssets.Add(modelAssets);
 			}
 
-			modelsFromSingleSaveFile.Clear();
+			return extractedAssets;
 		}
 
-		/// <summary>
-        ///     Adds convex mesh collider to
-        ///     all renderers in List of targets
-        /// </summary>
-        /// <param name="assets">Collection of targets</param>
-        private void AddCollidersToAssets(List<Transform> assets)
+		private SceneObject ApplyExtractedAssetsToModels(Transform modelHolder, ModelAssets assets)
 		{
-			foreach (var asset in assets)
-			{
-				MeshRenderer[] meshRenderers = asset.gameObject.GetComponentsInChildren<MeshRenderer>();
-
-				foreach (MeshRenderer meshRenderer in meshRenderers)
-				{
-					var meshCollider = meshRenderer.gameObject.AddComponent<MeshCollider>();
-					meshCollider.convex = true;
-				}
-			}
+			var meshFilter = modelHolder.GetComponentInChildren<MeshFilter>();
+			var meshRenderer = modelHolder.GetComponentInChildren<MeshRenderer>();
+			
+			meshFilter.sharedMesh = assets.Mesh;
+			meshRenderer.sharedMaterial = assets.Material;
+			meshRenderer.sharedMaterial.mainTexture = assets.Texture;
+			
+			SceneObject sceneObject = _instantiateService.AddSceneObjectComponent(modelHolder.gameObject, SceneObjectTypeId.Model);
+			return sceneObject;
 		}
 
 		private void AddColliders(SceneObject sceneObject)

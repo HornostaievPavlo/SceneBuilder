@@ -1,6 +1,7 @@
 ﻿using Enums;
 using Gameplay;
 using RuntimeHandle;
+using Services.SceneObjectCopying;
 using Services.SceneObjectSelection;
 using Services.SceneObjectsRegistry;
 using UnityEngine;
@@ -35,14 +36,17 @@ namespace UI.Widgets
 		
 		private ISceneObjectSelectionService _sceneObjectSelectionService;
 		private ISceneObjectsRegistry _sceneObjectsRegistry;
+		private ISceneObjectCopyService _sceneObjectCopyService;
 
 		[Inject]
 		private void Construct(
 			ISceneObjectSelectionService sceneObjectSelectionService,
-			ISceneObjectsRegistry sceneObjectsRegistry)
+			ISceneObjectsRegistry sceneObjectsRegistry,
+			ISceneObjectCopyService sceneObjectCopyService)
 		{
 			_sceneObjectSelectionService = sceneObjectSelectionService;
 			_sceneObjectsRegistry = sceneObjectsRegistry;
+			_sceneObjectCopyService = sceneObjectCopyService;
 		}
 		
 		private void OnEnable()
@@ -108,9 +112,7 @@ namespace UI.Widgets
 		private void HandleCopyButtonClicked()
 		{
 			SceneObject selectedObject = _sceneObjectSelectionService.SelectedObject;
-			
-			var copyInstantiator = selectedObject.GetComponent<SceneObjectCopyInstantiator>();
-			copyInstantiator.CreateCopy(selectedObject);
+			_sceneObjectCopyService.CreateCopy(selectedObject);
 		}
 
 		private void HandleDeleteButtonClicked()

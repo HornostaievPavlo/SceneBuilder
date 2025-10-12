@@ -1,13 +1,12 @@
 ﻿using System.Threading.Tasks;
+using LocalSaves;
+using UnityEngine;
 
 namespace Services.Saving
 {
 	public interface ISaveService
 	{
-		/// <summary>
-		///     Saves all scene assets,
-		///     creates save file row in UI
-		/// </summary>
-		Task SaveCurrentScene();
+		Task CreateLocalSave(Texture2D preview);
+		void DeleteLocalSave(LocalSave localSave);
 	}
 }
