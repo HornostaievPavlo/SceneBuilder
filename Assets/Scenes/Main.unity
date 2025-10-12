@@ -644,6 +644,7 @@ GameObject:
   m_Component:
   - component: {fileID: 278536830}
   - component: {fileID: 278536831}
+  - component: {fileID: 278536832}
   m_Layer: 5
   m_Name: ModelOnlyButtonsHolder
   m_TagString: Untagged
@@ -699,6 +700,18 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!225 &278536832
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 278536829}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &315868357
 GameObject:
   m_ObjectHideFlags: 0
@@ -3109,6 +3122,7 @@ GameObject:
   - component: {fileID: 925560436}
   - component: {fileID: 925560437}
   - component: {fileID: 925560438}
+  - component: {fileID: 925560439}
   m_Layer: 5
   m_Name: ButtonsHolder
   m_TagString: Untagged
@@ -3180,6 +3194,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ContentSizeFitter
   m_HorizontalFit: 0
   m_VerticalFit: 2
+--- !u!225 &925560439
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 925560435}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1009770913
 GameObject:
   m_ObjectHideFlags: 0
@@ -3733,7 +3759,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Main::UI.Widgets.ToolboxWidget
   buttonsHolder: {fileID: 925560435}
+  buttonsCanvasGroup: {fileID: 925560439}
   modelOnlyButtonsHolder: {fileID: 278536829}
+  modelOnlyButtonsCanvasGroup: {fileID: 278536832}
   transformHandleWrapper: {fileID: 672740412}
   moveButton: {fileID: 1111026718}
   rotateButton: {fileID: 1488490876}
@@ -4589,19 +4617,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1201872537}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: LoadingSystem, Main
-        m_MethodName: LoadAssetsFromDirectory
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1201872537
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4771,7 +4787,7 @@ MonoBehaviour:
   infoButton: {fileID: 2050209156}
   quitButton: {fileID: 1579313639}
   localSavesWidget: {fileID: 260263518}
-  controlsWidget: {fileID: 1492293206}
+  controlsInfoWidget: {fileID: 0}
 --- !u!1 &1251436806
 GameObject:
   m_ObjectHideFlags: 0
