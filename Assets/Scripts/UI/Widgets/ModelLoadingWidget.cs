@@ -1,4 +1,5 @@
-﻿using Services.Loading;
+﻿using DG.Tweening;
+using Services.Loading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -32,6 +33,9 @@ namespace UI.Widgets
 		
 		private void HandleLoadButtonClicked()
 		{
+			loadButton.transform.DOKill(true);
+			loadButton.transform.DOPunchScale(loadButton.transform.localScale * 0.25f, 0.2f);
+			
 			LoadModel();
 		}
 
