@@ -3406,6 +3406,42 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1050628787}
   m_CullTransparentMesh: 1
+--- !u!1 &1052332609
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1052332610}
+  m_Layer: 5
+  m_Name: Footer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1052332610
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1052332609}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7527474686216009601}
+  m_Father: {fileID: 558865330779573684}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -222.47}
+  m_SizeDelta: {x: 430, y: 59.086}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1068493105
 GameObject:
   m_ObjectHideFlags: 0
@@ -7342,7 +7378,7 @@ RectTransform:
   m_Father: {fileID: 3033985748941087749}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -9144,6 +9180,7 @@ RectTransform:
   - {fileID: 867620689145287187}
   - {fileID: 6679930191655754245}
   - {fileID: 6396074407463498876}
+  - {fileID: 1052332610}
   m_Father: {fileID: 2131068941}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
@@ -9187,8 +9224,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 317.5, y: -717.5}
-  m_SizeDelta: {x: 165, y: 195}
+  m_AnchoredPosition: {x: 305.3, y: -716.44}
+  m_SizeDelta: {x: 145, y: 175}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &569699278885851835
 GameObject:
@@ -9581,19 +9618,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2877061502593499819}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: SurfacePainter, Main
-        m_MethodName: SetTexture
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 2800000, guid: 7fdaa16a297ec9e4d802b288a7efe3ce, type: 3}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Texture, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!224 &1035546746003408702
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10510,7 +10535,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -84.41, y: 1}
+  m_AnchoredPosition: {x: -84.410126, y: 0.99853516}
   m_SizeDelta: {x: 65, y: 2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &1579052037259092397
@@ -10894,7 +10919,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1806678657975304367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10909,6 +10934,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Main::UI.Widgets.PaintingWidget
   colorPaintingButton: {fileID: 8460205922241226306}
   texturePaintingButton: {fileID: 7069229081444257423}
+  resetChangesButton: {fileID: 2550117024109494999}
+  colorTintSlider: {fileID: 409606446197863308}
   colorPaintingWidget: {fileID: 6679930191655754246}
   texturePaintingWidget: {fileID: 6396074407463498877}
 --- !u!1 &1849250078357440423
@@ -11705,19 +11732,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5880705430963896602}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: SurfacePainter, Main
-        m_MethodName: SetTexture
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 2800000, guid: bbbefa62f0c08764b92ab2b78cc4d894, type: 3}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Texture, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &2877061502593499819
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12671,8 +12686,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 112.5, y: -517.5}
-  m_SizeDelta: {x: 165, y: 195}
+  m_AnchoredPosition: {x: 120.3, y: -513.45996}
+  m_SizeDelta: {x: 145, y: 175}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &3701368903260611321
 GameObject:
@@ -12846,7 +12861,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 98.29999}
+  m_AnchoredPosition: {x: 0, y: 39.218506}
   m_SizeDelta: {x: 170, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3920361534876204034
@@ -12985,8 +13000,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 317.5, y: -517.5}
-  m_SizeDelta: {x: 165, y: 195}
+  m_AnchoredPosition: {x: 305.3, y: -513.45996}
+  m_SizeDelta: {x: 145, y: 175}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3967099348948728774
 CanvasRenderer:
@@ -13728,19 +13743,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7097055421706025524}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: SurfacePainter, Main
-        m_MethodName: SetTexture
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 2800000, guid: 35a942720382e654eb214f06563cbf69, type: 3}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Texture, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &4929143489017186428
 GameObject:
   m_ObjectHideFlags: 0
@@ -13924,19 +13927,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1137508660645284683}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: SurfacePainter, Main
-        m_MethodName: SetTexture
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 2800000, guid: 272f5a819de44e149b4bb56cd2d6d62b, type: 3}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Texture, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!224 &5177962337613766749
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14072,8 +14063,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 112.5, y: -317.5}
-  m_SizeDelta: {x: 165, y: 195}
+  m_AnchoredPosition: {x: 120.3, y: -310.47998}
+  m_SizeDelta: {x: 145, y: 175}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &5286612357093570215
 GameObject:
@@ -14205,19 +14196,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6697107822820095749}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: SurfacePainter, Main
-        m_MethodName: SetTexture
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 2800000, guid: 2d2444dd05c63d14cb55fdcc67fa20a8, type: 3}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Texture, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!222 &5434472561001013166
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -14999,7 +14978,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 84.91, y: 1}
+  m_AnchoredPosition: {x: 84.91016, y: 0.99853516}
   m_SizeDelta: {x: 65, y: 2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6082946584793146940
@@ -15418,8 +15397,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -35.194458}
-  m_SizeDelta: {x: 430, y: 433.6289}
+  m_AnchoredPosition: {x: 0, y: -5.6535034}
+  m_SizeDelta: {x: 430, y: 374.55}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6396074407463498877
 MonoBehaviour:
@@ -15433,6 +15412,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 719226ea1af64475ae997650fa66b077, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Main::UI.Widgets.Painting.TexturePaintingWidget
+  texturesButtonsParent: {fileID: 559384727148505936}
 --- !u!222 &6406462227880370492
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -15484,19 +15464,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3753348764622374258}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: SurfacePainter, Main
-        m_MethodName: SetTexture
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 2800000, guid: 5f1a8018ae82ea342b414bf6177f246c, type: 3}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Texture, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!224 &6444357739311192552
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15748,13 +15716,12 @@ RectTransform:
   - {fileID: 1576437747508155775}
   - {fileID: 6940180205839850355}
   - {fileID: 3859952564286881345}
-  - {fileID: 7527474686216009601}
   m_Father: {fileID: 558865330779573684}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -35.195007}
-  m_SizeDelta: {x: 430, y: 433.63}
+  m_AnchoredPosition: {x: 0, y: -5.6535034}
+  m_SizeDelta: {x: 430, y: 374.55}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6679930191655754246
 MonoBehaviour:
@@ -15770,7 +15737,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Main::UI.Widgets.Painting.ColorPaintingWidget
   colorsButtonsParent: {fileID: 3706885570199439033}
   colorTintSlider: {fileID: 409606446197863308}
-  resetChangesButton: {fileID: 2550117024109494999}
 --- !u!1 &6686176966112898162
 GameObject:
   m_ObjectHideFlags: 0
@@ -15999,7 +15965,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 815}
+  m_SizeDelta: {x: -4.399994, y: 803.94}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &6739601143949462537
 MonoBehaviour:
@@ -16214,7 +16180,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -149.43457}
+  m_AnchoredPosition: {x: 0, y: -149.43604}
   m_SizeDelta: {x: 400, y: 271.75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6945090549114928528
@@ -16456,8 +16422,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 317.5, y: -117.5}
-  m_SizeDelta: {x: 165, y: 195}
+  m_AnchoredPosition: {x: 305.3, y: -107.5}
+  m_SizeDelta: {x: 145, y: 175}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &7123734871096296163
 MonoBehaviour:
@@ -16770,8 +16736,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 317.5, y: -317.5}
-  m_SizeDelta: {x: 165, y: 195}
+  m_AnchoredPosition: {x: 305.3, y: -310.47998}
+  m_SizeDelta: {x: 145, y: 175}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &7276435415410090964
 RectTransform:
@@ -16879,19 +16845,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8658877871669422146}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: SurfacePainter, Main
-        m_MethodName: SetTexture
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 2800000, guid: f522ca02bb416c44f8f94d29657a91b3, type: 3}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Texture, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!224 &7301868413532674786
 RectTransform:
   m_ObjectHideFlags: 0
@@ -17058,8 +17012,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 112.5, y: -717.5}
-  m_SizeDelta: {x: 165, y: 195}
+  m_AnchoredPosition: {x: 120.3, y: -716.44}
+  m_SizeDelta: {x: 145, y: 175}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &7517785205959741067
 GameObject:
@@ -17092,12 +17046,12 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1765483008}
-  m_Father: {fileID: 6679930191655754245}
+  m_Father: {fileID: 1052332610}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 35.336487}
-  m_SizeDelta: {x: 200, y: 47.4984}
+  m_AnchoredPosition: {x: 0, y: 29.543}
+  m_SizeDelta: {x: 200, y: 59.086}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &7581173863589386692
 RectTransform:
@@ -17426,19 +17380,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6138694197744022215}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: SurfacePainter, Main
-        m_MethodName: SetTexture
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 2800000, guid: 5657398f4dd959b47a0be9fb2ff61a4a, type: 3}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Texture, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!224 &7950170943245506570
 RectTransform:
   m_ObjectHideFlags: 0
@@ -17894,8 +17836,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 6.7715}
-  m_SizeDelta: {x: 0, y: -13.543}
+  m_AnchoredPosition: {x: 0, y: -0.00077819824}
+  m_SizeDelta: {x: 0, y: -0.0014954}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &8518181087935746248
 RectTransform:
@@ -18380,8 +18322,8 @@ MonoBehaviour:
   m_ChildAlignment: 4
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 165, y: 195}
-  m_Spacing: {x: 40, y: 5}
+  m_CellSize: {x: 145, y: 200}
+  m_Spacing: {x: 40, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2
 --- !u!1 &9007012418924263027
@@ -18472,7 +18414,7 @@ GameObject:
   - component: {fileID: 731983497036995498}
   - component: {fileID: 5452190520405189886}
   m_Layer: 5
-  m_Name: 'MaterialsScrollView  '
+  m_Name: 'TexturesScrollView  '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18630,8 +18572,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 112.5, y: -117.5}
-  m_SizeDelta: {x: 165, y: 195}
+  m_AnchoredPosition: {x: 120.3, y: -107.5}
+  m_SizeDelta: {x: 145, y: 175}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9177743879137782086
 CanvasRenderer:
