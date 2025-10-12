@@ -55,7 +55,8 @@ namespace Services.Painting
 					renderer.material = material;
 				}
 
-				Color tintedColor = new Color(Color.white.r * value,
+				Color tintedColor = new Color(
+					Color.white.r * value,
 					Color.white.r * value,
 					Color.white.r * value);
 
