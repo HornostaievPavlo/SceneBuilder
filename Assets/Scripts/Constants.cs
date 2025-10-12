@@ -24,4 +24,20 @@ public static class Constants
 
 	public static readonly Color InfoWidgetSelectedColor = Color.blue;
 	public static readonly Color InfoWidgetUnselectedColor = Color.white;
+
+	public static readonly Color[] PaintingColors =
+	{
+		new(1f, 0f, 0f),             // Red
+		new(0f, 0f, 1f),             // Blue
+		new(1f, 1f, 0f),             // Yellow
+		new(0f, 1f, 0f),             // Green
+		new(1f, 0.647f, 0f),         // Orange
+		new(0.5f, 0f, 0.5f),         // Purple
+		new(1f, 1f, 1f),             // White
+		new(0f, 0f, 0f),             // Black
+		new(0.5f, 0.5f, 0.5f),       // Gray
+		new(0.545f, 0.271f, 0.075f), // Brown
+		new(1f, 0.412f, 0.706f),     // Pink
+		new(0f, 1f, 1f)              // Cyan
+	};
 }
