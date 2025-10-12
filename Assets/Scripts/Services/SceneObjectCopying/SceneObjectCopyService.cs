@@ -1,26 +1,22 @@
-﻿using Services.SceneObjectsRegistry;
+﻿using Gameplay;
 using Services.Instantiation;
+using Services.SceneObjectsRegistry;
 using UnityEngine;
-using Zenject;
 
-namespace Gameplay
+namespace Services.SceneObjectCopying
 {
-	public class SceneObjectCopyInstantiator : MonoBehaviour
+	public class SceneObjectCopyService : ISceneObjectCopyService
 	{
-		private ReadableTextureCopyInstantiator _textureCopyInstantiator;
-		
-		private IInstantiateService _instantiateService;
-		private ISceneObjectsRegistry _sceneObjectsRegistry;
+		private readonly ReadableTextureCopyInstantiator _textureCopyInstantiator;
+		private readonly IInstantiateService _instantiateService;
+		private readonly ISceneObjectsRegistry _sceneObjectsRegistry;
 
-		[Inject]
-		private void Construct(IInstantiateService instantiateService, ISceneObjectsRegistry sceneObjectsRegistry)
+		public SceneObjectCopyService(
+			IInstantiateService instantiateService,
+			ISceneObjectsRegistry sceneObjectsRegistry)
 		{
 			_instantiateService = instantiateService;
 			_sceneObjectsRegistry = sceneObjectsRegistry;
-		}
-		
-		private void Awake()
-		{
 			_textureCopyInstantiator = new ReadableTextureCopyInstantiator();
 		}
 
@@ -34,11 +30,11 @@ namespace Gameplay
 			Material materialCopy = originalObject.transform.GetComponentInChildren<MeshRenderer>().material;
 			Texture2D textureCopy = _textureCopyInstantiator.CreateReadableTexture(materialCopy.mainTexture);
 			
-			GameObject copyGameObject = Instantiate(originalObject.gameObject, Vector3.zero, Quaternion.identity, _sceneObjectsRegistry.SceneObjectsHolder);
+			GameObject copyGameObject = Object.Instantiate(originalObject.gameObject, Vector3.zero, Quaternion.identity, _sceneObjectsRegistry.SceneObjectsHolder);
 			
 			if (copyGameObject.TryGetComponent(out SceneObject existingSceneObject))
 			{
-				DestroyImmediate(existingSceneObject);
+				Object.DestroyImmediate(existingSceneObject);
 			}
 			
 			copyGameObject.name = originalObject.gameObject.name;

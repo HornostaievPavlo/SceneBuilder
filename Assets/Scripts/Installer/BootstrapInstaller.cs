@@ -4,6 +4,7 @@ using Services.Loading;
 using Services.LocalSavesRepository;
 using Services.Painting;
 using Services.Saving;
+using Services.SceneObjectCopying;
 using Services.SceneObjectSelection;
 using Services.SceneObjectsRegistry;
 using Zenject;
@@ -22,6 +23,7 @@ namespace Installer
 			Container.BindInterfacesAndSelfTo<SaveService>().AsSingle();
 			Container.BindInterfacesAndSelfTo<LoadService>().AsSingle();
 			Container.BindInterfacesAndSelfTo<LocalSavesRepository>().AsSingle();
+			Container.BindInterfacesAndSelfTo<SceneObjectCopyService>().AsSingle();
 		}
 	}
 }
