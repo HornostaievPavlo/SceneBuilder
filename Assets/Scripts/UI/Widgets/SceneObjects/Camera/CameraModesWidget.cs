@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-namespace UI.Widgets
+namespace UI.Widgets.SceneObjects.Camera
 {
 	public class CameraModesWidget : MonoBehaviour
 	{
@@ -29,8 +29,8 @@ namespace UI.Widgets
 		[SerializeField] private Sprite cameraViewImageSelected;
 		[SerializeField] private Sprite cameraViewImageDeselected;
 
-		private Camera _mainCamera;
-		private Camera _sceneObjectCamera;
+		private UnityEngine.Camera _mainCamera;
+		private UnityEngine.Camera _sceneObjectCamera;
 
 		private CameraModeTypeId _currentModeTypeId;
 
@@ -44,7 +44,7 @@ namespace UI.Widgets
 
 		private void Awake()
 		{
-			_mainCamera = Camera.main;
+			_mainCamera = UnityEngine.Camera.main;
 			_currentModeTypeId = CameraModeTypeId.MainView;
 			ToggleButtonsActiveState(false);
 		}
@@ -76,7 +76,7 @@ namespace UI.Widgets
 
 			ToggleButtonsActiveState(true);
 
-			_sceneObjectCamera = sceneObject.GetComponentInChildren<Camera>();
+			_sceneObjectCamera = sceneObject.GetComponentInChildren<UnityEngine.Camera>();
 			SetCameraMode(_currentModeTypeId);
 		}
 

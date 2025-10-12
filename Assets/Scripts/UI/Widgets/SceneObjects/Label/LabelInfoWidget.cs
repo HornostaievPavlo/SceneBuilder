@@ -26,7 +26,7 @@ namespace UI.Widgets.SceneObjects.Label
 		
 		private LabelEditWidget _labelEditWidget;
 		
-		private Camera _mainCamera;
+		private UnityEngine.Camera _mainCamera;
 		private Gameplay.Label _label;
 		
 		private ISceneObjectsRegistry _sceneObjectsRegistry;
@@ -39,7 +39,7 @@ namespace UI.Widgets.SceneObjects.Label
 
 		private void Awake()
 		{
-			_mainCamera = Camera.main;
+			_mainCamera = UnityEngine.Camera.main;
 		}
 
 		protected override void OnEnable()

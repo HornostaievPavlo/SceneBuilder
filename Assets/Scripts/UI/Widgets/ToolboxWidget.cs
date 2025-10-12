@@ -4,6 +4,7 @@ using RuntimeHandle;
 using Services.SceneObjectCopying;
 using Services.SceneObjectSelection;
 using Services.SceneObjectsRegistry;
+using UI.Widgets.Painting;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;

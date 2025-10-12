@@ -1,118 +1,172 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Gameplay;
+using Services.SceneObjectSelection;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Services.Painting
 {
-	public class ModelPaintingService : IModelPaintingService
+	public class ModelPaintingService : IModelPaintingService, IDisposable
 	{
-		private readonly List<Material> _copiedMaterials = new();
-
-		private List<Renderer> _targetRenderers = new();
-
 		private readonly List<Material> _originalMaterials = new();
+		private readonly List<Material> _copiedMaterials = new();
+		private List<Renderer> _renderers = new();
 
-		private const string COLOR_PROPERTY_NAME = "baseColorFactor";
-		private const string TEXTURE_PATH = "baseColorTexture";
+		private readonly ISceneObjectSelectionService _sceneObjectSelectionService;
 
-		public void CacheModelMaterials(GameObject target, bool isSelected)
+		public ModelPaintingService(ISceneObjectSelectionService sceneObjectSelectionService)
 		{
-			if (isSelected)
-			{
-				_targetRenderers = target.GetComponentsInChildren<Renderer>().ToList();
-
-				foreach (Renderer renderer in _targetRenderers)
-				{
-					_originalMaterials.Add(renderer.material);
-				}
-
-				CopyOriginalMaterials();
-			}
-			else
-			{
-				_targetRenderers.Clear();
-				_originalMaterials.Clear();
-				_copiedMaterials.Clear();
-			}
+			_sceneObjectSelectionService = sceneObjectSelectionService;
+			
+			_sceneObjectSelectionService.OnObjectSelected += HandleObjectSelected;
+			_sceneObjectSelectionService.OnObjectDeselected += HandleObjectDeselected;
 		}
-
-		private void CopyOriginalMaterials()
+		
+		public void Dispose()
 		{
-			foreach (Material mat in _originalMaterials)
-			{
-				Material copy = new Material(mat);
-				_copiedMaterials.Add(copy);
-			}
-
-			for (int i = 0; i < _copiedMaterials.Count; i++)
-			{
-				_copiedMaterials[i].name = $"Material{i + 1}";
-			}
+			_sceneObjectSelectionService.OnObjectSelected -= HandleObjectSelected;
+			_sceneObjectSelectionService.OnObjectDeselected -= HandleObjectDeselected;
 		}
 
 		public void SetColor(Color color)
 		{
-			foreach (var material in _copiedMaterials)
+			ApplyMaterialsToRenderers();
+			
+			foreach (Material material in _copiedMaterials)
 			{
-				foreach (Renderer renderer in _targetRenderers)
-				{
-					renderer.material = material;
-				}
-
-				material.SetColor(COLOR_PROPERTY_NAME, color);
+				material.SetColor(Constants.ColorProperty, color);
 			}
 		}
 
-		public void SetColorTint(float value)
+		public void SetColorTint(float tintValue)
 		{
-			foreach (var material in _copiedMaterials)
+			float normalizedTintValue = 1f - tintValue;
+			
+			ApplyMaterialsToRenderers();
+			
+			Color tintedColor = CreateTintedColor(normalizedTintValue);
+			
+			foreach (Material material in _copiedMaterials)
 			{
-				foreach (Renderer renderer in _targetRenderers)
-				{
-					renderer.material = material;
-				}
-
-				Color tintedColor = new Color(Color.white.r * value,
-					Color.white.r * value,
-					Color.white.r * value);
-
-				material.SetColor(COLOR_PROPERTY_NAME, tintedColor);
-			}
-		}
-
-		public void SetOriginalMaterial(Slider slider)
-		{
-			slider.value = 1;
-
-			for (int i = 0; i < _copiedMaterials.Count; i++)
-			{
-				_targetRenderers[i].material = _originalMaterials[i];
-				_targetRenderers[i].material.color = Color.white;
+				material.SetColor(Constants.ColorProperty, tintedColor);
 			}
 		}
 
 		public void SetTexture(Texture texture)
 		{
-			DeleteOriginalTextures();
-
-			foreach (var material in _copiedMaterials)
+			ClearTexturesFromMaterials();
+			ApplyMaterialsToRenderers();
+			
+			foreach (Material material in _copiedMaterials)
 			{
-				foreach (Renderer renderer in _targetRenderers)
-				{
-					renderer.material = material;
-				}
-
-				material.SetTexture(TEXTURE_PATH, texture);
+				material.SetTexture(Constants.TextureProperty, texture);
 			}
 		}
 
-		private void DeleteOriginalTextures()
+		public void RestoreOriginalMaterial()
 		{
-			foreach (var material in _copiedMaterials)
+			RestoreOriginalMaterialsToRenderers();
+			RecreateCleanCopiedMaterials();
+		}
+		
+		private void HandleObjectSelected(SceneObject sceneObject)
+		{
+			CollectRenderersFromSceneObject(sceneObject);
+			StoreOriginalMaterials();
+			CreateCopiedMaterials();
+		}
+
+		private void HandleObjectDeselected()
+		{
+			ClearAllMaterialCollections();
+		}
+
+		private void CollectRenderersFromSceneObject(SceneObject sceneObject)
+		{
+			_renderers = sceneObject.GetComponentsInChildren<Renderer>().ToList();
+		}
+
+		private void StoreOriginalMaterials()
+		{
+			foreach (Renderer renderer in _renderers)
 			{
-				material.SetTexture(TEXTURE_PATH, null);
+				_originalMaterials.Add(renderer.material);
 			}
+		}
+
+		private void CreateCopiedMaterials()
+		{
+			foreach (Material originalMaterial in _originalMaterials)
+			{
+				Material materialCopy = new Material(originalMaterial);
+				_copiedMaterials.Add(materialCopy);
+			}
+
+			AssignNamesToMaterials(_copiedMaterials);
+		}
+
+		private void RecreateCleanCopiedMaterials()
+		{
+			_copiedMaterials.Clear();
+			
+			foreach (Material originalMaterial in _originalMaterials)
+			{
+				Material materialCopy = new Material(originalMaterial);
+				_copiedMaterials.Add(materialCopy);
+			}
+
+			AssignNamesToMaterials(_copiedMaterials);
+		}
+
+		private void AssignNamesToMaterials(List<Material> materials)
+		{
+			for (int i = 0; i < materials.Count; i++)
+			{
+				materials[i].name = $"Material{i + 1}";
+			}
+		}
+
+		private void ApplyMaterialsToRenderers()
+		{
+			foreach (Material material in _copiedMaterials)
+			{
+				foreach (Renderer renderer in _renderers)
+				{
+					renderer.material = material;
+				}
+			}
+		}
+
+		private void RestoreOriginalMaterialsToRenderers()
+		{
+			for (int i = 0; i < _renderers.Count && i < _originalMaterials.Count; i++)
+			{
+				_renderers[i].material = _originalMaterials[i];
+			}
+		}
+
+		private void ClearTexturesFromMaterials()
+		{
+			foreach (Material material in _copiedMaterials)
+			{
+				material.SetTexture(Constants.TextureProperty, null);
+			}
+		}
+
+		private void ClearAllMaterialCollections()
+		{
+			_renderers.Clear();
+			_originalMaterials.Clear();
+			_copiedMaterials.Clear();
+		}
+
+		private Color CreateTintedColor(float tintValue)
+		{
+			return new Color(
+				Color.white.r * tintValue,
+				Color.white.g * tintValue,
+				Color.white.b * tintValue);
 		}
 	}
 }
