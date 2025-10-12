@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Enums;
 using Gameplay;
@@ -12,16 +10,11 @@ using Services.SceneObjectsRegistry;
 using UnityEditor;
 using UnityEngine;
 using Zenject;
-using Object = UnityEngine.Object;
 
 namespace Services.Loading
 {
 	public class LoadService : ILoadService
 	{
-		// private List<Transform> modelsFromSingleSaveFile = new();
-
-		// private Transform[] children;
-		
 		private ReadableTextureCopyInstantiator _textureCopyInstantiator;
 
 		private IInstantiateService _instantiateService;
@@ -36,13 +29,10 @@ namespace Services.Loading
 			_textureCopyInstantiator = new ReadableTextureCopyInstantiator();
 		}
 
-		public async Task<bool> LoadModel(string modelPath, string localSaveDirectoryPath = "")
+		public async Task<bool> LoadModel(string modelPath)
 		{
 			if (string.IsNullOrEmpty(modelPath))
 			{
-				// Debug.LogError($"Trying to load model from empty path");
-				// return false;
-				
 				modelPath = Constants.DuckModelPath;
 			}
 
@@ -65,7 +55,7 @@ namespace Services.Loading
 
 			if (isLoadedFromLocalSave)
 			{
-				SetupLocalSaveAssets(localSaveDirectoryPath);
+				SetupLocalSaveAssets();
 			}
 			else
 			{
@@ -88,7 +78,7 @@ namespace Services.Loading
 		public async void LoadLocalSave(LocalSave localSave)
 		{
 			string assetPath = localSave.DirectoryPath + Constants.AssetFile;
-			await LoadModel(assetPath, localSave.DirectoryPath);
+			await LoadModel(assetPath);
 		}
 
 		public Texture LoadTexture(string path)
@@ -138,64 +128,7 @@ namespace Services.Loading
 			}
 		}
 
-		// private void SetupLocalSaveAssets(string localSaveDirectoryPath)
-		// {
-		// 	List<Transform> resultList = new();
-		// 	List<Transform> localSaveModels = new();
-		// 	List<Transform> children = new();
-		//
-		// 	bool isSingleAsset = GameObject.Find("Scene") == null;
-		// 	Transform sceneObj = null;
-		//
-		// 	if (!isSingleAsset)
-		// 	{
-		// 		sceneObj = GameObject.Find("Scene").transform;
-		// 		sceneObj.SetParent(_sceneObjectsRegistry.SceneObjectsHolder);
-		// 	}
-		//
-		// 	var spawner = _sceneObjectsRegistry.SceneObjectsHolder.gameObject.GetComponentInChildren<GltfAsset>();
-		// 	Object.Destroy(spawner.gameObject.GetComponent<SceneObject>());
-		// 	spawner.gameObject.name = "glTF Asset";
-		//
-		// 	GltfAsset[] spawners = _sceneObjectsRegistry.SceneObjectsHolder.gameObject.GetComponentsInChildren<GltfAsset>();
-		// 	foreach (GltfAsset item in spawners)
-		// 	{
-		// 		Object.Destroy(item.gameObject.GetComponent<SceneObject>());
-		// 		item.gameObject.name = "glTF Asset";
-		// 	}
-		//
-		// 	children = _sceneObjectsRegistry.SceneObjectsHolder.gameObject.GetComponentsInChildren<Transform>().ToList();
-		//
-		// 	for (int i = 0; i < children.Count; i++)
-		// 	{
-		// 		if (children[i].gameObject.name == "Asset") resultList.Add(children[i]);
-		// 	}
-		//
-		// 	foreach (var asset in resultList)
-		// 	{
-		// 		asset.SetParent(_sceneObjectsRegistry.SceneObjectsHolder);
-		//
-		// 		bool hasSelectable = asset.GetComponentInChildren<SceneObject>() != null;
-		//
-		// 		if (hasSelectable == false)
-		// 		{
-		// 			SceneObject sceneObject = asset.gameObject.AddComponent<SceneObject>();
-		// 			sceneObject.Register(SceneObjectTypeId.Model);
-		//
-		// 			localSaveModels.Add(asset.transform);
-		// 		}
-		// 	}
-		//
-		// 	if (sceneObj)
-		// 	{
-		// 		Object.Destroy(sceneObj.gameObject);
-		// 	}
-		// 	
-		// 	// AssignTextures(localSaveModels, localSaveDirectoryPath);
-		// 	localSaveModels.Clear();
-		// }
-
-		private void SetupLocalSaveAssets(string localSaveDirectoryPath)
+		private void SetupLocalSaveAssets()
 		{
 			Transform sceneObjectsHolder = _sceneObjectsRegistry.SceneObjectsHolder;
 			Transform[] childTransforms = sceneObjectsHolder.GetComponentsInChildren<Transform>(true);

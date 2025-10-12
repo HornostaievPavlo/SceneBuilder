@@ -6,7 +6,7 @@ namespace Services.Loading
 {
 	public interface ILoadService
 	{
-		Task<bool> LoadModel(string modelPath, string localSaveDirectoryPath = "");
+		Task<bool> LoadModel(string modelPath);
 		void LoadCamera();
 		void LoadLabel();
 		void LoadLocalSave(LocalSave localSave);
