@@ -4,7 +4,9 @@ namespace Services.Painting
 {
 	public interface IModelPaintingService
 	{
+		void SetColor(Color color);
 		void SetColorTint(float value);
-		void CacheModelMaterials(GameObject target, bool isSelected);
+		void SetTexture(Texture texture);
+		void RestoreOriginalMaterial();
 	}
 }

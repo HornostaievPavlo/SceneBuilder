@@ -1,44 +1,101 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Gameplay;
+using Services.SceneObjectSelection;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Services.Painting
 {
-	public class ModelPaintingService : IModelPaintingService
+	public class ModelPaintingService : IModelPaintingService, IDisposable
 	{
+		private readonly List<Material> _originalMaterials = new();
 		private readonly List<Material> _copiedMaterials = new();
 
-		private List<Renderer> _targetRenderers = new();
+		private List<Renderer> _renderers = new();
 
-		private readonly List<Material> _originalMaterials = new();
+		private readonly ISceneObjectSelectionService _sceneObjectSelectionService;
 
-		private const string COLOR_PROPERTY_NAME = "baseColorFactor";
-		private const string TEXTURE_PATH = "baseColorTexture";
-
-		public void CacheModelMaterials(GameObject target, bool isSelected)
+		public ModelPaintingService(ISceneObjectSelectionService sceneObjectSelectionService)
 		{
-			if (isSelected)
-			{
-				_targetRenderers = target.GetComponentsInChildren<Renderer>().ToList();
+			_sceneObjectSelectionService = sceneObjectSelectionService;
+			
+			sceneObjectSelectionService.OnObjectSelected += HandleObjectSelected;
+			sceneObjectSelectionService.OnObjectDeselected += HandleObjectDeselected;
+		}
+		
+		public void Dispose()
+		{
+			_sceneObjectSelectionService.OnObjectSelected -= HandleObjectSelected;
+			_sceneObjectSelectionService.OnObjectDeselected -= HandleObjectDeselected;
+		}
 
-				foreach (Renderer renderer in _targetRenderers)
+		public void SetColor(Color color)
+		{
+			foreach (var material in _copiedMaterials)
+			{
+				foreach (Renderer renderer in _renderers)
 				{
-					_originalMaterials.Add(renderer.material);
+					renderer.material = material;
 				}
 
-				CopyOriginalMaterials();
-			}
-			else
-			{
-				_targetRenderers.Clear();
-				_originalMaterials.Clear();
-				_copiedMaterials.Clear();
+				material.SetColor(Constants.ColorProperty, color);
 			}
 		}
 
-		private void CopyOriginalMaterials()
+		public void SetColorTint(float value)
 		{
+			value = 1 - value;
+			
+			foreach (var material in _copiedMaterials)
+			{
+				foreach (Renderer renderer in _renderers)
+				{
+					renderer.material = material;
+				}
+
+				Color tintedColor = new Color(Color.white.r * value,
+					Color.white.r * value,
+					Color.white.r * value);
+
+				material.SetColor(Constants.ColorProperty, tintedColor);
+			}
+		}
+
+		public void RestoreOriginalMaterial()
+		{
+			for (int i = 0; i < _copiedMaterials.Count; i++)
+			{
+				_renderers[i].material = _originalMaterials[i];
+				_renderers[i].material.color = Color.white;
+			}
+		}
+
+		public void SetTexture(Texture texture)
+		{
+			DeleteOriginalTextures();
+
+			foreach (var material in _copiedMaterials)
+			{
+				foreach (Renderer renderer in _renderers)
+				{
+					renderer.material = material;
+				}
+
+				material.SetTexture(Constants.TextureProperty, texture);
+			}
+		}
+		
+		private void HandleObjectSelected(SceneObject sceneObject)
+		{
+			_renderers = sceneObject.GetComponentsInChildren<Renderer>().ToList();
+
+			foreach (Renderer renderer in _renderers)
+			{
+				_originalMaterials.Add(renderer.material);
+			}
+
 			foreach (Material mat in _originalMaterials)
 			{
 				Material copy = new Material(mat);
@@ -51,67 +108,18 @@ namespace Services.Painting
 			}
 		}
 
-		public void SetColor(Color color)
+		private void HandleObjectDeselected()
 		{
-			foreach (var material in _copiedMaterials)
-			{
-				foreach (Renderer renderer in _targetRenderers)
-				{
-					renderer.material = material;
-				}
-
-				material.SetColor(COLOR_PROPERTY_NAME, color);
-			}
-		}
-
-		public void SetColorTint(float value)
-		{
-			foreach (var material in _copiedMaterials)
-			{
-				foreach (Renderer renderer in _targetRenderers)
-				{
-					renderer.material = material;
-				}
-
-				Color tintedColor = new Color(Color.white.r * value,
-					Color.white.r * value,
-					Color.white.r * value);
-
-				material.SetColor(COLOR_PROPERTY_NAME, tintedColor);
-			}
-		}
-
-		public void SetOriginalMaterial(Slider slider)
-		{
-			slider.value = 1;
-
-			for (int i = 0; i < _copiedMaterials.Count; i++)
-			{
-				_targetRenderers[i].material = _originalMaterials[i];
-				_targetRenderers[i].material.color = Color.white;
-			}
-		}
-
-		public void SetTexture(Texture texture)
-		{
-			DeleteOriginalTextures();
-
-			foreach (var material in _copiedMaterials)
-			{
-				foreach (Renderer renderer in _targetRenderers)
-				{
-					renderer.material = material;
-				}
-
-				material.SetTexture(TEXTURE_PATH, texture);
-			}
+			_renderers.Clear();
+			_originalMaterials.Clear();
+			_copiedMaterials.Clear();
 		}
 
 		private void DeleteOriginalTextures()
 		{
 			foreach (var material in _copiedMaterials)
 			{
-				material.SetTexture(TEXTURE_PATH, null);
+				material.SetTexture(Constants.TextureProperty, null);
 			}
 		}
 	}
