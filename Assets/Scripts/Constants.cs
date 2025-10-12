@@ -15,6 +15,8 @@ public static class Constants
 	public const string CameraPrefabPath = "Assets/Prefabs/SceneObjects/Camera.prefab";
 	public const string LabelPrefabPath = "Assets/Prefabs/SceneObjects/Label.prefab";
 	
+	public const string ModelHolderObjectName = "ModelHolder";
+	
 	public const int ZeroCameraDepth = 0;
 	public const int LowestCameraDepth = 1;
 	public const int MiddleCameraDepth = 2;
