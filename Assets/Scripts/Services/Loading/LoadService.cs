@@ -101,39 +101,15 @@ namespace Services.Loading
 
 		private SceneObject InstantiateSceneObject(SceneObjectTypeId typeId)
 		{
-			// try to remove switch 
-			switch (typeId)
+			GameObject prefab = typeId switch
 			{
-			    case SceneObjectTypeId.Model:
-			    {
-				    var modelPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(Constants.ModelPrefabPath);
-				    SceneObject model = _instantiateService.InstantiateSceneObject(modelPrefab, _sceneObjectsRegistry.SceneObjectsHolder, typeId);
-			        
-				    return model;
-			    }
-			    case SceneObjectTypeId.Camera:
-			    {
-				    var cameraPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(Constants.CameraPrefabPath);
-				    SceneObject camera = _instantiateService.InstantiateSceneObject(cameraPrefab, _sceneObjectsRegistry.SceneObjectsHolder, typeId);
-			        
-				    camera.name = "Asset";
-					
-				    return camera;
-			    }
-			    case SceneObjectTypeId.Label:
-			    {
-				    var labelPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(Constants.LabelPrefabPath);
-				    SceneObject label = _instantiateService.InstantiateSceneObject(labelPrefab, _sceneObjectsRegistry.SceneObjectsHolder, typeId);
-					
-				    label.name = "Asset";
-				    
-				    return label;
-			    }
-			    default:
-			    {
-				    return null;
-			    }
-			}
+				SceneObjectTypeId.Model => AssetDatabase.LoadAssetAtPath<GameObject>(Constants.ModelPrefabPath),
+				SceneObjectTypeId.Camera => AssetDatabase.LoadAssetAtPath<GameObject>(Constants.CameraPrefabPath),
+				SceneObjectTypeId.Label => AssetDatabase.LoadAssetAtPath<GameObject>(Constants.LabelPrefabPath),
+				_ => null
+			};
+
+			return _instantiateService.InstantiateSceneObject(prefab, _sceneObjectsRegistry.SceneObjectsHolder, typeId);
 		}
 
 		private void SetupLocalSaveAssets()
