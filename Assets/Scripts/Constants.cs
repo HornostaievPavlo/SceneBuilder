@@ -17,6 +17,9 @@ public static class Constants
 	
 	public const string ModelHolderObjectName = "ModelHolder";
 	
+	public const string ColorProperty = "baseColorFactor";
+	public const string TextureProperty = "baseColorTexture";
+	
 	public const int ZeroCameraDepth = 0;
 	public const int LowestCameraDepth = 1;
 	public const int MiddleCameraDepth = 2;
