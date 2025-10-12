@@ -47,12 +47,14 @@ namespace Services.Instantiation
             return instantiated;
         }
 
-        public void AddSceneObjectComponent(GameObject existingGameObject, SceneObjectTypeId typeId)
+        public SceneObject AddSceneObjectComponent(GameObject existingGameObject, SceneObjectTypeId typeId)
         {
             SceneObject sceneObject = existingGameObject.AddComponent<SceneObject>();
             _container.InjectGameObject(existingGameObject);
             
             sceneObject.Register(typeId);
+            
+            return sceneObject;
         }
     }
 }
