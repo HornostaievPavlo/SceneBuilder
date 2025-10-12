@@ -1,4 +1,5 @@
-﻿using Enums;
+﻿using DG.Tweening;
+using Enums;
 using Gameplay;
 using RuntimeHandle;
 using Services.SceneObjectCopying;
@@ -14,6 +15,7 @@ namespace UI.Widgets
 	public class ToolboxWidget : MonoBehaviour
 	{
 		[Header("Holders")]
+		[SerializeField] private CanvasGroup buttonsCanvasGroup;
 		[SerializeField] private GameObject buttonsHolder;
 		[SerializeField] private GameObject modelOnlyButtonsHolder;
 		
@@ -82,11 +84,13 @@ namespace UI.Widgets
 		{
 			buttonsHolder.SetActive(true);
 			modelOnlyButtonsHolder.SetActive(sceneObject.TypeId == SceneObjectTypeId.Model);
+			
+			AnimateButtonsAppear();
 		}
 
 		private void HandleObjectDeselected()
 		{
-			buttonsHolder.SetActive(false);
+			AnimateButtonsDisappear();
 		}
 
 		private void HandleMoveButtonClicked()
@@ -125,6 +129,38 @@ namespace UI.Widgets
 		private void HandleFocusButtonClicked()
 		{
 			orbitCamera.FocusOnSelectedObject();
+		}
+
+		private void AnimateButtonsAppear()
+		{
+			float appearDuration = 0.25f;
+			
+			Vector3 originalPosition = buttonsHolder.transform.localPosition;
+			buttonsHolder.transform.localPosition = new Vector3(originalPosition.x + 200f, originalPosition.y, originalPosition.z);
+			
+			buttonsHolder.transform.DOKill(true);
+			buttonsHolder.transform.DOLocalMoveX(originalPosition.x, appearDuration).SetEase(Ease.OutBack);
+
+			buttonsCanvasGroup.alpha = 0f;
+			buttonsCanvasGroup.DOKill(true);
+			DOTween.To(() => buttonsCanvasGroup.alpha, x => buttonsCanvasGroup.alpha = x, 1f, appearDuration);
+		}
+
+		private void AnimateButtonsDisappear()
+		{
+			float disappearDuration = 0.15f;
+
+			Vector3 originalPosition = buttonsHolder.transform.localPosition;
+			Vector3 targetPosition = new Vector3(originalPosition.x + 200f, originalPosition.y, originalPosition.z);
+
+			buttonsHolder.transform.DOKill(true);
+			buttonsHolder.transform.DOLocalMoveX(targetPosition.x, disappearDuration)
+				.SetEase(Ease.InBack)
+				.OnComplete(() =>
+				{
+					buttonsHolder.SetActive(false);
+					buttonsHolder.transform.localPosition = originalPosition;
+				});
 		}
 	}
 }
