@@ -21,6 +21,8 @@ namespace Services.Loading
 		// private List<Transform> modelsFromSingleSaveFile = new();
 
 		// private Transform[] children;
+		
+		private ReadableTextureCopyInstantiator _textureCopyInstantiator;
 
 		private IInstantiateService _instantiateService;
 		private ISceneObjectsRegistry _sceneObjectsRegistry;
@@ -30,6 +32,8 @@ namespace Services.Loading
 		{
 			_instantiateService = instantiateService;
 			_sceneObjectsRegistry = sceneObjectsRegistry;
+			
+			_textureCopyInstantiator = new ReadableTextureCopyInstantiator();
 		}
 
 		public async Task<bool> LoadModel(string modelPath, string localSaveDirectoryPath = "")
@@ -42,8 +46,15 @@ namespace Services.Loading
 				modelPath = Constants.DuckModelPath;
 			}
 
-			SceneObject modelAsset = InstantiateSceneObject(SceneObjectTypeId.Model);
-			var gltfAsset = modelAsset.gameObject.AddComponent<GltfAsset>();
+			SceneObject sceneObject = InstantiateSceneObject(SceneObjectTypeId.Model);
+			
+			var gltfAsset = sceneObject.gameObject.AddComponent<GltfAsset>();
+			var instantiationSettings = new InstantiationSettings()
+			{
+				SceneObjectCreation = SceneObjectCreation.Never
+			};
+
+			gltfAsset.InstantiationSettings = instantiationSettings;
 
 			bool isSuccess = await gltfAsset.Load(modelPath);
 
@@ -54,28 +65,13 @@ namespace Services.Loading
 
 			if (isLoadedFromLocalSave)
 			{
-				// SetupLocalSaveAssets(localSaveDirectoryPath);
+				SetupLocalSaveAssets(localSaveDirectoryPath);
 			}
 			else
 			{
-				// List<Transform> assets = new();
-				// Transform[] children = IOUtility.assetsParent.gameObject.GetComponentsInChildren<Transform>();
-				//
-				// for (int i = 0; i < children.Length; i++)
-				// {
-				//     if (children[i].gameObject.name == "Asset")
-				//     {
-				//         assets.Add(children[i]);
-				//     }
-				// }
-
-				// AddColliders(modelAsset);
-
-				// assets = modelAsset.GetComponentsInChildren<Transform>().ToList();
+				AddColliders(sceneObject);
 			}
 			
-			AddColliders(modelAsset);
-
 			return true;
 		}
 
@@ -88,6 +84,22 @@ namespace Services.Loading
         {
 	        InstantiateSceneObject(SceneObjectTypeId.Label);
         }
+
+		public async void LoadLocalSave(LocalSave localSave)
+		{
+			string assetPath = localSave.DirectoryPath + Constants.AssetFile;
+			await LoadModel(assetPath, localSave.DirectoryPath);
+		}
+
+		public Texture LoadTexture(string path)
+		{
+			byte[] loadedBytes = File.ReadAllBytes(path);
+
+			Texture2D textureFromBytes = new Texture2D(2, 2);
+			textureFromBytes.LoadImage(loadedBytes);
+
+			return textureFromBytes;
+		}
 
 		private SceneObject InstantiateSceneObject(SceneObjectTypeId typeId)
 		{
@@ -126,109 +138,121 @@ namespace Services.Loading
 			}
 		}
 
-		public async void LoadLocalSave(LocalSave localSave)
+		// private void SetupLocalSaveAssets(string localSaveDirectoryPath)
+		// {
+		// 	List<Transform> resultList = new();
+		// 	List<Transform> localSaveModels = new();
+		// 	List<Transform> children = new();
+		//
+		// 	bool isSingleAsset = GameObject.Find("Scene") == null;
+		// 	Transform sceneObj = null;
+		//
+		// 	if (!isSingleAsset)
+		// 	{
+		// 		sceneObj = GameObject.Find("Scene").transform;
+		// 		sceneObj.SetParent(_sceneObjectsRegistry.SceneObjectsHolder);
+		// 	}
+		//
+		// 	var spawner = _sceneObjectsRegistry.SceneObjectsHolder.gameObject.GetComponentInChildren<GltfAsset>();
+		// 	Object.Destroy(spawner.gameObject.GetComponent<SceneObject>());
+		// 	spawner.gameObject.name = "glTF Asset";
+		//
+		// 	GltfAsset[] spawners = _sceneObjectsRegistry.SceneObjectsHolder.gameObject.GetComponentsInChildren<GltfAsset>();
+		// 	foreach (GltfAsset item in spawners)
+		// 	{
+		// 		Object.Destroy(item.gameObject.GetComponent<SceneObject>());
+		// 		item.gameObject.name = "glTF Asset";
+		// 	}
+		//
+		// 	children = _sceneObjectsRegistry.SceneObjectsHolder.gameObject.GetComponentsInChildren<Transform>().ToList();
+		//
+		// 	for (int i = 0; i < children.Count; i++)
+		// 	{
+		// 		if (children[i].gameObject.name == "Asset") resultList.Add(children[i]);
+		// 	}
+		//
+		// 	foreach (var asset in resultList)
+		// 	{
+		// 		asset.SetParent(_sceneObjectsRegistry.SceneObjectsHolder);
+		//
+		// 		bool hasSelectable = asset.GetComponentInChildren<SceneObject>() != null;
+		//
+		// 		if (hasSelectable == false)
+		// 		{
+		// 			SceneObject sceneObject = asset.gameObject.AddComponent<SceneObject>();
+		// 			sceneObject.Register(SceneObjectTypeId.Model);
+		//
+		// 			localSaveModels.Add(asset.transform);
+		// 		}
+		// 	}
+		//
+		// 	if (sceneObj)
+		// 	{
+		// 		Object.Destroy(sceneObj.gameObject);
+		// 	}
+		// 	
+		// 	// AssignTextures(localSaveModels, localSaveDirectoryPath);
+		// 	localSaveModels.Clear();
+		// }
+
+		private void SetupLocalSaveAssets(string localSaveDirectoryPath)
 		{
-			string assetPath = localSave.DirectoryPath + Constants.AssetFile;
-			await LoadModel(assetPath, localSave.DirectoryPath);
-		}
+			Transform sceneObjectsHolder = _sceneObjectsRegistry.SceneObjectsHolder;
+			Transform[] childTransforms = sceneObjectsHolder.GetComponentsInChildren<Transform>(true);
 
-        private void SetupLocalSaveAssets(string localSaveDirectoryPath)
-		{
-			List<Transform> resultList = new();
-			List<Transform> localSaveModels = new();
-			List<Transform> children = new();
-
-			bool isSingleAsset = GameObject.Find("Scene") == null;
-			Transform sceneObj = null;
-
-			if (!isSingleAsset)
-			{
-				sceneObj = GameObject.Find("Scene").transform;
-				sceneObj.SetParent(_sceneObjectsRegistry.SceneObjectsHolder);
-			}
-
-			var spawner = _sceneObjectsRegistry.SceneObjectsHolder.gameObject.GetComponentInChildren<GltfAsset>();
-			Object.Destroy(spawner.gameObject.GetComponent<SceneObject>());
-			spawner.gameObject.name = "glTF Asset";
-
-			GltfAsset[] spawners = _sceneObjectsRegistry.SceneObjectsHolder.gameObject.GetComponentsInChildren<GltfAsset>();
-			foreach (GltfAsset item in spawners)
-			{
-				Object.Destroy(item.gameObject.GetComponent<SceneObject>());
-				item.gameObject.name = "glTF Asset";
-			}
-
-			children = _sceneObjectsRegistry.SceneObjectsHolder.gameObject.GetComponentsInChildren<Transform>().ToList();
-
-			for (int i = 0; i < children.Count; i++)
-			{
-				if (children[i].gameObject.name == "Asset") resultList.Add(children[i]);
-			}
-
-			foreach (var asset in resultList)
-			{
-				asset.SetParent(_sceneObjectsRegistry.SceneObjectsHolder);
-
-				bool hasSelectable = asset.GetComponentInChildren<SceneObject>() != null;
-
-				if (hasSelectable == false)
-				{
-					SceneObject sceneObject = asset.gameObject.AddComponent<SceneObject>();
-					sceneObject.Register(SceneObjectTypeId.Model);
-
-					localSaveModels.Add(asset.transform);
-				}
-			}
-
-			if (sceneObj)
-			{
-				Object.Destroy(sceneObj.gameObject);
-			}
+			var exportParent = sceneObjectsHolder.GetComponentInChildren<SceneObject>();
+			exportParent.gameObject.name = "ExportParent";
 			
-			// AssignTextures(localSaveModels, localSaveDirectoryPath);
-			localSaveModels.Clear();
-		}
+			List<Transform> modelHolders = new();
 
-        // private void AssignTextures(int sceneNumber)
-        private void AssignTextures(List<Transform> localSaveModels, string localSaveDirectoryPath)
-		{
-			for (int i = 0; i < localSaveModels.Count; i++)
+			foreach (Transform childTransform in childTransforms)
 			{
-				Renderer renderer = localSaveModels[i].gameObject.GetComponentInChildren<MeshRenderer>();
-
-				if (renderer == null) 
+				if (childTransform.gameObject.name != Constants.ModelHolderObjectName || childTransform == exportParent.transform) 
 					continue;
-				
-				Material material = renderer.material;
-
-				if (material == null) 
-					continue;
-				
-				string texturePath = $"/Asset{i + 1}" + Constants.TextureFile;
-				string fullPath = localSaveDirectoryPath + texturePath;
-			
-				material.mainTexture = LoadTexture(fullPath);
+					
+				modelHolders.Add(childTransform);
 			}
 			
-			AddCollidersToAssets(localSaveModels);
-		}
+			List<Mesh> modelsMeshes = new();
+			List<Material> modelsMaterials = new();
+			List<Texture> modelsTextures = new();
 
-		private void AssignTextures(string localSaveDirectoryPath)
-		{
-			
-		}
-
-        private void AddCollidersToAssets(List<Transform> assets)
-		{
-			foreach (Transform asset in assets)
+			foreach (Transform modelHolder in modelHolders)
 			{
-				MeshRenderer[] meshRenderers = asset.gameObject.GetComponentsInChildren<MeshRenderer>();
+				modelHolder.SetParent(sceneObjectsHolder);
+				
+				var modelMeshFilter = modelHolder.GetComponentInChildren<MeshFilter>();
+				var modelMeshRenderer = modelHolder.GetComponentInChildren<MeshRenderer>();
+				
+				var meshCopy = new Mesh();
+				meshCopy.Clear();
+				meshCopy = modelMeshFilter.mesh;
+				meshCopy.name = "mesh";
+				
+				modelsMeshes.Add(meshCopy);
+				
+				var materialCopy = new Material(modelMeshRenderer.material);
+				modelsMaterials.Add(materialCopy);
 
-				foreach (MeshRenderer meshRenderer in meshRenderers)
-				{
-					var meshCollider = meshRenderer.gameObject.AddComponent<MeshCollider>();
-					meshCollider.convex = true;
-				}
+				var textureCopy = _textureCopyInstantiator.CreateReadableTexture(modelMeshRenderer.material.mainTexture);
+				modelsTextures.Add(textureCopy);
+			}
+
+			_sceneObjectsRegistry.DeleteObject(exportParent);
+
+			for (var i = 0; i < modelHolders.Count; i++)
+			{
+				Transform modelHolder = modelHolders[i];
+				
+				var modelMeshFilter = modelHolder.GetComponentInChildren<MeshFilter>();
+				var modelMeshRenderer = modelHolder.GetComponentInChildren<MeshRenderer>();
+				
+				modelMeshFilter.sharedMesh = modelsMeshes[i];
+				modelMeshRenderer.sharedMaterial = modelsMaterials[i];
+				modelMeshRenderer.sharedMaterial.mainTexture = modelsTextures[i];
+				
+				SceneObject sceneObject =_instantiateService.AddSceneObjectComponent(modelHolder.gameObject, SceneObjectTypeId.Model);
+				AddColliders(sceneObject);
 			}
 		}
 
@@ -241,16 +265,6 @@ namespace Services.Loading
 				var meshCollider = meshRenderer.gameObject.AddComponent<MeshCollider>();
 				meshCollider.convex = true;
 			}
-		}
-		
-		public Texture LoadTexture(string path)
-		{
-			byte[] loadedBytes = File.ReadAllBytes(path);
-
-			Texture2D textureFromBytes = new Texture2D(2, 2);
-			textureFromBytes.LoadImage(loadedBytes);
-
-			return textureFromBytes;
 		}
 	}
 }
