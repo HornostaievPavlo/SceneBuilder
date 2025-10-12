@@ -6,6 +6,7 @@ using Enums;
 using Gameplay;
 using GLTFast;
 using LocalSaves;
+using Plain;
 using Services.Instantiation;
 using Services.SceneObjectsRegistry;
 using UnityEditor;
@@ -28,7 +29,7 @@ namespace Services.Loading
 		{
 			_instantiateService = instantiateService;
 			_sceneObjectsRegistry = sceneObjectsRegistry;
-			
+
 			_textureCopyInstantiator = new ReadableTextureCopyInstantiator();
 		}
 
@@ -81,22 +82,22 @@ namespace Services.Loading
 		public async void LoadLocalSave(LocalSave localSave)
 		{
 			string assetPath = localSave.DirectoryPath + Constants.AssetFile;
-			bool isSuccess = await LoadModel(assetPath);
+			bool isLoadSuccessful = await LoadModel(assetPath);
 			
-			if (isSuccess)
+			if (isLoadSuccessful)
 			{
 				OnLocalSaveLoaded?.Invoke();
 			}
 		}
 
-		public Texture LoadTexture(string path)
+		public Texture LoadTexture(string texturePath)
 		{
-			byte[] loadedBytes = File.ReadAllBytes(path);
+			byte[] textureBytes = File.ReadAllBytes(texturePath);
 
-			Texture2D textureFromBytes = new Texture2D(2, 2);
-			textureFromBytes.LoadImage(loadedBytes);
+			Texture2D loadedTexture = new Texture2D(2, 2);
+			loadedTexture.LoadImage(textureBytes);
 
-			return textureFromBytes;
+			return loadedTexture;
 		}
 
 		private SceneObject InstantiateSceneObject(SceneObjectTypeId typeId)
@@ -115,62 +116,84 @@ namespace Services.Loading
 		private void SetupLocalSaveAssets()
 		{
 			Transform sceneObjectsHolder = _sceneObjectsRegistry.SceneObjectsHolder;
-			Transform[] childTransforms = sceneObjectsHolder.GetComponentsInChildren<Transform>(true);
-
-			var exportParent = sceneObjectsHolder.GetComponentInChildren<SceneObject>();
-			exportParent.gameObject.name = "ExportParent";
+			SceneObject exportParent = PrepareExportParent(sceneObjectsHolder);
 			
-			List<Transform> modelHolders = new();
-
-			foreach (Transform childTransform in childTransforms)
-			{
-				if (childTransform.gameObject.name != Constants.ModelHolderObjectName || childTransform == exportParent.transform) 
-					continue;
-					
-				modelHolders.Add(childTransform);
-			}
-			
-			List<Mesh> modelsMeshes = new();
-			List<Material> modelsMaterials = new();
-			List<Texture> modelsTextures = new();
-
-			foreach (Transform modelHolder in modelHolders)
-			{
-				modelHolder.SetParent(sceneObjectsHolder);
-				
-				var modelMeshFilter = modelHolder.GetComponentInChildren<MeshFilter>();
-				var modelMeshRenderer = modelHolder.GetComponentInChildren<MeshRenderer>();
-				
-				var meshCopy = new Mesh();
-				meshCopy.Clear();
-				meshCopy = modelMeshFilter.mesh;
-				meshCopy.name = "mesh";
-				
-				modelsMeshes.Add(meshCopy);
-				
-				var materialCopy = new Material(modelMeshRenderer.material);
-				modelsMaterials.Add(materialCopy);
-
-				var textureCopy = _textureCopyInstantiator.CreateReadableTexture(modelMeshRenderer.material.mainTexture);
-				modelsTextures.Add(textureCopy);
-			}
+			List<Transform> modelHolders = FindModelHolders(sceneObjectsHolder, exportParent.transform);
+			List<ModelAssets> extractedAssets = ExtractAssetCopiesFromModels(modelHolders);
 
 			_sceneObjectsRegistry.DeleteObject(exportParent);
 
-			for (var i = 0; i < modelHolders.Count; i++)
+			for (int i = 0; i < modelHolders.Count; i++)
 			{
-				Transform modelHolder = modelHolders[i];
-				
-				var modelMeshFilter = modelHolder.GetComponentInChildren<MeshFilter>();
-				var modelMeshRenderer = modelHolder.GetComponentInChildren<MeshRenderer>();
-				
-				modelMeshFilter.sharedMesh = modelsMeshes[i];
-				modelMeshRenderer.sharedMaterial = modelsMaterials[i];
-				modelMeshRenderer.sharedMaterial.mainTexture = modelsTextures[i];
-				
-				SceneObject sceneObject =_instantiateService.AddSceneObjectComponent(modelHolder.gameObject, SceneObjectTypeId.Model);
+				SceneObject sceneObject = ApplyExtractedAssetsToModels(modelHolders[i], extractedAssets[i]);
 				AddColliders(sceneObject);
 			}
+		}
+
+		private SceneObject PrepareExportParent(Transform sceneObjectsHolder)
+		{
+			var exportParent = sceneObjectsHolder.GetComponentInChildren<SceneObject>();
+			exportParent.gameObject.name = "ExportParent";
+			return exportParent;
+		}
+
+		private List<Transform> FindModelHolders(Transform sceneObjectsHolder, Transform exportParentTransform)
+		{
+			Transform[] allChildTransforms = sceneObjectsHolder.GetComponentsInChildren<Transform>(true);
+			List<Transform> modelHolders = new();
+
+			foreach (Transform childTransform in allChildTransforms)
+			{
+				bool isModelHolder = childTransform.gameObject.name == Constants.ModelHolderObjectName;
+				bool isNotExportParent = childTransform != exportParentTransform;
+				
+				if (isModelHolder && isNotExportParent)
+				{
+					modelHolders.Add(childTransform);
+				}
+			}
+
+			return modelHolders;
+		}
+
+		private List<ModelAssets> ExtractAssetCopiesFromModels(List<Transform> modelHolders)
+		{
+			List<ModelAssets> extractedAssets = new();
+
+			foreach (Transform modelHolder in modelHolders)
+			{
+				modelHolder.SetParent(_sceneObjectsRegistry.SceneObjectsHolder);
+				
+				var meshFilter = modelHolder.GetComponentInChildren<MeshFilter>();
+				var meshRenderer = modelHolder.GetComponentInChildren<MeshRenderer>();
+				
+				var meshCopy = new Mesh();
+				meshCopy.Clear();
+				meshCopy = meshFilter.mesh;
+				meshCopy.name = "mesh";
+				
+				var materialCopy = new Material(meshRenderer.material);
+
+				Texture2D textureCopy = _textureCopyInstantiator.CreateReadableTexture(meshRenderer.material.mainTexture);
+
+				var modelAssets = new ModelAssets(meshCopy, materialCopy, textureCopy);
+				extractedAssets.Add(modelAssets);
+			}
+
+			return extractedAssets;
+		}
+
+		private SceneObject ApplyExtractedAssetsToModels(Transform modelHolder, ModelAssets assets)
+		{
+			var meshFilter = modelHolder.GetComponentInChildren<MeshFilter>();
+			var meshRenderer = modelHolder.GetComponentInChildren<MeshRenderer>();
+			
+			meshFilter.sharedMesh = assets.Mesh;
+			meshRenderer.sharedMaterial = assets.Material;
+			meshRenderer.sharedMaterial.mainTexture = assets.Texture;
+			
+			SceneObject sceneObject = _instantiateService.AddSceneObjectComponent(modelHolder.gameObject, SceneObjectTypeId.Model);
+			return sceneObject;
 		}
 
 		private void AddColliders(SceneObject sceneObject)
