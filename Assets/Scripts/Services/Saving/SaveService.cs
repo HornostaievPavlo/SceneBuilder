@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Enums;
 using Gameplay;
@@ -16,8 +14,6 @@ namespace Services.Saving
 {
 	public class SaveService : ISaveService
 	{
-		private ReadableTextureCopyInstantiator _textureCopyInstantiator;
-		
 		private ISceneObjectsRegistry _sceneObjectsRegistry;
 		private ILocalSavesRepository _localSavesRepository;
 
@@ -26,16 +22,21 @@ namespace Services.Saving
 		{
 			_localSavesRepository = localSavesRepository;
 			_sceneObjectsRegistry = sceneObjectsRegistry;
-			_textureCopyInstantiator = new ReadableTextureCopyInstantiator();
 		}
 
 		public async Task CreateLocalSave(Texture2D preview)
 		{
-			string directoryPath = CreateLocalSaveDirectory();
 			List<SceneObject> saveTargets = _sceneObjectsRegistry.GetSceneObjects(SceneObjectTypeId.Model);
+			
+			if (saveTargets.Count == 0)
+			{
+				Debug.Log($"Trying to save empty scene");
+				return;
+			}
+			
+			string directoryPath = CreateLocalSaveDirectory();
 
 			await SaveModels(directoryPath, saveTargets);
-			SaveTextures(directoryPath, saveTargets);
 			SavePreview(directoryPath, preview);
 			
 			_localSavesRepository.AddLocalSave(new LocalSave(directoryPath, preview));
@@ -75,25 +76,6 @@ namespace Services.Saving
 
 			string filePath = path + Constants.AssetFile;
 			await export.SaveToFileAndDispose(filePath);
-		}
-
-		private void SaveTextures(string path, List<SceneObject> modelsList)
-		{
-			for (int i = 0; i < modelsList.Count; i++)
-			{
-				Renderer renderer = modelsList[i].GetComponentInChildren<Renderer>();
-				Material material = renderer.sharedMaterial;
-
-				if (material.mainTexture == null) 
-					continue;
-				
-				Texture2D texture = _textureCopyInstantiator.CreateReadableTexture(material.mainTexture);
-
-				string directoryPath = path + $"/Asset{i + 1}";
-				string filePath = directoryPath + Constants.TextureFile;
-
-				SaveTextureToDirectory(texture, directoryPath, filePath);
-			}
 		}
 
 		private void SavePreview(string path, Texture2D preview)
