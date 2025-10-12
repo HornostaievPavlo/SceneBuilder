@@ -9,7 +9,6 @@ namespace UI.Widgets.Painting
 	{
 		[SerializeField] private GameObject colorsButtonsParent;
 		[SerializeField] private Slider colorTintSlider;
-		[SerializeField] private Button resetChangesButton;
 
 		private Color[] _colors;
 		private Button[] _colorButtons;
@@ -31,14 +30,12 @@ namespace UI.Widgets.Painting
 		private void OnEnable()
 		{
 			colorTintSlider.onValueChanged.AddListener(HandleColorTintSliderValueChanged);
-			resetChangesButton.onClick.AddListener(HandleResetChangesButtonClicked);
 			AddColorButtonsHandlers();
 		}
 
 		private void OnDisable()
 		{
 			colorTintSlider.onValueChanged.RemoveListener(HandleColorTintSliderValueChanged);
-			resetChangesButton.onClick.RemoveListener(HandleResetChangesButtonClicked);
 			RemoveColorButtonsHandlers();
 		}
 
@@ -64,9 +61,9 @@ namespace UI.Widgets.Painting
 
 		private void RemoveColorButtonsHandlers()
 		{
-			for (int i = 0; i < _colorButtons.Length; i++)
+			foreach (Button button in _colorButtons)
 			{
-				_colorButtons[i].onClick.RemoveAllListeners();
+				button.onClick.RemoveAllListeners();
 			}
 		}
 
@@ -78,12 +75,6 @@ namespace UI.Widgets.Painting
 		private void HandleColorTintSliderValueChanged(float value)
 		{
 			_modelPaintingService.SetColorTint(value);
-		}
-
-		private void HandleResetChangesButtonClicked()
-		{
-			_modelPaintingService.RestoreOriginalMaterial();
-			colorTintSlider.value = 0;
 		}
 	}
 }
