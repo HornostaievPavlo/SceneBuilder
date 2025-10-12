@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-namespace UI.Widgets
+namespace UI.Widgets.LocalSaves
 {
     public class LocalSaveWidget : MonoBehaviour
     {
