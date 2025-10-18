@@ -103,39 +103,49 @@ namespace UI.Widgets
 
 		private void HandleMoveButtonClicked()
 		{
+			AnimateButtonClick(moveButton.transform);
 			transformHandleWrapper.SetType(HandleType.POSITION);
 		}
 
 		private void HandleRotateButtonClicked()
 		{
+			AnimateButtonClick(rotateButton.transform);
 			transformHandleWrapper.SetType(HandleType.ROTATION);
 		}
 
 		private void HandleScaleButtonClicked()
 		{
+			AnimateButtonClick(scaleButton.transform);
 			transformHandleWrapper.SetType(HandleType.SCALE);
 		}
 
 		private void HandlePaintButtonClicked()
 		{
+			AnimateButtonClick(paintButton.transform);
+			
 			paintingWidget.gameObject.SetActive(true);
 			buttonsHolder.SetActive(false);
 		}
 
 		private void HandleCopyButtonClicked()
 		{
+			AnimateButtonClick(copyButton.transform);
+			
 			SceneObject selectedObject = _sceneObjectSelectionService.SelectedObject;
 			_sceneObjectCopyService.CreateCopy(selectedObject);
 		}
 
 		private void HandleDeleteButtonClicked()
 		{
+			AnimateButtonClick(deleteButton.transform);
+			
 			_sceneObjectsRegistry.DeleteObject(_sceneObjectSelectionService.SelectedObject);
 			buttonsHolder.SetActive(false);
 		}
 
 		private void HandleFocusButtonClicked()
 		{
+			AnimateButtonClick(focusButton.transform);
 			orbitCamera.FocusOnSelectedObject();
 		}
 
@@ -172,6 +182,13 @@ namespace UI.Widgets
 				_initialButtonsHolderPosition.x + 200f,
 				_initialButtonsHolderPosition.y,
 				_initialButtonsHolderPosition.z);
+		}
+		
+		private void AnimateButtonClick(Transform buttonTransform)
+		{
+			buttonTransform.localScale = Vector3.one;
+			buttonTransform.DOKill(true);
+			buttonTransform.DOPunchScale(Vector3.one * 0.25f, 0.15f);
 		}
 	}
 }
