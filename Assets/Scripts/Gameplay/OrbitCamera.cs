@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Services.Input;
@@ -21,9 +22,14 @@ namespace Gameplay
         
         private Quaternion _rotation;
         private Quaternion _defaultCameraRotation;
+        
+        private Coroutine _focusCoroutine;
 
         private const float MinPitchAngle = 3f;
         private const float MaxPitchAngle = 90f;
+        
+        private const float FocusMovementDuration = 0.75f;
+        private readonly AnimationCurve _focusMovementCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
     
         private IInputService _inputService;
         private ISceneObjectSelectionService _sceneObjectSelectionService;
@@ -101,17 +107,57 @@ namespace Gameplay
         {
             if (target == null) 
                 return;
-        
+
+            if (_focusCoroutine != null)
+            {
+                StopCoroutine(_focusCoroutine);
+            }
+
+            _focusCoroutine = StartCoroutine(FocusCameraCoroutine(target));
+        }
+
+        private IEnumerator FocusCameraCoroutine(SceneObject target)
+        {
             Bounds bounds = GetBounds(target.gameObject);
 
             float radius = bounds.extents.magnitude;
             radius *= 1.1f;
 
             float distance = radius / Mathf.Sin(_mainCamera.fieldOfView * Mathf.Deg2Rad * 0.5f);
-            SetFocusPosition(bounds.center);
+            
+            Vector3 targetFocusPosition = bounds.center;
+            Vector3 targetCameraPosition = GetCameraPosition(targetFocusPosition, _defaultCameraRotation, distance);
+            Vector2 targetPan = Vector2.zero;
 
-            SetCameraPosition(GetCameraPosition(_focusPosition, _defaultCameraRotation, distance));
-            SetPan(Vector2.zero);
+            Vector3 startFocusPosition = _focusPosition;
+            Vector3 startCameraPosition = _cameraPosition;
+            Vector2 startPan = _pan;
+
+            float elapsedTime = 0f;
+
+            while (elapsedTime < FocusMovementDuration)
+            {
+                elapsedTime += Time.deltaTime;
+                float t = Mathf.Clamp01(elapsedTime / FocusMovementDuration);
+                float curveValue = _focusMovementCurve.Evaluate(t);
+
+                _focusPosition = Vector3.Lerp(startFocusPosition, targetFocusPosition, curveValue);
+                _pan = Vector2.Lerp(startPan, targetPan, curveValue);
+                
+                Vector3 lerpedCameraPosition = Vector3.Lerp(startCameraPosition, targetCameraPosition, curveValue);
+                GetOrbitValues(_focusPosition, lerpedCameraPosition, out _rotation, out _zoomAmount);
+                _cameraPosition = GetCameraPosition(_focusPosition, _rotation, _zoomAmount);
+                
+                UpdateTransform();
+
+                yield return null;
+            }
+
+            SetFocusPosition(targetFocusPosition);
+            SetCameraPosition(targetCameraPosition);
+            SetPan(targetPan);
+
+            _focusCoroutine = null;
         }
 
         private void SetFocusPosition(Vector3 value)
