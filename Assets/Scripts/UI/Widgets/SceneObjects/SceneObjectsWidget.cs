@@ -1,3 +1,5 @@
+using System;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,6 +26,8 @@ namespace UI.Widgets.SceneObjects
     
         private float _initialBackgroundWidth;
         private float _expandedBackgroundHeight;
+
+        private Tween _sizeTween;
     
         private void Awake()
         {
@@ -48,6 +52,8 @@ namespace UI.Widgets.SceneObjects
         {
             openToggle.onValueChanged.RemoveListener(HandleOpenToggleValueChanged);
             expandToggle.onValueChanged.RemoveListener(HandleExpandToggleValueChanged);
+            
+            _sizeTween?.Kill();
         }
 
         private void HandleOpenToggleValueChanged(bool value)
@@ -57,8 +63,7 @@ namespace UI.Widgets.SceneObjects
                 HandleCollapsed();
             }
 
-            RefreshContentSize(value);
-            RefreshVisuals(value);
+            RefreshContentSize(isOpened: value);
 
             foreach (Toggle toggle in _tabsToggles)
             {
@@ -74,7 +79,7 @@ namespace UI.Widgets.SceneObjects
                 ? _expandedBackgroundHeight 
                 : _expandedBackgroundHeight / 2;
 
-            content.sizeDelta = new Vector2(_initialBackgroundWidth, targetHeight);
+            AnimateSizeDelta(targetHeight);
             expandToggle.transform.eulerAngles = new Vector3(0, 0, value ? 180 : 0);
         }
 
@@ -89,13 +94,29 @@ namespace UI.Widgets.SceneObjects
                 : collapsedSprite;
         }
 
-        private void RefreshContentSize(bool value)
+        private void RefreshContentSize(bool isOpened)
         {
-            float targetHeight = value 
+            float targetHeight = isOpened 
                 ? _expandedBackgroundHeight / 2 
                 : 0f;
 
-            content.sizeDelta = new Vector2(_initialBackgroundWidth, targetHeight);
+            if (isOpened)
+            {
+                RefreshVisuals(true);
+            }
+
+            AnimateSizeDelta(targetHeight, onCompleted: () => RefreshVisuals(isOpened));
+        }
+
+        private void AnimateSizeDelta(float targetHeight, Action onCompleted = null)
+        {
+            _sizeTween?.Kill();
+            
+            Vector2 targetSize = new Vector2(_initialBackgroundWidth, targetHeight);
+            
+            _sizeTween = DOTween.To(() => content.sizeDelta, x => content.sizeDelta = x, targetSize, 0.3f)
+                .SetEase(Ease.OutCubic)
+                .OnComplete(() => onCompleted?.Invoke());
         }
 
         private void HandleCollapsed()
