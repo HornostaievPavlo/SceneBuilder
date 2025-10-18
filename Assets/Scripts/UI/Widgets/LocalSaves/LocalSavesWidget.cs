@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Plain;
 using Services.Instantiation;
@@ -55,13 +56,26 @@ namespace UI.Widgets.LocalSaves
         public void Setup()
         {
             Cleanup();
+            gameObject.SetActive(true);
+
+            StartCoroutine(WidgetsSetupSequence());
+        }
+
+        private IEnumerator WidgetsSetupSequence()
+        {
+            List<LocalSave> localSaves = _localSavesRepository.GetLocalSaves();
             
-            foreach (LocalSave localSave in _localSavesRepository.GetLocalSaves())
+            for (var i = 0; i < localSaves.Count; i++)
             {
+                LocalSave localSave = localSaves[i];
+                
+                if ( i > 0)
+                {
+                    yield return new WaitForSeconds(0.1f);
+                }
+
                 CreateWidget(localSave);
             }
-
-            gameObject.SetActive(true);
         }
 
         private void Cleanup()
