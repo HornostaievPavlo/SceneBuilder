@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UI.Widgets.LocalSaves;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,17 +32,26 @@ namespace UI.Widgets
 
         private void OnLoadButtonClicked()
         {
+            AnimateButtonClick(loadButton.transform);
             localSavesWidget.Setup();
         }    
 
         private void OnInfoButtonClicked()
         {
+            AnimateButtonClick(infoButton.transform);
             controlsInfoWidget.gameObject.SetActive(true);
         }
 
         private void OnQuitButtonClicked()
         {
+            AnimateButtonClick(quitButton.transform);
             Application.Quit();
+        }
+        
+        private void AnimateButtonClick(Transform buttonTransform)
+        {
+            buttonTransform.localScale = Vector3.one;
+            buttonTransform.DOPunchScale(Vector3.one * 0.25f, 0.15f);
         }
     }
 }
