@@ -1,4 +1,5 @@
-﻿using DG.Tweening;
+﻿using System.Threading.Tasks;
+using DG.Tweening;
 using Services.Loading;
 using TMPro;
 using UnityEngine;
@@ -11,7 +12,7 @@ namespace UI.Widgets
 	{
 		[SerializeField] private TMP_InputField inputField;
 		[SerializeField] private Button loadButton;
-		[SerializeField] private GameObject processingPopup;
+		[SerializeField] private ProcessingWidget processingWidget;
 		
 		private ILoadService _loadService;
 
@@ -43,9 +44,9 @@ namespace UI.Widgets
 		{
 			string input = inputField.text;
 			
-			processingPopup.SetActive(true);
+			processingWidget.Show();
 			await _loadService.LoadModel(input);
-			processingPopup.SetActive(false);
+			processingWidget.Hide();
 			
 			inputField.text = string.Empty;
 		}
