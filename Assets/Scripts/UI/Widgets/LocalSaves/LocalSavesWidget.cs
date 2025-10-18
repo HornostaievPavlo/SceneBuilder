@@ -71,7 +71,7 @@ namespace UI.Widgets.LocalSaves
                 
                 if ( i > 0)
                 {
-                    yield return new WaitForSeconds(0.1f);
+                    yield return new WaitForSeconds(0.05f);
                 }
 
                 CreateWidget(localSave);

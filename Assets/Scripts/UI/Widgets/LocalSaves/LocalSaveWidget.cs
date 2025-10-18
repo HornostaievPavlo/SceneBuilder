@@ -63,7 +63,7 @@ namespace UI.Widgets.LocalSaves
         {
             canvasGroup.alpha = 0f;
             canvasGroup.DOKill(true);
-            DOTween.To(() => canvasGroup.alpha, x => canvasGroup.alpha = x, 1f, 0.2f);
+            DOTween.To(() => canvasGroup.alpha, x => canvasGroup.alpha = x, 1f, 0.15f);
         }
     }
 }
