@@ -52,7 +52,7 @@ namespace Services.SceneObjectsRegistry
 				Unregister(sceneObject);
 			}
 			
-			UnityEngine.Object.Destroy(sceneObject.gameObject);
+			sceneObject.AnimateScale(isScalingUp: false, onComplete: () => UnityEngine.Object.Destroy(sceneObject.gameObject));
 		}
 	}
 }
