@@ -35,7 +35,7 @@ namespace UI.Widgets
 		private void HandleLoadButtonClicked()
 		{
 			loadButton.transform.DOKill(true);
-			loadButton.transform.DOPunchScale(loadButton.transform.localScale * 0.25f, 0.2f);
+			loadButton.transform.DOPunchScale(Vector3.one * 0.5f, 0.2f);
 			
 			LoadModel();
 		}
