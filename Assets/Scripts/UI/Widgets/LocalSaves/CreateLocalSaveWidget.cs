@@ -9,7 +9,6 @@ namespace UI.Widgets.LocalSaves
     public class CreateLocalSaveWidget : MonoBehaviour
     {
         [SerializeField] private Button button;
-        [SerializeField] private GameObject progressPopup;
 
         private ScreenshotMaker _screenshotMaker;
     
@@ -38,12 +37,8 @@ namespace UI.Widgets.LocalSaves
 
         private async void HandleClick()
         {
-            progressPopup.SetActive(true);
-
             Texture2D previewTexture = _screenshotMaker.CreatePreview();
             await _saveService.CreateLocalSave(previewTexture);
-        
-            progressPopup.SetActive(false);
         }
     }
 }
