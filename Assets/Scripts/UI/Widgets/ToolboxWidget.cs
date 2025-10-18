@@ -1,4 +1,5 @@
-﻿using DG.Tweening;
+﻿using System;
+using DG.Tweening;
 using Enums;
 using Gameplay;
 using RuntimeHandle;
@@ -37,6 +38,8 @@ namespace UI.Widgets
 		[SerializeField] private Button focusButton;
 		[SerializeField] private OrbitCamera orbitCamera;
 		
+		private Vector3 _initialButtonsHolderPosition;
+		
 		private ISceneObjectSelectionService _sceneObjectSelectionService;
 		private ISceneObjectsRegistry _sceneObjectsRegistry;
 		private ISceneObjectCopyService _sceneObjectCopyService;
@@ -51,7 +54,12 @@ namespace UI.Widgets
 			_sceneObjectsRegistry = sceneObjectsRegistry;
 			_sceneObjectCopyService = sceneObjectCopyService;
 		}
-		
+
+		private void Awake()
+		{
+			_initialButtonsHolderPosition = buttonsHolder.transform.localPosition;
+		}
+
 		private void OnEnable()
 		{
 			_sceneObjectSelectionService.OnObjectSelected += HandleObjectSelected;
@@ -134,12 +142,10 @@ namespace UI.Widgets
 		private void AnimateButtonsAppear()
 		{
 			float appearDuration = 0.25f;
-			
-			Vector3 originalPosition = buttonsHolder.transform.localPosition;
-			buttonsHolder.transform.localPosition = new Vector3(originalPosition.x + 200f, originalPosition.y, originalPosition.z);
+			buttonsHolder.transform.localPosition = GetOffscreenPosition();
 			
 			buttonsHolder.transform.DOKill(true);
-			buttonsHolder.transform.DOLocalMoveX(originalPosition.x, appearDuration).SetEase(Ease.OutBack);
+			buttonsHolder.transform.DOLocalMoveX(_initialButtonsHolderPosition.x, appearDuration).SetEase(Ease.OutBack);
 
 			buttonsCanvasGroup.alpha = 0f;
 			buttonsCanvasGroup.DOKill(true);
@@ -150,17 +156,22 @@ namespace UI.Widgets
 		{
 			float disappearDuration = 0.15f;
 
-			Vector3 originalPosition = buttonsHolder.transform.localPosition;
-			Vector3 targetPosition = new Vector3(originalPosition.x + 200f, originalPosition.y, originalPosition.z);
-
 			buttonsHolder.transform.DOKill(true);
-			buttonsHolder.transform.DOLocalMoveX(targetPosition.x, disappearDuration)
+			buttonsHolder.transform.DOLocalMoveX(GetOffscreenPosition().x, disappearDuration)
 				.SetEase(Ease.InBack)
 				.OnComplete(() =>
 				{
 					buttonsHolder.SetActive(false);
-					buttonsHolder.transform.localPosition = originalPosition;
+					buttonsHolder.transform.localPosition = _initialButtonsHolderPosition;
 				});
+		}
+		
+		private Vector3 GetOffscreenPosition()
+		{
+			return new Vector3(
+				_initialButtonsHolderPosition.x + 200f,
+				_initialButtonsHolderPosition.y,
+				_initialButtonsHolderPosition.z);
 		}
 	}
 }
