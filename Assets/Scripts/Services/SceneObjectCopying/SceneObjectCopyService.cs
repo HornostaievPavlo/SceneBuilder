@@ -43,7 +43,9 @@ namespace Services.SceneObjectCopying
 			copyGameObject.GetComponentInChildren<MeshRenderer>().material.mainTexture = textureCopy;
 			copyGameObject.GetComponentInChildren<MeshCollider>().sharedMesh = meshCopy;
 			
-			_instantiateService.AddSceneObjectComponent(copyGameObject, originalObject.TypeId);
+			SceneObject sceneObject = _instantiateService.AddSceneObjectComponent(copyGameObject, originalObject.TypeId);
+			
+			sceneObject.AnimateScale(isScalingUp: true);
 		}
 	}
 }
