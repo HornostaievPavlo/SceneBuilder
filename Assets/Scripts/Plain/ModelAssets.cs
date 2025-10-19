@@ -4,9 +4,9 @@ namespace Plain
 {
 	public class ModelAssets
 	{
-		public Mesh Mesh { get; set; }
-		public Material Material { get; set; }
-		public Texture Texture { get; set; }
+		public Mesh Mesh { get; }
+		public Material Material { get; }
+		public Texture Texture { get; }
 
 		public ModelAssets(Mesh mesh, Material material, Texture texture)
 		{
