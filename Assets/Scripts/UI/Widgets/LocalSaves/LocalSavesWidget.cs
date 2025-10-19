@@ -122,6 +122,11 @@ namespace UI.Widgets.LocalSaves
                 
                 _localSavesWidgets[i].Setup(localSaves[i]);
             }
+            
+            if (_localSavesRepository.GetLocalSaves().Count == 0)
+            {
+                Close();
+            }
         }
 
         private void HandleCloseButtonClicked()
