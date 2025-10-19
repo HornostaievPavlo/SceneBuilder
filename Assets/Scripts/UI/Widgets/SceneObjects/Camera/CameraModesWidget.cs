@@ -78,7 +78,10 @@ namespace UI.Widgets.SceneObjects.Camera
 		private void HandleObjectSelected(SceneObject sceneObject)
 		{
 			if (sceneObject.TypeId != SceneObjectTypeId.Camera)
+			{
+				HandleOtherSceneObjectSelected();
 				return;
+			}
 
 			ToggleButtonsActiveState(true);
 
@@ -96,6 +99,16 @@ namespace UI.Widgets.SceneObjects.Camera
 			}
 
 			_sceneObjectCamera = null;
+		}
+
+		private void HandleOtherSceneObjectSelected()
+		{
+			ToggleButtonsActiveState(false);
+
+			if (_currentModeTypeId == CameraModeTypeId.CameraView || _currentModeTypeId == CameraModeTypeId.SplitScreenView)
+			{
+				SetCameraMode(CameraModeTypeId.MainView);
+			}
 		}
 
 		private void ToggleButtonsActiveState(bool value)
