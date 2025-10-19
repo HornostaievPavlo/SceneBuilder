@@ -1,4 +1,5 @@
 ﻿using System;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,9 +15,15 @@ namespace UI.Widgets.SceneObjects.Label
 		[SerializeField] private TMP_InputField descriptionInputField;
 		
 		private Gameplay.Label _label;
+		private Vector3 _initialPosition;
 		
 		public event Action OnClosed;
-		
+
+		private void Awake()
+		{
+			_initialPosition = transform.localPosition;
+		}
+
 		private void OnEnable()
 		{
 			closeButton.onClick.AddListener(HandleCloseButtonClicked);
@@ -31,14 +38,19 @@ namespace UI.Widgets.SceneObjects.Label
 
 		public void Setup(Gameplay.Label label)
 		{
-			gameObject.SetActive(true);
 			_label = label;
+
+			if (transform.localPosition == _initialPosition && gameObject.activeSelf)
+				return;
+			
+			gameObject.SetActive(true);
+			AnimateAppear();
 		}
 
 		private void HandleCloseButtonClicked()
 		{
 			OnClosed?.Invoke();
-			gameObject.SetActive(false);
+			AnimateDisappear();
 		}
 
 		private void HandleApplyButtonClicked()
@@ -55,6 +67,31 @@ namespace UI.Widgets.SceneObjects.Label
 
 			OnClosed?.Invoke();
 			gameObject.SetActive(false);
+		}
+		
+		private void AnimateAppear()
+		{
+			transform.localPosition = GetOHiddenPosition();
+			
+			transform.DOKill(true);
+			transform.DOLocalMoveX(_initialPosition.x, 0.25f).SetEase(Ease.OutBack);
+		}
+
+		private void AnimateDisappear()
+		{
+			transform.DOKill(true);
+			transform.DOLocalMoveX(GetOHiddenPosition().x, 0.25f)
+				.SetEase(Ease.InBack)
+				.OnComplete(() =>
+				{
+					gameObject.SetActive(false);
+					transform.localPosition = _initialPosition;
+				});
+		}
+		
+		private Vector3 GetOHiddenPosition()
+		{
+			return new Vector3(_initialPosition.x - 380f, _initialPosition.y, _initialPosition.z);
 		}
 	}
 }
