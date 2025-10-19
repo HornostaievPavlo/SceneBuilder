@@ -6002,8 +6002,8 @@ RectTransform:
   m_Children:
   - {fileID: 1081070597}
   - {fileID: 138168868}
-  - {fileID: 1716760060}
   - {fileID: 2027736222}
+  - {fileID: 1716760060}
   m_Father: {fileID: 2131068941}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -7471,7 +7471,7 @@ GameObject:
   - component: {fileID: 1765483010}
   - component: {fileID: 1765483009}
   m_Layer: 5
-  m_Name: Reset Changes Text
+  m_Name: ResetChangesText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9446,7 +9446,7 @@ GameObject:
   m_Component:
   - component: {fileID: 567747021202317569}
   m_Layer: 5
-  m_Name: Furniture Leather
+  m_Name: FurnitureLeather
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12988,7 +12988,7 @@ GameObject:
   - component: {fileID: 6406462227880370492}
   - component: {fileID: 167556359026308909}
   m_Layer: 5
-  m_Name: Tab Name
+  m_Name: TabName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13921,7 +13921,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3674847802589399941}
   m_Layer: 5
-  m_Name: Black Leather
+  m_Name: BlackLeather
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14045,7 +14045,7 @@ GameObject:
   - component: {fileID: 4255759015818108085}
   - component: {fileID: 6721513466187467869}
   m_Layer: 5
-  m_Name: Tab Name
+  m_Name: TabName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14243,7 +14243,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9150916064122012090}
   m_Layer: 5
-  m_Name: Default White
+  m_Name: DefaultWhite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14790,7 +14790,7 @@ GameObject:
   - component: {fileID: 1115021715706907057}
   - component: {fileID: 3222508923306609837}
   m_Layer: 5
-  m_Name: Text Area
+  m_Name: TextArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15804,7 +15804,7 @@ GameObject:
   - component: {fileID: 8184384997924842316}
   - component: {fileID: 9078816358608233628}
   m_Layer: 5
-  m_Name: Text Area
+  m_Name: TextArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
