@@ -83,17 +83,6 @@ namespace UI.Widgets.SceneObjects
             expandToggle.transform.eulerAngles = new Vector3(0, 0, value ? 180 : 0);
         }
 
-        private void RefreshVisuals(bool value)
-        {
-            openToggle.transform.eulerAngles = new Vector3(0, 0, value ? 180 : 0);
-            expandToggle.gameObject.SetActive(value);
-            lineSeparator.SetActive(value);
-        
-            headerImage.sprite = value 
-                ? openedSprite 
-                : collapsedSprite;
-        }
-
         private void RefreshContentSize(bool isOpened)
         {
             float targetHeight = isOpened 
@@ -104,8 +93,23 @@ namespace UI.Widgets.SceneObjects
             {
                 RefreshVisuals(true);
             }
+            
+            var toggleTargetRotation = new Vector3(0, 0, isOpened ? 180f : 0f);
+            
+            openToggle.transform.DOKill(true);
+            openToggle.transform.DORotate(toggleTargetRotation, 0.5f).SetEase(Ease.OutBack);
 
             AnimateSizeDelta(targetHeight, onCompleted: () => RefreshVisuals(isOpened));
+        }
+
+        private void RefreshVisuals(bool isOpened)
+        {
+            expandToggle.gameObject.SetActive(isOpened);
+            lineSeparator.SetActive(isOpened);
+        
+            headerImage.sprite = isOpened 
+                ? openedSprite 
+                : collapsedSprite;
         }
 
         private void AnimateSizeDelta(float targetHeight, Action onCompleted = null)
