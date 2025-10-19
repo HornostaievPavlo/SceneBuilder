@@ -22,12 +22,14 @@ namespace UI.Widgets.SceneObjects
         [SerializeField] private Sprite collapsedSprite;
         [SerializeField] private Sprite openedSprite;
 
-        private Toggle[] _tabsToggles;
-    
         private float _initialBackgroundWidth;
         private float _expandedBackgroundHeight;
 
         private Tween _sizeTween;
+        private Toggle[] _tabsToggles;
+
+        private const float AnimationDuration = 0.3f;
+        private const float ExpandedStateBottomOffset = 190f;
         
         public ToggleGroup TabsToggleGroup => tabsToggleGroup;
         public Toggle OpenToggle => openToggle;
@@ -35,7 +37,7 @@ namespace UI.Widgets.SceneObjects
         private void Awake()
         {
             _initialBackgroundWidth = content.sizeDelta.x;
-            _expandedBackgroundHeight = content.sizeDelta.y;
+            _expandedBackgroundHeight = CalculateExpandedHeight();
         
             content.sizeDelta = new Vector2(_initialBackgroundWidth, 0f);
         
@@ -66,7 +68,7 @@ namespace UI.Widgets.SceneObjects
                 HandleCollapsed();
             }
 
-            RefreshContentSize(isOpened: value);
+            RefreshOnOpenStateChange(isOpened: value);
 
             foreach (Toggle toggle in _tabsToggles)
             {
@@ -86,7 +88,7 @@ namespace UI.Widgets.SceneObjects
             expandToggle.transform.eulerAngles = new Vector3(0, 0, value ? 180 : 0);
         }
 
-        private void RefreshContentSize(bool isOpened)
+        private void RefreshOnOpenStateChange(bool isOpened)
         {
             float targetHeight = isOpened 
                 ? _expandedBackgroundHeight / 2 
@@ -94,22 +96,27 @@ namespace UI.Widgets.SceneObjects
 
             if (isOpened)
             {
-                RefreshVisuals(true);
+                RefreshHeaderSprite(true);
             }
+
+            RefreshVisuals(isOpened);
             
             var toggleTargetRotation = new Vector3(0, 0, isOpened ? 180f : 0f);
             
             openToggle.transform.DOKill(true);
-            openToggle.transform.DORotate(toggleTargetRotation, 0.5f).SetEase(Ease.OutBack);
+            openToggle.transform.DORotate(toggleTargetRotation, AnimationDuration).SetEase(Ease.OutBack);
 
-            AnimateSizeDelta(targetHeight, onCompleted: () => RefreshVisuals(isOpened));
+            AnimateSizeDelta(targetHeight, onCompleted: () => RefreshHeaderSprite(isOpened));
         }
 
         private void RefreshVisuals(bool isOpened)
         {
             expandToggle.gameObject.SetActive(isOpened);
             lineSeparator.SetActive(isOpened);
+        }
         
+        private void RefreshHeaderSprite(bool isOpened)
+        {
             headerImage.sprite = isOpened 
                 ? openedSprite 
                 : collapsedSprite;
@@ -117,11 +124,10 @@ namespace UI.Widgets.SceneObjects
 
         private void AnimateSizeDelta(float targetHeight, Action onCompleted = null)
         {
-            _sizeTween?.Kill();
-            
             Vector2 targetSize = new Vector2(_initialBackgroundWidth, targetHeight);
             
-            _sizeTween = DOTween.To(() => content.sizeDelta, x => content.sizeDelta = x, targetSize, 0.3f)
+            _sizeTween?.Kill();
+            _sizeTween = DOTween.To(() => content.sizeDelta, x => content.sizeDelta = x, targetSize, AnimationDuration)
                 .SetEase(Ease.OutCubic)
                 .OnComplete(() => onCompleted?.Invoke());
         }
@@ -131,6 +137,24 @@ namespace UI.Widgets.SceneObjects
             expandToggle.SetIsOnWithoutNotify(false);
             expandToggle.transform.eulerAngles = Vector3.zero;
             expandToggle.gameObject.SetActive(false);
+        }
+
+        private float CalculateExpandedHeight()
+        {
+            RectTransform canvasRect = GetComponentInParent<Canvas>()?.GetComponent<RectTransform>();
+            
+            if (canvasRect == null)
+            {
+                return Screen.height - ExpandedStateBottomOffset;
+            }
+            
+            float canvasHeight = canvasRect.rect.height;
+            float contentTopY = content.anchoredPosition.y + canvasHeight / 2;
+            
+            float canvasBottomY = -canvasHeight / 2;
+            float availableHeight = contentTopY - canvasBottomY - ExpandedStateBottomOffset;
+            
+            return Mathf.Max(0, availableHeight);
         }
     }
 }
