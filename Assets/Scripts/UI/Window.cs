@@ -27,15 +27,16 @@ namespace UI
                 content.SetActive(true);
             }
             
-            AnimateToggling(value);
+            AnimateToggle(value);
         }
         
-        private void AnimateToggling(bool value)
+        private void AnimateToggle(bool value)
         {
             contentCanvasGroup.alpha = value ? 0f : 1f;
+            float endValue = value ? 1f : 0f;
+
             contentCanvasGroup.DOKill(true);
-            
-            var alphaTween = DOTween.To(() => contentCanvasGroup.alpha, x => contentCanvasGroup.alpha = x, value ? 1f : 0f, 0.2f);
+            var alphaTween = DOTween.To(() => contentCanvasGroup.alpha, x => contentCanvasGroup.alpha = x, endValue, 0.2f);
             
             if (value == false)
             {
