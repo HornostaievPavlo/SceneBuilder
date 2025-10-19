@@ -10,21 +10,19 @@ using Services.Instantiation;
 using Services.SceneObjectsRegistry;
 using UnityEditor;
 using UnityEngine;
-using Zenject;
 
 namespace Services.Loading
 {
 	public class LoadService : ILoadService
 	{
-		private ReadableTextureCopyInstantiator _textureCopyInstantiator;
+		private readonly ReadableTextureCopyInstantiator _textureCopyInstantiator;
 
-		private IInstantiateService _instantiateService;
-		private ISceneObjectsRegistry _sceneObjectsRegistry;
+		private readonly IInstantiateService _instantiateService;
+		private readonly ISceneObjectsRegistry _sceneObjectsRegistry;
 
 		public event Action OnLocalSaveLoaded;
 
-		[Inject]
-		private void Construct(IInstantiateService instantiateService, ISceneObjectsRegistry sceneObjectsRegistry)
+		public LoadService(IInstantiateService instantiateService, ISceneObjectsRegistry sceneObjectsRegistry)
 		{
 			_instantiateService = instantiateService;
 			_sceneObjectsRegistry = sceneObjectsRegistry;
