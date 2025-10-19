@@ -1,8 +1,11 @@
 ﻿using System;
 using DG.Tweening;
+using Gameplay;
+using Services.SceneObjectSelection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace UI.Widgets.SceneObjects.Label
 {
@@ -17,7 +20,15 @@ namespace UI.Widgets.SceneObjects.Label
 		private Gameplay.Label _label;
 		private Vector3 _initialPosition;
 		
+		private ISceneObjectSelectionService _sceneObjectSelectionService;
+
 		public event Action OnClosed;
+
+		[Inject]
+		private void Construct(ISceneObjectSelectionService sceneObjectSelectionService)
+		{
+			_sceneObjectSelectionService = sceneObjectSelectionService;
+		}
 
 		private void Awake()
 		{
@@ -26,12 +37,16 @@ namespace UI.Widgets.SceneObjects.Label
 
 		private void OnEnable()
 		{
+			_sceneObjectSelectionService.OnObjectSelected += HandleObjectSelected;
+			
 			closeButton.onClick.AddListener(HandleCloseButtonClicked);
 			applyButton.onClick.AddListener(HandleApplyButtonClicked);
 		}
 		
 		private void OnDisable()
 		{
+			_sceneObjectSelectionService.OnObjectSelected -= HandleObjectSelected;
+			
 			closeButton.onClick.RemoveListener(HandleCloseButtonClicked);
 			applyButton.onClick.RemoveListener(HandleApplyButtonClicked);
 		}
@@ -45,6 +60,14 @@ namespace UI.Widgets.SceneObjects.Label
 			
 			gameObject.SetActive(true);
 			AnimateAppear();
+		}
+
+		private void HandleObjectSelected(SceneObject sceneObject)
+		{
+			if (sceneObject as Gameplay.Label != _label)
+			{
+				AnimateDisappear();
+			}
 		}
 
 		private void HandleCloseButtonClicked()
