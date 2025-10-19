@@ -50,7 +50,6 @@ namespace UI.Widgets
         
         private void AnimateButtonClick(Transform buttonTransform)
         {
-            buttonTransform.localScale = Vector3.one;
             buttonTransform.DOKill(true);
             buttonTransform.DOPunchScale(Vector3.one * 0.25f, 0.15f);
         }
