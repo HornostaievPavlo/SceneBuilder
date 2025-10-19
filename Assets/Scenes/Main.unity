@@ -343,7 +343,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 110410503}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -354,10 +354,10 @@ RectTransform:
   - {fileID: 268448743}
   m_Father: {fileID: 1619059934042241981}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 817}
-  m_SizeDelta: {x: 430, y: 817}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -72.000015}
+  m_SizeDelta: {x: 430, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &110410505
 MonoBehaviour:
@@ -762,7 +762,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &268448743
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9317,10 +9317,10 @@ RectTransform:
   - {fileID: 1052332610}
   m_Father: {fileID: 2131068941}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0.5}
-  m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -367, y: 136.02}
-  m_SizeDelta: {x: 430, y: 504.02}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -367, y: -403.97998}
+  m_SizeDelta: {x: 430, y: 504.02002}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &559384727148505936
 GameObject:
@@ -10829,10 +10829,10 @@ RectTransform:
   - {fileID: 110410504}
   m_Father: {fileID: 2131068941}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 255, y: -595}
-  m_SizeDelta: {x: 430, y: 889}
+  m_AnchoredPosition: {x: 255, y: -55}
+  m_SizeDelta: {x: 430, y: -191}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1630192879174285483
 GameObject:
@@ -12214,6 +12214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95b616fed0ac9f2459a03656dda06e78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Main::SceneObjectsControlsWidget
+  bottomScreenOffset: 190
   openToggle: {fileID: 339824287}
   expandToggle: {fileID: 268448746}
   content: {fileID: 110410504}
@@ -15894,7 +15895,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.00018310547}
+  m_AnchoredPosition: {x: 0, y: -0.00012207031}
   m_SizeDelta: {x: 0, y: -611.015}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &6656950819378053434
