@@ -90,6 +90,8 @@ namespace UI.Widgets.SceneObjects
 		protected virtual SceneObjectInfoWidget CreateInfoWidget(SceneObject sceneObject)
 		{
 			var infoWidget = _instantiateService.Instantiate<SceneObjectInfoWidget>(infoWidgetPrefab, infoWidgetsParent);
+			infoWidget.transform.position = Vector3.zero;
+			infoWidget.transform.localScale = Vector3.one;
 			
 			_infoWidgets.Add(infoWidget);
 			

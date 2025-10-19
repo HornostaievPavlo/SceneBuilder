@@ -8,7 +8,6 @@ using GLTFast;
 using Plain;
 using Services.Instantiation;
 using Services.SceneObjectsRegistry;
-using UnityEditor;
 using UnityEngine;
 
 namespace Services.Loading
@@ -101,9 +100,9 @@ namespace Services.Loading
 		{
 			GameObject prefab = typeId switch
 			{
-				SceneObjectTypeId.Model => AssetDatabase.LoadAssetAtPath<GameObject>(Constants.ModelPrefabPath),
-				SceneObjectTypeId.Camera => AssetDatabase.LoadAssetAtPath<GameObject>(Constants.CameraPrefabPath),
-				SceneObjectTypeId.Label => AssetDatabase.LoadAssetAtPath<GameObject>(Constants.LabelPrefabPath),
+				SceneObjectTypeId.Model => Resources.Load<GameObject>(Constants.ModelPrefabPath),
+				SceneObjectTypeId.Camera => Resources.Load<GameObject>(Constants.CameraPrefabPath),
+				SceneObjectTypeId.Label => Resources.Load<GameObject>(Constants.LabelPrefabPath),
 				_ => null
 			};
 

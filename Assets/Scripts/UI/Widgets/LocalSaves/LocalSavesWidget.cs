@@ -91,6 +91,9 @@ namespace UI.Widgets.LocalSaves
         private void CreateWidget(LocalSave localSave)
         {
             LocalSaveWidget widget = _instantiateService.Instantiate<LocalSaveWidget>(localSaveWidgetPrefab, content);
+            widget.transform.position = Vector3.zero;
+            widget.transform.localScale = Vector3.one;
+            
             widget.Setup(localSave);
             
             _localSavesWidgets.Add(widget);

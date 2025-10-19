@@ -86,6 +86,11 @@ namespace UI.Widgets.SceneObjects.Label
 			
 			editButton.gameObject.SetActive(isTargetLabelSelected);
 			alignToCameraButton.gameObject.SetActive(isTargetLabelSelected);
+			
+			if (sceneObject as Gameplay.Label != _label)
+			{
+				HandleEditWidgetClosed();
+			}
 		}
 
 		protected override void HandleObjectDeselected()

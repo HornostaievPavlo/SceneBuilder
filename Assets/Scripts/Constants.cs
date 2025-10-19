@@ -10,9 +10,9 @@ public static class Constants
 	public static readonly string ApplicationDataPath = Application.persistentDataPath;
 	public static readonly string ScenePath = $"{ApplicationDataPath}/Scene";
 
-	public const string ModelPrefabPath = "Assets/Prefabs/SceneObjects/ModelHolder.prefab";
-	public const string CameraPrefabPath = "Assets/Prefabs/SceneObjects/Camera.prefab";
-	public const string LabelPrefabPath = "Assets/Prefabs/SceneObjects/Label.prefab";
+	public const string ModelPrefabPath = "SceneObjects/ModelHolder";
+	public const string CameraPrefabPath = "SceneObjects/Camera";
+	public const string LabelPrefabPath = "SceneObjects/Label";
 	
 	public const string ModelHolderObjectName = "ModelHolder";
 	
