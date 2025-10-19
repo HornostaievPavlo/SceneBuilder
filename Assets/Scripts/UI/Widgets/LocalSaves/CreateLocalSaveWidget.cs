@@ -1,4 +1,5 @@
 using System.Collections;
+using DG.Tweening;
 using Plain;
 using Services.Saving;
 using UnityEngine;
@@ -39,6 +40,8 @@ namespace UI.Widgets.LocalSaves
 
         private async void HandleClick()
         {
+            AnimateButtonClick();
+            
             Texture2D previewTexture = _screenshotMaker.CreatePreview();
             await _saveService.CreateLocalSave(previewTexture);
             
@@ -50,6 +53,12 @@ namespace UI.Widgets.LocalSaves
             successInfoObject.gameObject.SetActive(true);
             yield return new WaitForSeconds(2f);
             successInfoObject.gameObject.SetActive(false);
+        }
+        
+        private void AnimateButtonClick()
+        {
+            button.transform.DOKill(true);
+            button.transform.DOPunchScale(Vector3.one * 0.25f, 0.15f);
         }
     }
 }
