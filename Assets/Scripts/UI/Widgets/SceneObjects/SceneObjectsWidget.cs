@@ -28,6 +28,9 @@ namespace UI.Widgets.SceneObjects
         private float _expandedBackgroundHeight;
 
         private Tween _sizeTween;
+        
+        public ToggleGroup TabsToggleGroup => tabsToggleGroup;
+        public Toggle OpenToggle => openToggle;
     
         private void Awake()
         {

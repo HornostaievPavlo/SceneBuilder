@@ -2186,7 +2186,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000061035156}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 10.0001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &634473427
@@ -17311,6 +17311,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4bf437e3b57478b9c2dadfa1ec69380, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Main::UI.Left_Menu.SceneObjectsTabsWidget
+  parentWidget: {fileID: 3143734842116482462}
   modelsTabToggle: {fileID: 1435052800}
   camerasTabToggle: {fileID: 511416167}
   labelsTabToggle: {fileID: 392509661}
