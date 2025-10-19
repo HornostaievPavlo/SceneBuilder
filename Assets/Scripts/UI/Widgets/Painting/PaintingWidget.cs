@@ -37,7 +37,7 @@ namespace UI.Widgets.Painting
 			texturePaintingButton.onClick.AddListener(HandleTexturePaintingButtonClicked);
 			resetChangesButton.onClick.AddListener(HandleResetChangesButtonClicked);
 			
-			AnimateTransparency(isActive: true);
+			AnimateAppear(isActive: true);
 		}
 		
 		private void OnDisable()
@@ -48,7 +48,7 @@ namespace UI.Widgets.Painting
 			texturePaintingButton.onClick.RemoveListener(HandleTexturePaintingButtonClicked);
 			resetChangesButton.onClick.RemoveListener(HandleResetChangesButtonClicked);
 			
-			AnimateTransparency(isActive: false);
+			AnimateAppear(isActive: false);
 		}
 
 		private void HandleObjectDeselected()
@@ -74,7 +74,7 @@ namespace UI.Widgets.Painting
 			colorTintSlider.value = 0;
 		}
 
-		private void AnimateTransparency(bool isActive)
+		private void AnimateAppear(bool isActive)
 		{
 			canvasGroup.alpha = isActive ? 0f : 1f;
 			float endValue = isActive ? 1f : 0f;

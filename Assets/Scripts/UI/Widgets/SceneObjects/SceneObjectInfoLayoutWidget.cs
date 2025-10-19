@@ -24,9 +24,7 @@ namespace UI.Widgets.SceneObjects
 		private IInstantiateService _instantiateService;
 
 		[Inject]
-		private void Construct(
-			ISceneObjectsRegistry sceneObjectsRegistry,
-			IInstantiateService instantiateService)
+		private void Construct(ISceneObjectsRegistry sceneObjectsRegistry, IInstantiateService instantiateService)
 		{
 			_sceneObjectsRegistry = sceneObjectsRegistry;
 			_instantiateService = instantiateService;

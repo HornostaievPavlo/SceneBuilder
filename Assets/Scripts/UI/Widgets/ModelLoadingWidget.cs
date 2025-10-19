@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using DG.Tweening;
+﻿using DG.Tweening;
 using Services.Loading;
 using TMPro;
 using UnityEngine;

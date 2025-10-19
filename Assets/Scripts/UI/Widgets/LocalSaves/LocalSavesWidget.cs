@@ -112,7 +112,12 @@ namespace UI.Widgets.LocalSaves
                 Destroy(widget.gameObject);
                 break;
             }
-            
+
+            RefreshWidgets();
+        }
+
+        private void RefreshWidgets()
+        {
             List<LocalSave> localSaves = _localSavesRepository.GetLocalSaves();
             
             for (int i = 0; i < _localSavesWidgets.Count; i++)

@@ -110,7 +110,6 @@ namespace UI.Widgets.SceneObjects
         {
             if (parentWidget.TabsToggleGroup.AnyTogglesOn() == false)
             {
-                // parentWidget.HandleOpenToggleValueChanged(false);
                 parentWidget.OpenToggle.isOn = false;
             }
         }

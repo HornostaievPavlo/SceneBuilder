@@ -41,10 +41,6 @@ namespace UI.Widgets
 			{
 				Process.Start(path);
 			}
-			else
-			{
-				UnityEngine.Debug.LogWarning($"Saves folder does not exist: {path}");
-			}
 		}
 	}
 }

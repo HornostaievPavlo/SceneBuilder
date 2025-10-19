@@ -52,7 +52,12 @@ namespace UI.Widgets.SceneObjects
 		{
 			numberText.text = number.ToString();
 		}
-		
+
+		public string GetSceneObjectId()
+		{
+			return SceneObject.Id;
+		}
+
 		protected virtual void HandleObjectSelected(SceneObject sceneObject)
 		{
 			selectionImage.color = sceneObject == SceneObject
@@ -63,11 +68,6 @@ namespace UI.Widgets.SceneObjects
 		protected virtual void HandleObjectDeselected()
 		{
 			selectionImage.color = Constants.InfoWidgetUnselectedColor;
-		}
-		
-		public string GetSceneObjectId()
-		{
-			return SceneObject.Id;
 		}
 
 		private void RefreshSelectionImage()
