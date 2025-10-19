@@ -1,4 +1,5 @@
-﻿using Services.Loading;
+﻿using DG.Tweening;
+using Services.Loading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +11,7 @@ namespace UI.Widgets
 	{
 		[SerializeField] private TMP_InputField inputField;
 		[SerializeField] private Button loadButton;
-		[SerializeField] private GameObject processingPopup;
+		[SerializeField] private ProcessingWidget processingWidget;
 		
 		private ILoadService _loadService;
 
@@ -32,6 +33,9 @@ namespace UI.Widgets
 		
 		private void HandleLoadButtonClicked()
 		{
+			loadButton.transform.DOKill(true);
+			loadButton.transform.DOPunchScale(Vector3.one * 0.5f, 0.2f);
+			
 			LoadModel();
 		}
 
@@ -39,9 +43,9 @@ namespace UI.Widgets
 		{
 			string input = inputField.text;
 			
-			processingPopup.SetActive(true);
+			processingWidget.Show();
 			await _loadService.LoadModel(input);
-			processingPopup.SetActive(false);
+			processingWidget.Hide();
 			
 			inputField.text = string.Empty;
 		}

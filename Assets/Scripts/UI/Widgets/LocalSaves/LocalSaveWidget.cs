@@ -1,3 +1,4 @@
+using DG.Tweening;
 using Plain;
 using Services.Loading;
 using Services.Saving;
@@ -12,6 +13,7 @@ namespace UI.Widgets.LocalSaves
         [SerializeField] private RawImage preview;
         [SerializeField] private Button loadButton;
         [SerializeField] private Button deleteButton;
+        [SerializeField] private CanvasGroup canvasGroup;
 
         private LocalSave _localSave;
         
@@ -43,6 +45,8 @@ namespace UI.Widgets.LocalSaves
         {
             _localSave = localSave;
             preview.texture = localSave.Preview;
+            
+            AnimateAppear();
         }
 
         private void HandleLoadButtonClicked()
@@ -53,6 +57,13 @@ namespace UI.Widgets.LocalSaves
         private void HandleDeleteButtonClicked()
         {
             _saveService.DeleteLocalSave(_localSave);
+        }
+
+        private void AnimateAppear()
+        {
+            canvasGroup.alpha = 0f;
+            canvasGroup.DOKill(true);
+            DOTween.To(() => canvasGroup.alpha, x => canvasGroup.alpha = x, 1f, 0.15f);
         }
     }
 }

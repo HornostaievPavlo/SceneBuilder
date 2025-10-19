@@ -8,20 +8,18 @@ using Plain;
 using Services.LocalSavesRepository;
 using Services.SceneObjectsRegistry;
 using UnityEngine;
-using Zenject;
 
 namespace Services.Saving
 {
 	public class SaveService : ISaveService
 	{
-		private ISceneObjectsRegistry _sceneObjectsRegistry;
-		private ILocalSavesRepository _localSavesRepository;
+		private readonly ISceneObjectsRegistry _sceneObjectsRegistry;
+		private readonly ILocalSavesRepository _localSavesRepository;
 
-		[Inject]
-		private void Construct(ISceneObjectsRegistry sceneObjectsRegistry, ILocalSavesRepository localSavesRepository)
+		public SaveService(ISceneObjectsRegistry sceneObjectsRegistry, ILocalSavesRepository localSavesRepository)
 		{
-			_localSavesRepository = localSavesRepository;
 			_sceneObjectsRegistry = sceneObjectsRegistry;
+			_localSavesRepository = localSavesRepository;
 		}
 
 		public async Task CreateLocalSave(Texture2D preview)

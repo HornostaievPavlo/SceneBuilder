@@ -1,3 +1,5 @@
+using System.Collections;
+using DG.Tweening;
 using Plain;
 using Services.Saving;
 using UnityEngine;
@@ -9,7 +11,7 @@ namespace UI.Widgets.LocalSaves
     public class CreateLocalSaveWidget : MonoBehaviour
     {
         [SerializeField] private Button button;
-        [SerializeField] private GameObject progressPopup;
+        [SerializeField] private GameObject successInfoObject;
 
         private ScreenshotMaker _screenshotMaker;
     
@@ -38,12 +40,25 @@ namespace UI.Widgets.LocalSaves
 
         private async void HandleClick()
         {
-            progressPopup.SetActive(true);
-
+            AnimateButtonClick();
+            
             Texture2D previewTexture = _screenshotMaker.CreatePreview();
             await _saveService.CreateLocalSave(previewTexture);
+            
+            StartCoroutine(ShowSuccessInfo());
+        }
+
+        private IEnumerator ShowSuccessInfo()
+        {
+            successInfoObject.gameObject.SetActive(true);
+            yield return new WaitForSeconds(2f);
+            successInfoObject.gameObject.SetActive(false);
+        }
         
-            progressPopup.SetActive(false);
+        private void AnimateButtonClick()
+        {
+            button.transform.DOKill(true);
+            button.transform.DOPunchScale(Vector3.one * 0.25f, 0.15f);
         }
     }
 }

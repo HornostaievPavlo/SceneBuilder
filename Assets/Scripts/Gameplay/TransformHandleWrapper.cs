@@ -1,4 +1,5 @@
 using System.Collections;
+using DG.Tweening;
 using RuntimeHandle;
 using Services.SceneObjectSelection;
 using Services.SceneObjectsRegistry;
@@ -58,6 +59,7 @@ namespace Gameplay
 			handle.gameObject.SetActive(true);
 			handle.target = sceneObject.transform;
 
+			AnimateGizmoAppear();
 			StartCoroutine(RefreshGizmoLayer());
 		}
 
@@ -95,6 +97,12 @@ namespace Gameplay
 			}
 
 			return 0;
+		}
+
+		private void AnimateGizmoAppear()
+		{
+			transform.DOKill(true);
+			transform.DOPunchScale(handle.transform.localScale * 0.9f, 0.25f);
 		}
 	}
 }

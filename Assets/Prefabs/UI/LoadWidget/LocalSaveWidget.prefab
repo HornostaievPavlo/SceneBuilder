@@ -85,6 +85,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1132159655475646917}
   - component: {fileID: 1971947062914503238}
+  - component: {fileID: 8802410247393824576}
   m_Layer: 5
   m_Name: LocalSaveWidget
   m_TagString: Untagged
@@ -132,6 +133,19 @@ MonoBehaviour:
   preview: {fileID: 3206046129457618497}
   loadButton: {fileID: 2743337962789122999}
   deleteButton: {fileID: 4475422883408273560}
+  canvasGroup: {fileID: 8802410247393824576}
+--- !u!225 &8802410247393824576
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1518328692777373531}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1542503094107588441
 GameObject:
   m_ObjectHideFlags: 0

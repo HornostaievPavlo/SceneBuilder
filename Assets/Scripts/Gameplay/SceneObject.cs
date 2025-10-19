@@ -1,4 +1,5 @@
 using System;
+using DG.Tweening;
 using Enums;
 using Services.SceneObjectsRegistry;
 using UnityEngine;
@@ -27,6 +28,18 @@ namespace Gameplay
 			GenerateGuid();
 			SetTypeId(typeId);
 			_sceneObjectsRegistry.Register(this);
+		}
+		
+		public void AnimateScale(bool isScalingUp, Action onComplete = null)
+		{
+			Vector3 startScale = isScalingUp ? Vector3.zero : Vector3.one;
+			Vector3 endScale = isScalingUp ? Vector3.one : Vector3.zero;
+			
+			transform.localScale = startScale;
+			transform.DOKill(true);
+			transform.DOScale(endScale, 0.15f)
+				.SetEase(Ease.InExpo)
+				.OnComplete(() => { onComplete?.Invoke(); });
 		}
 
 		private void SetTypeId(SceneObjectTypeId typeId)

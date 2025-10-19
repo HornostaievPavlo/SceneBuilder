@@ -1,4 +1,5 @@
-﻿using Services.Painting;
+﻿using DG.Tweening;
+using Services.Painting;
 using Services.SceneObjectSelection;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,7 +16,9 @@ namespace UI.Widgets.Painting
 		
 		[SerializeField] private ColorPaintingWidget colorPaintingWidget;
 		[SerializeField] private TexturePaintingWidget texturePaintingWidget;
-		
+
+		[SerializeField] private CanvasGroup canvasGroup;
+ 		
 		private IModelPaintingService _modelPaintingService;
 		private ISceneObjectSelectionService _sceneObjectSelectionService;
 
@@ -33,6 +36,8 @@ namespace UI.Widgets.Painting
 			colorPaintingButton.onClick.AddListener(HandleColorPaintingButtonClicked);
 			texturePaintingButton.onClick.AddListener(HandleTexturePaintingButtonClicked);
 			resetChangesButton.onClick.AddListener(HandleResetChangesButtonClicked);
+			
+			AnimateAppear(isActive: true);
 		}
 		
 		private void OnDisable()
@@ -42,6 +47,8 @@ namespace UI.Widgets.Painting
 			colorPaintingButton.onClick.RemoveListener(HandleColorPaintingButtonClicked);
 			texturePaintingButton.onClick.RemoveListener(HandleTexturePaintingButtonClicked);
 			resetChangesButton.onClick.RemoveListener(HandleResetChangesButtonClicked);
+			
+			AnimateAppear(isActive: false);
 		}
 
 		private void HandleObjectDeselected()
@@ -65,6 +72,15 @@ namespace UI.Widgets.Painting
 		{
 			_modelPaintingService.RestoreOriginalMaterial();
 			colorTintSlider.value = 0;
+		}
+
+		private void AnimateAppear(bool isActive)
+		{
+			canvasGroup.alpha = isActive ? 0f : 1f;
+			float endValue = isActive ? 1f : 0f;
+			
+			canvasGroup.DOKill(true);
+			DOTween.To(() => canvasGroup.alpha, x => canvasGroup.alpha = x, endValue, 0.25f);
 		}
 	}
 }

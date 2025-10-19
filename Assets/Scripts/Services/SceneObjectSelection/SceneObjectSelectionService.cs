@@ -10,15 +10,14 @@ namespace Services.SceneObjectSelection
 	{
 		private SceneObject _selectedObject;
 		
-		private IInputService _inputService;
+		private readonly IInputService _inputService;
 
 		public event Action<SceneObject> OnObjectSelected;
 		public event Action OnObjectDeselected;
 		
 		public SceneObject SelectedObject => _selectedObject;
 
-		[Inject]
-		private void Construct(IInputService inputService)
+		public SceneObjectSelectionService(IInputService inputService)
 		{
 			_inputService = inputService;
 		}
@@ -48,6 +47,9 @@ namespace Services.SceneObjectSelection
 
 		private void HandleRayMiss()
 		{
+			if (_selectedObject == null)
+				return;
+			
 			_selectedObject = null;
 			OnObjectDeselected?.Invoke();
 		}

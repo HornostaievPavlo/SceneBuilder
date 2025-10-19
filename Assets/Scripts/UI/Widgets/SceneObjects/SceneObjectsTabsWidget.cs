@@ -5,6 +5,8 @@ namespace UI.Widgets.SceneObjects
 {
     public class SceneObjectsTabsWidget : MonoBehaviour
     {
+        [SerializeField] private SceneObjectsWidget parentWidget;
+        
         [SerializeField] private Toggle modelsTabToggle;
         [SerializeField] private Toggle camerasTabToggle;
         [SerializeField] private Toggle labelsTabToggle;
@@ -59,18 +61,33 @@ namespace UI.Widgets.SceneObjects
         {
             modelsLayoutWidget.gameObject.SetActive(value);
             _lastActiveWidget = modelsLayoutWidget;
+            
+            if (value == false)
+            {
+                CheckForAllTabsDisabled();
+            }
         }
 
         private void HandleCamerasTabToggleValueChanged(bool value)
         {
             camerasLayoutWidget.gameObject.SetActive(value);
             _lastActiveWidget = camerasLayoutWidget;
+            
+            if (value == false)
+            {
+                CheckForAllTabsDisabled();
+            }
         }
 
         private void HandleLabelsTabToggleValueChanged(bool value)
         {
             labelsLayoutWidget.gameObject.SetActive(value);
             _lastActiveWidget = labelsLayoutWidget;
+            
+            if (value == false)
+            {
+                CheckForAllTabsDisabled();
+            }
         }
 
         private void ChangeLastActiveToggleState(bool value)
@@ -86,6 +103,14 @@ namespace UI.Widgets.SceneObjects
             else if (_lastActiveWidget == labelsLayoutWidget)
             {
                 labelsTabToggle.isOn = value;
+            }
+        }
+
+        private void CheckForAllTabsDisabled()
+        {
+            if (parentWidget.TabsToggleGroup.AnyTogglesOn() == false)
+            {
+                parentWidget.OpenToggle.isOn = false;
             }
         }
     }

@@ -4,6 +4,7 @@ using Services.SceneObjectSelection;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
+using DG.Tweening;
 
 namespace UI.Widgets.SceneObjects.Camera
 {
@@ -35,6 +36,11 @@ namespace UI.Widgets.SceneObjects.Camera
 		private CameraModeTypeId _currentModeTypeId;
 
 		private ISceneObjectSelectionService _sceneObjectSelectionService;
+
+		private const float RectTweenDuration = 0.1f;
+		
+		private Tweener _mainCameraRectTween;
+		private Tweener _sceneObjectCameraRectTween;
 
 		[Inject]
 		private void Construct(ISceneObjectSelectionService sceneObjectSelectionService)
@@ -72,7 +78,10 @@ namespace UI.Widgets.SceneObjects.Camera
 		private void HandleObjectSelected(SceneObject sceneObject)
 		{
 			if (sceneObject.TypeId != SceneObjectTypeId.Camera)
+			{
+				HandleOtherSceneObjectSelected();
 				return;
+			}
 
 			ToggleButtonsActiveState(true);
 
@@ -90,6 +99,16 @@ namespace UI.Widgets.SceneObjects.Camera
 			}
 
 			_sceneObjectCamera = null;
+		}
+
+		private void HandleOtherSceneObjectSelected()
+		{
+			ToggleButtonsActiveState(false);
+
+			if (_currentModeTypeId == CameraModeTypeId.CameraView || _currentModeTypeId == CameraModeTypeId.SplitScreenView)
+			{
+				SetCameraMode(CameraModeTypeId.MainView);
+			}
 		}
 
 		private void ToggleButtonsActiveState(bool value)
@@ -136,7 +155,7 @@ namespace UI.Widgets.SceneObjects.Camera
 
 		private void SetCameraViewMode()
 		{
-			_sceneObjectCamera.rect = new Rect(0, 0, 1, 1);
+			AnimateCameraRect(_sceneObjectCamera, new Rect(0, 0, 1, 1));
 			_sceneObjectCamera.depth = Constants.MiddleCameraDepth;
 
 			_mainCamera.depth = Constants.ZeroCameraDepth;
@@ -148,8 +167,8 @@ namespace UI.Widgets.SceneObjects.Camera
 
 		private void SetSplitScreenMode()
 		{
-			_mainCamera.rect = new Rect(0, 0, 0.5f, 1);
-			_sceneObjectCamera.rect = new Rect(0.5f, 0, 0.5f, 1);
+			AnimateCameraRect(_mainCamera, new Rect(0, 0, 0.5f, 1));
+			AnimateCameraRect(_sceneObjectCamera, new Rect(0.5f, 0, 0.5f, 1));
 
 			_sceneObjectCamera.depth = Constants.LowestCameraDepth;
 
@@ -160,7 +179,7 @@ namespace UI.Widgets.SceneObjects.Camera
 
 		private void SetMainViewMode()
 		{
-			_mainCamera.rect = new Rect(0, 0, 1, 1);
+			AnimateCameraRect(_mainCamera, new Rect(0, 0, 1, 1));
 
 			_sceneObjectCamera.depth = Constants.ZeroCameraDepth;
 			_mainCamera.depth = Constants.HighestCameraDepth;
@@ -168,6 +187,24 @@ namespace UI.Widgets.SceneObjects.Camera
 			mainViewImage.sprite = mainViewImageSelected;
 			splitScreenViewImage.sprite = splitScreenImageDeselected;
 			cameraViewImage.sprite = cameraViewImageDeselected;
+		}
+
+		private void AnimateCameraRect(UnityEngine.Camera camera, Rect targetRect)
+		{
+			if (camera == _mainCamera)
+			{
+				_mainCameraRectTween?.Kill();
+				_mainCameraRectTween = camera.DORect(targetRect, RectTweenDuration)
+					.SetEase(Ease.Linear)
+					.SetUpdate(UpdateType.Late);
+			}
+			else if (camera == _sceneObjectCamera)
+			{
+				_sceneObjectCameraRectTween?.Kill();
+				_sceneObjectCameraRectTween = camera.DORect(targetRect, RectTweenDuration)
+					.SetEase(Ease.Linear)
+					.SetUpdate(UpdateType.Late);
+			}
 		}
 	}
 }
