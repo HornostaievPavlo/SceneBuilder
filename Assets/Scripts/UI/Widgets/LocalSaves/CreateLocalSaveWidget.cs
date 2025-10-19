@@ -1,3 +1,4 @@
+using System.Collections;
 using Plain;
 using Services.Saving;
 using UnityEngine;
@@ -9,6 +10,7 @@ namespace UI.Widgets.LocalSaves
     public class CreateLocalSaveWidget : MonoBehaviour
     {
         [SerializeField] private Button button;
+        [SerializeField] private GameObject successInfoObject;
 
         private ScreenshotMaker _screenshotMaker;
     
@@ -39,6 +41,15 @@ namespace UI.Widgets.LocalSaves
         {
             Texture2D previewTexture = _screenshotMaker.CreatePreview();
             await _saveService.CreateLocalSave(previewTexture);
+            
+            StartCoroutine(ShowSuccessInfo());
+        }
+
+        private IEnumerator ShowSuccessInfo()
+        {
+            successInfoObject.gameObject.SetActive(true);
+            yield return new WaitForSeconds(2f);
+            successInfoObject.gameObject.SetActive(false);
         }
     }
 }
