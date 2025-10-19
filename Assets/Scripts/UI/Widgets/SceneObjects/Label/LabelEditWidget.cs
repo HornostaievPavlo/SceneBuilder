@@ -21,6 +21,9 @@ namespace UI.Widgets.SceneObjects.Label
 		private Vector3 _initialPosition;
 		
 		private ISceneObjectSelectionService _sceneObjectSelectionService;
+		
+		private const float AnimationDuration = 0.25f;
+		private const float TweenPositionOffset = 380f;
 
 		public event Action OnClosed;
 
@@ -97,13 +100,13 @@ namespace UI.Widgets.SceneObjects.Label
 			transform.localPosition = GetOHiddenPosition();
 			
 			transform.DOKill(true);
-			transform.DOLocalMoveX(_initialPosition.x, 0.25f).SetEase(Ease.OutBack);
+			transform.DOLocalMoveX(_initialPosition.x, AnimationDuration).SetEase(Ease.OutBack);
 		}
 
 		private void AnimateDisappear()
 		{
 			transform.DOKill(true);
-			transform.DOLocalMoveX(GetOHiddenPosition().x, 0.25f)
+			transform.DOLocalMoveX(GetOHiddenPosition().x, AnimationDuration)
 				.SetEase(Ease.InBack)
 				.OnComplete(() =>
 				{
@@ -114,7 +117,7 @@ namespace UI.Widgets.SceneObjects.Label
 		
 		private Vector3 GetOHiddenPosition()
 		{
-			return new Vector3(_initialPosition.x - 380f, _initialPosition.y, _initialPosition.z);
+			return new Vector3(_initialPosition.x - TweenPositionOffset, _initialPosition.y, _initialPosition.z);
 		}
 	}
 }
